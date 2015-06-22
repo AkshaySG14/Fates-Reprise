@@ -1,0 +1,271 @@
+
+Daur.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+itemacquired
+  rotate: false
+  xy: 1, 107
+  size: 17, 18
+  orig: 17, 18
+  offset: 0, 0
+  index: -1
+toppush1
+  rotate: false
+  xy: 1, 87
+  size: 17, 18
+  orig: 17, 18
+  offset: 0, 0
+  index: -1
+toppush2
+  rotate: false
+  xy: 20, 107
+  size: 17, 18
+  orig: 17, 18
+  offset: 0, 0
+  index: -1
+attackleft1
+  rotate: false
+  xy: 1, 67
+  size: 16, 18
+  orig: 16, 18
+  offset: 0, 0
+  index: -1
+attackleft2
+  rotate: false
+  xy: 20, 87
+  size: 16, 18
+  orig: 16, 18
+  offset: 0, 0
+  index: -1
+attackright1
+  rotate: false
+  xy: 39, 107
+  size: 16, 18
+  orig: 16, 18
+  offset: 0, 0
+  index: -1
+attackright2
+  rotate: false
+  xy: 1, 47
+  size: 16, 18
+  orig: 16, 18
+  offset: 0, 0
+  index: -1
+attackup1
+  rotate: false
+  xy: 19, 67
+  size: 16, 18
+  orig: 16, 18
+  offset: 0, 0
+  index: -1
+bottom1
+  rotate: false
+  xy: 38, 87
+  size: 16, 18
+  orig: 16, 18
+  offset: 0, 0
+  index: -1
+bottom2
+  rotate: false
+  xy: 57, 107
+  size: 16, 18
+  orig: 16, 18
+  offset: 0, 0
+  index: -1
+bottompush1
+  rotate: false
+  xy: 1, 27
+  size: 16, 18
+  orig: 16, 18
+  offset: 0, 0
+  index: -1
+bottompush2
+  rotate: false
+  xy: 19, 47
+  size: 16, 18
+  orig: 16, 18
+  offset: 0, 0
+  index: -1
+left1
+  rotate: false
+  xy: 37, 67
+  size: 16, 18
+  orig: 16, 18
+  offset: 0, 0
+  index: -1
+left2
+  rotate: false
+  xy: 56, 87
+  size: 16, 18
+  orig: 16, 18
+  offset: 0, 0
+  index: -1
+leftpush1
+  rotate: false
+  xy: 75, 107
+  size: 16, 18
+  orig: 16, 18
+  offset: 0, 0
+  index: -1
+leftpush2
+  rotate: false
+  xy: 1, 7
+  size: 16, 18
+  orig: 16, 18
+  offset: 0, 0
+  index: -1
+right1
+  rotate: false
+  xy: 19, 27
+  size: 16, 18
+  orig: 16, 18
+  offset: 0, 0
+  index: -1
+right2
+  rotate: false
+  xy: 37, 47
+  size: 16, 18
+  orig: 16, 18
+  offset: 0, 0
+  index: -1
+rightpush1
+  rotate: false
+  xy: 55, 67
+  size: 16, 18
+  orig: 16, 18
+  offset: 0, 0
+  index: -1
+rightpush2
+  rotate: false
+  xy: 74, 87
+  size: 16, 18
+  orig: 16, 18
+  offset: 0, 0
+  index: -1
+top1
+  rotate: false
+  xy: 93, 107
+  size: 16, 18
+  orig: 16, 18
+  offset: 0, 0
+  index: -1
+top2
+  rotate: false
+  xy: 111, 107
+  size: 16, 18
+  orig: 16, 18
+  offset: 0, 0
+  index: -1
+attackdown1
+  rotate: false
+  xy: 19, 7
+  size: 15, 18
+  orig: 15, 18
+  offset: 0, 0
+  index: -1
+attackdown2
+  rotate: false
+  xy: 37, 27
+  size: 15, 18
+  orig: 15, 18
+  offset: 0, 0
+  index: -1
+attackup2
+  rotate: false
+  xy: 55, 47
+  size: 15, 18
+  orig: 15, 18
+  offset: 0, 0
+  index: -1
+bottomswim1
+  rotate: false
+  xy: 73, 71
+  size: 17, 14
+  orig: 17, 14
+  offset: 0, 0
+  index: -1
+leftswim1
+  rotate: false
+  xy: 92, 91
+  size: 17, 14
+  orig: 17, 14
+  offset: 0, 0
+  index: -1
+rightswim1
+  rotate: false
+  xy: 92, 75
+  size: 17, 14
+  orig: 17, 14
+  offset: 0, 0
+  index: -1
+topswim1
+  rotate: false
+  xy: 36, 11
+  size: 17, 14
+  orig: 17, 14
+  offset: 0, 0
+  index: -1
+bottomswim2
+  rotate: false
+  xy: 54, 32
+  size: 17, 13
+  orig: 17, 13
+  offset: 0, 0
+  index: -1
+falling1
+  rotate: false
+  xy: 111, 91
+  size: 12, 14
+  orig: 12, 14
+  offset: 0, 0
+  index: -1
+dead
+  rotate: false
+  xy: 111, 76
+  size: 11, 13
+  orig: 11, 13
+  offset: 0, 0
+  index: -1
+leftswim2
+  rotate: false
+  xy: 55, 17
+  size: 17, 13
+  orig: 17, 13
+  offset: 0, 0
+  index: -1
+rightswim2
+  rotate: false
+  xy: 55, 2
+  size: 17, 13
+  orig: 17, 13
+  offset: 0, 0
+  index: -1
+topswim2
+  rotate: false
+  xy: 92, 60
+  size: 17, 13
+  orig: 17, 13
+  offset: 0, 0
+  index: -1
+sword
+  rotate: false
+  xy: 111, 54
+  size: 6, 20
+  orig: 6, 20
+  offset: 0, 0
+  index: -1
+falling2
+  rotate: false
+  xy: 119, 67
+  size: 6, 7
+  orig: 6, 7
+  offset: 0, 0
+  index: -1
+falling3
+  rotate: false
+  xy: 1, 1
+  size: 4, 4
+  orig: 4, 4
+  offset: 0, 0
+  index: -1

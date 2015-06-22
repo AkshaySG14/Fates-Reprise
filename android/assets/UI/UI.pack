@@ -1,0 +1,68 @@
+
+UI.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+shopicon
+  rotate: false
+  xy: 1, 1
+  size: 100, 120
+  orig: 100, 120
+  offset: 0, 0
+  index: -1
+WhiteBar
+  rotate: false
+  xy: 103, 105
+  size: 160, 16
+  orig: 160, 16
+  offset: 0, 0
+  index: -1
+WhiteUI
+  rotate: false
+  xy: 103, 87
+  size: 160, 16
+  orig: 160, 16
+  offset: 0, 0
+  index: -1
+cursor
+  rotate: false
+  xy: 265, 105
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+heart1
+  rotate: false
+  xy: 103, 78
+  size: 7, 7
+  orig: 7, 7
+  offset: 0, 0
+  index: -1
+heart2
+  rotate: false
+  xy: 265, 96
+  size: 7, 7
+  orig: 7, 7
+  offset: 0, 0
+  index: -1
+heart3
+  rotate: false
+  xy: 283, 114
+  size: 7, 7
+  orig: 7, 7
+  offset: 0, 0
+  index: -1
+indicator
+  rotate: false
+  xy: 103, 71
+  size: 3, 5
+  orig: 3, 5
+  offset: 0, 0
+  index: -1
+indicator2
+  rotate: false
+  xy: 112, 80
+  size: 3, 5
+  orig: 3, 5
+  offset: 0, 0
+  index: -1

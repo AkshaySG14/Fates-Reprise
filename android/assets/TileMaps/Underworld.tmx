@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="160" height="160" tilewidth="16" tileheight="16">
+ <tileset firstgid="1" name="Tiles" tilewidth="16" tileheight="16">
+  <image source="Tiles.png" width="800" height="800"/>
+ </tileset>
+ <layer name="Background" width="160" height="160">
+  <data encoding="base64" compression="zlib">
+   eJzt0rENABAARUGlPc1kX42Eiorf3CVvg1cKZLV6Dl7yHym39/zHa/trfeY/fvEfSf4jyX8k+Q8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABgGTHrHSA=
+  </data>
+ </layer>
+ <layer name="Foreground" width="160" height="160">
+  <data encoding="base64" compression="zlib">
+   eJztwQEBAAAAgiD/r25IQAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHwYkA8AAQ==
+  </data>
+ </layer>
+ <layer name="Objects" width="160" height="160">
+  <data encoding="base64" compression="zlib">
+   eJzt1jEOgkAQBVBKuYt6Jgr1QBTogSjQIxELl8Amm5XEamLzXvKzYWh/JjMdmuaZ0rXrWybPXikQYd661bff//LsrX8EWfp3SRnb9b2m3KqZ/hFlrrp1T9+PaqZ/RFn6N2z9GoqelTP9I0ref93O/de5/wiW779+u/WycqZ/RMn7b9zZf6P9RzD3H/90TDvu9CPnnd0IAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAkT7+oCqD
+  </data>
+ </layer>
+ <layer name="Fog" width="160" height="160">
+  <data encoding="base64" compression="zlib">
+   eJztwQEBAAAAgiD/r25IQAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHwYkA8AAQ==
+  </data>
+ </layer>
+ <objectgroup name="Spawns" width="160" height="160">
+  <object name="Main Spawn" x="84" y="106" width="22" height="16">
+   <properties>
+    <property name="startmainspawn" value=""/>
+   </properties>
+  </object>
+  <object name="Main Spawn" x="82" y="29" width="22" height="16">
+   <properties>
+    <property name="startmsgspawn" value=""/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup name="Access" width="160" height="160"/>
+ <objectgroup name="Fogs" width="160" height="160"/>
+ <objectgroup name="Interactables" width="160" height="160"/>
+</map>

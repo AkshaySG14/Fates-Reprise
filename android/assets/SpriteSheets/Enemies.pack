@@ -1,0 +1,320 @@
+
+Enemies.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+Pantomime
+  rotate: false
+  xy: 1, 15
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+wizardSU2
+  rotate: false
+  xy: 1, 1
+  size: 17, 12
+  orig: 17, 12
+  offset: 0, 0
+  index: -1
+woodenknightD1
+  rotate: false
+  xy: 19, 15
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+beetleL1
+  rotate: false
+  xy: 20, 1
+  size: 16, 12
+  orig: 16, 12
+  offset: 0, 0
+  index: -1
+woodenknightD2
+  rotate: false
+  xy: 37, 15
+  size: 16, 16
+  orig: 16, 16
+  offset: 0, 0
+  index: -1
+beetleR1
+  rotate: false
+  xy: 38, 1
+  size: 16, 12
+  orig: 16, 12
+  offset: 0, 0
+  index: -1
+beetleD1
+  rotate: false
+  xy: 55, 15
+  size: 12, 16
+  orig: 12, 16
+  offset: 0, 0
+  index: -1
+beetleL2
+  rotate: false
+  xy: 56, 1
+  size: 15, 12
+  orig: 15, 12
+  offset: 0, 0
+  index: -1
+beetleU1
+  rotate: false
+  xy: 69, 15
+  size: 12, 16
+  orig: 12, 16
+  offset: 0, 0
+  index: -1
+beetleR2
+  rotate: false
+  xy: 73, 1
+  size: 15, 12
+  orig: 15, 12
+  offset: 0, 0
+  index: -1
+pantomimeD1
+  rotate: false
+  xy: 83, 17
+  size: 14, 14
+  orig: 14, 14
+  offset: 0, 0
+  index: -1
+pantomimeD2
+  rotate: false
+  xy: 90, 1
+  size: 14, 14
+  orig: 14, 14
+  offset: 0, 0
+  index: -1
+pantomimeU1
+  rotate: false
+  xy: 99, 17
+  size: 14, 14
+  orig: 14, 14
+  offset: 0, 0
+  index: -1
+pantomimeU2
+  rotate: false
+  xy: 106, 1
+  size: 14, 14
+  orig: 14, 14
+  offset: 0, 0
+  index: -1
+pantomimeL1
+  rotate: false
+  xy: 115, 17
+  size: 10, 14
+  orig: 10, 14
+  offset: 0, 0
+  index: -1
+pantomimeL2
+  rotate: false
+  xy: 122, 1
+  size: 10, 14
+  orig: 10, 14
+  offset: 0, 0
+  index: -1
+pantomimeR1
+  rotate: false
+  xy: 127, 17
+  size: 10, 14
+  orig: 10, 14
+  offset: 0, 0
+  index: -1
+pantomimeR2
+  rotate: false
+  xy: 134, 1
+  size: 10, 14
+  orig: 10, 14
+  offset: 0, 0
+  index: -1
+wizardSL2
+  rotate: false
+  xy: 139, 19
+  size: 15, 12
+  orig: 15, 12
+  offset: 0, 0
+  index: -1
+wizardSR2
+  rotate: false
+  xy: 156, 19
+  size: 15, 12
+  orig: 15, 12
+  offset: 0, 0
+  index: -1
+wizardSU1
+  rotate: false
+  xy: 173, 19
+  size: 15, 12
+  orig: 15, 12
+  offset: 0, 0
+  index: -1
+dollD1
+  rotate: false
+  xy: 190, 14
+  size: 14, 17
+  orig: 14, 17
+  offset: 0, 0
+  index: -1
+dollD2
+  rotate: false
+  xy: 206, 14
+  size: 14, 17
+  orig: 14, 17
+  offset: 0, 0
+  index: -1
+dollSD
+  rotate: false
+  xy: 222, 14
+  size: 14, 17
+  orig: 14, 17
+  offset: 0, 0
+  index: -1
+dollSU
+  rotate: false
+  xy: 238, 14
+  size: 14, 17
+  orig: 14, 17
+  offset: 0, 0
+  index: -1
+dollU1
+  rotate: false
+  xy: 254, 14
+  size: 14, 17
+  orig: 14, 17
+  offset: 0, 0
+  index: -1
+dollU2
+  rotate: false
+  xy: 270, 14
+  size: 14, 17
+  orig: 14, 17
+  offset: 0, 0
+  index: -1
+dollL1
+  rotate: false
+  xy: 286, 14
+  size: 12, 17
+  orig: 12, 17
+  offset: 0, 0
+  index: -1
+dollL2
+  rotate: false
+  xy: 300, 14
+  size: 12, 17
+  orig: 12, 17
+  offset: 0, 0
+  index: -1
+dollR1
+  rotate: false
+  xy: 314, 14
+  size: 12, 17
+  orig: 12, 17
+  offset: 0, 0
+  index: -1
+dollR2
+  rotate: false
+  xy: 328, 14
+  size: 12, 17
+  orig: 12, 17
+  offset: 0, 0
+  index: -1
+dollSL
+  rotate: false
+  xy: 342, 14
+  size: 12, 17
+  orig: 12, 17
+  offset: 0, 0
+  index: -1
+dollSR
+  rotate: false
+  xy: 356, 14
+  size: 12, 17
+  orig: 12, 17
+  offset: 0, 0
+  index: -1
+beetleD2
+  rotate: false
+  xy: 370, 16
+  size: 12, 15
+  orig: 12, 15
+  offset: 0, 0
+  index: -1
+beetleU2
+  rotate: false
+  xy: 384, 16
+  size: 12, 15
+  orig: 12, 15
+  offset: 0, 0
+  index: -1
+slimeD1
+  rotate: false
+  xy: 398, 19
+  size: 14, 12
+  orig: 14, 12
+  offset: 0, 0
+  index: -1
+wizardSL1
+  rotate: false
+  xy: 414, 19
+  size: 14, 12
+  orig: 14, 12
+  offset: 0, 0
+  index: -1
+wizardSR1
+  rotate: false
+  xy: 430, 19
+  size: 14, 12
+  orig: 14, 12
+  offset: 0, 0
+  index: -1
+wizardD
+  rotate: false
+  xy: 446, 19
+  size: 13, 12
+  orig: 13, 12
+  offset: 0, 0
+  index: -1
+wizardL
+  rotate: false
+  xy: 461, 19
+  size: 13, 12
+  orig: 13, 12
+  offset: 0, 0
+  index: -1
+wizardR
+  rotate: false
+  xy: 476, 19
+  size: 13, 12
+  orig: 13, 12
+  offset: 0, 0
+  index: -1
+wizardSD1
+  rotate: false
+  xy: 491, 19
+  size: 13, 12
+  orig: 13, 12
+  offset: 0, 0
+  index: -1
+wizardSD2
+  rotate: false
+  xy: 146, 5
+  size: 13, 12
+  orig: 13, 12
+  offset: 0, 0
+  index: -1
+wizardU
+  rotate: false
+  xy: 161, 5
+  size: 13, 12
+  orig: 13, 12
+  offset: 0, 0
+  index: -1
+slimeD2
+  rotate: false
+  xy: 398, 7
+  size: 14, 10
+  orig: 14, 10
+  offset: 0, 0
+  index: -1

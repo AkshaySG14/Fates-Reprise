@@ -1,0 +1,804 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="160" height="160" tilewidth="16" tileheight="16">
+ <tileset firstgid="1" name="Tiles" tilewidth="16" tileheight="16">
+  <image source="Tiles.png" width="800" height="800"/>
+  <tile id="60">
+   <properties>
+    <property name="blocked" value=""/>
+    <property name="bush" value=""/>
+    <property name="summer" value=""/>
+   </properties>
+  </tile>
+  <tile id="195">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </tile>
+  <tile id="196">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </tile>
+  <tile id="211">
+   <properties>
+    <property name="hole" value=""/>
+   </properties>
+  </tile>
+  <tile id="245">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </tile>
+  <tile id="246">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </tile>
+  <tile id="247">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </tile>
+  <tile id="248">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </tile>
+  <tile id="249">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </tile>
+  <tile id="294">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </tile>
+  <tile id="295">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </tile>
+  <tile id="296">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </tile>
+  <tile id="297">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </tile>
+  <tile id="299">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </tile>
+  <tile id="300">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </tile>
+  <tile id="301">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </tile>
+  <tile id="302">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </tile>
+  <tile id="312">
+   <properties>
+    <property name="blocked" value=""/>
+    <property name="bramble" value=""/>
+   </properties>
+  </tile>
+  <tile id="348">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </tile>
+  <tile id="349">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </tile>
+  <tile id="350">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </tile>
+  <tile id="351">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </tile>
+  <tile id="352">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </tile>
+  <tile id="400">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </tile>
+  <tile id="401">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </tile>
+  <tile id="402">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </tile>
+  <tile id="900">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </tile>
+  <tile id="901">
+   <properties>
+    <property name="blocked" value=""/>
+    <property name="chest" value=""/>
+   </properties>
+  </tile>
+  <tile id="2195">
+   <properties>
+    <property name="darkness" value=""/>
+   </properties>
+  </tile>
+  <tile id="2244">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </tile>
+  <tile id="2245">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </tile>
+  <tile id="2246">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </tile>
+  <tile id="2294">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </tile>
+  <tile id="2295">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </tile>
+  <tile id="2296">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </tile>
+  <tile id="2344">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </tile>
+  <tile id="2345">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </tile>
+  <tile id="2346">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="Background" width="160" height="160">
+  <data encoding="base64" compression="zlib">
+   eJzt2UlOwzAAQNGy4/7iRgjohdijikaqrHisY9fte5IXQORMv0kaTqf7fbzXj95zx5yvo2VbGeOcGZvv6wj/VnvetmVK1jtjvm250uNSe/xiY/OTGaust9d825y325zrL7XOll7uWWZv2dz50N+Y/krbi+3Hxcz+zpXzpfZFf495/Uvtx0VrfzFhfyWfkdKROxf6699fTs1xHtlfzbXt6P5Kt7dHBxc9z9sj9Jf6fjerv5L19n7+27T0N+I6VPPdfKX+UmrO261H6O/cOJ/+1nr+q31vluq+9X1J7LNw7/uXvXn1N7a/nJr+ao5fr/WGUq322MbY5yu1T0fub2494fNlzN5+7f1ubx1hf7Xr6aHH8eN1lH4fvCi9v5WMz7chu8cCZvQHm5L+cu3pj1Y9r38x+iOmd3+xd376Y4/+mKlnf6n/eeiPPfpjptJ34yXvtmP/c9YfAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACs7+ttzvgtHKXzsaZH7q9mPtY0si/9EZrRX6977+1yrEl/zKQ/Zlq5v9vBmmb0V9qg/p6f/pjpqP5GD9Y0uxtdvbaRLX28/w/9sRnZmv4IHX29S/2sP0beb/VHaOT1r2Xw3Fq7KHlHF177PP8ROqq/vXuv/gi5/zLTkf31GDy3P3xDj60=
+  </data>
+ </layer>
+ <layer name="Foreground" width="160" height="160">
+  <data encoding="base64" compression="zlib">
+   eJzt2TsOgCAQBUC9mJf3YlY2JoogIJ+ZxoBa7cuuwWUBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABgRFviPShNNpnddrkyhms9z/W+hp+vkQV5m89dJv+k/40tta7yQGkyRgtqf/sBlKaX0brYjMo0IV8zkvN9eeXNGVuOnPifR20tnmnTh6c5GbuO2WNsak4LcvWo2BlrJpPKeQzQqwNk1g0f
+  </data>
+ </layer>
+ <layer name="Objects" width="160" height="160">
+  <data encoding="base64" compression="zlib">
+   eJzt2ktyIkcQgOGq0GZ0ElloNLP2wjexLekw1l7mSMDMBXQV8fDKlLtTJDlZLxARhvm/iApQd1LVdGfXo9HiUwjfKuX7tizU329hf98hbH26zkPqXjR+j4+uL8X9E4byLfNex72F3at+r+N6r0ct7i2Uy6naze2Xa53iVtuyCUOZj+f+lxjCbdxt34xxq3H/zXbfOgxl41zTUtupzVkc6kvt3cWhPl2nrbtWX5Lqs58/pD59XuQ8aHP1KuflcxxKOj/eex13E3ev+r2Ok+OdqLYn5py3ft8UdxPLReLer3eujHETc060iVOfldrU50/ilpI/Y7HtLlQdpfyT3JLr9znuXwuJWf740T061vseGxOzVm3K8em/dazOI/uqv6/+zslSvUqc0LH6vY0rfd9D82+WuX972pVznOrS5b+Y4Off+tNQJM7mX453/mrHl9tn2dzS30XnQEu7Nlafk2Q99llr6dvGInE6h3SsziP7Kt93VrjPQzj+/Nn6vTivD37Pg+uhrFVfvVbbbX2r4L+3+WL7vfdtTv7Zc6Xzr/V71BySf6W6ktvr3XnSRd9LXv6tVEm8HKnlTc2p8++PuLsefzrXsre+1riZanfmtNuaf14bXn0iN9/p/R7z4N+zVkv+5Y6pln+LsN+n5fLPG0Naefe0d7zfO89fS5zcl79H//5M5e76NHl6bP7p66bj1plj6O2f09jUm3+TWB9/J+q+tH27jfXGX+k3a/NiHSvzPalLXvX8T+efOz9vuL61OO/ctLDH47at2pX7dWHe67hT5l9pnVej70td0j2a7kWrN//cNoO//rD5p2Na1mUSK/M9m3+5+Z+dT+vrMQ++Wp7aPvqU+VfyEfnnrd9a222J6xnDbgvjh+RrcYwO+/lXGpN0fZPo56Bsz809bb0yvtn8885Lbh1f6ydz69VWPfln1+X274/IP2/9Vlr/ymdLuaKvx7Fzequ13Z76Sjl1aH1Sj1f/XWa71+6pv693DPr4avPJUlypPu8ceNtyY6d+fp8rPc+9gR76+X2u5OY53nwc6NEzT7TzHPIPx9Ljr6XHX3f+bQv5h056/LXs+FuzceaJ8v8VgOcUz9H1PPEm0i8i75jxd2Ves/NE8g8Zx4y/ud9xNOaFKDnl/1uwLkFN63P5Y+J6nusDAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA+P/6GkO435YvcXj/si1Tte2L2fd3pkydetL2eWZ/rb7WIvXiPD1tr93DtjzG4f1vYSiy7dHss3kp+aQ/8zTmwyzuSjD7nxpy5j7u3x9e+ToeP86Tzb/XcXsu/+x2b5+Xf7PYn38PY1yt3yX/zpe+vlN1He01n4455uWC7NP5ZXPvr6v+/Hsxx+R5viL/zpn0XULGX5H6w1nj9S3l3yH9X0+7OE+SfzLuplf9d6LzIDf/S3R+pf7u2P7vXtVdQv6dr6e4vy4V3vq3Z/73/AH5J/M/1h+Xy64/Uq6kvi+3/jh0/nfM+sPLeX1c5N/5SrnTs/7I8fJPyFjM+heWHttK468d834dix67H+L+M+Hc8+tprI/7pWfhXr04T7pvKfV/ts+xcdIPtf5OUnvuQ7/2c5C+x+uL5FmM/h0ivabxVKT3sl3GyxqJk/q95z8ynuOySb7Y3y4SnQfSX3nPg19Uf+Xl36v5m/yDkHzxxkJh88r2f7m4nJ44XDbJA9sP2XVFT17Z/i55deJsO3YOQP5dvlz+6fG4t//z8k/T9dl2Hs0+XLZcv2bXoTbu+erHz/TO/2w7dg5A/l0+my+2H0z072De77GHrn9b4nDZevLvkPWvNxaTfxDyPHgZy78vtP4OUYpbFuJs+/yu8XP4FxZE9co=
+  </data>
+ </layer>
+ <layer name="Fog" width="160" height="160">
+  <data encoding="base64" compression="zlib">
+   eJztw7EJADAIADD7/1l+5eRYHxBKSSAR8LcaAQAANuW5AQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB4UwPBbQU7
+  </data>
+ </layer>
+ <objectgroup name="Portals" width="160" height="160">
+  <object name="Portal Out 1" x="21" y="130" width="14" height="11">
+   <properties>
+    <property name="PO" value=""/>
+   </properties>
+  </object>
+  <object name="Portal In 1" x="20" y="147" width="14" height="11">
+   <properties>
+    <property name="PI" value=""/>
+   </properties>
+  </object>
+  <object name="Portal Out 2" x="243" y="99" width="14" height="11">
+   <properties>
+    <property name="PO" value=""/>
+   </properties>
+  </object>
+  <object name="Portal In 2" x="242" y="116" width="14" height="11">
+   <properties>
+    <property name="PI" value=""/>
+   </properties>
+  </object>
+  <object name="Portal Out 3" x="355" y="115" width="14" height="11">
+   <properties>
+    <property name="PO" value=""/>
+   </properties>
+  </object>
+  <object name="Portal In 3" x="354" y="132" width="14" height="11">
+   <properties>
+    <property name="PI" value=""/>
+   </properties>
+  </object>
+  <object name="Portal Out 4" x="502" y="129" width="14" height="11">
+   <properties>
+    <property name="PO" value=""/>
+   </properties>
+  </object>
+  <object name="Portal In 4" x="501" y="146" width="14" height="11">
+   <properties>
+    <property name="PI" value=""/>
+   </properties>
+  </object>
+  <object name="Portal Out 5" x="692" y="114" width="14" height="11">
+   <properties>
+    <property name="PO" value=""/>
+   </properties>
+  </object>
+  <object name="Portal In 5" x="691" y="131" width="14" height="11">
+   <properties>
+    <property name="PI" value=""/>
+   </properties>
+  </object>
+  <object name="Portal Out 6" x="867" y="130" width="14" height="11">
+   <properties>
+    <property name="PO" value=""/>
+   </properties>
+  </object>
+  <object name="Portal In 6" x="866" y="147" width="14" height="11">
+   <properties>
+    <property name="PI" value=""/>
+   </properties>
+  </object>
+  <object name="Portal Out 7" x="1042" y="114" width="14" height="11">
+   <properties>
+    <property name="PO" value=""/>
+   </properties>
+  </object>
+  <object name="Portal In 7" x="1042" y="132" width="14" height="11">
+   <properties>
+    <property name="PI" value=""/>
+   </properties>
+  </object>
+  <object name="Portal In 8" x="1153" y="147" width="14" height="11">
+   <properties>
+    <property name="PI" value=""/>
+   </properties>
+  </object>
+  <object name="Portal Out 8" x="1153" y="129" width="14" height="11">
+   <properties>
+    <property name="PO" value=""/>
+   </properties>
+  </object>
+  <object name="Portal In 9" x="1250" y="147" width="14" height="11">
+   <properties>
+    <property name="PI" value=""/>
+   </properties>
+  </object>
+  <object name="Portal Out 9" x="1250" y="132" width="14" height="11">
+   <properties>
+    <property name="PO" value=""/>
+   </properties>
+  </object>
+  <object name="Portal In 10" x="1346" y="147" width="14" height="11">
+   <properties>
+    <property name="PI" value=""/>
+   </properties>
+  </object>
+  <object name="Portal Out 10" x="1346" y="129" width="14" height="11">
+   <properties>
+    <property name="PO" value=""/>
+   </properties>
+  </object>
+  <object name="Portal Out 11" x="1458" y="129" width="14" height="11">
+   <properties>
+    <property name="PO" value=""/>
+   </properties>
+  </object>
+  <object name="Portal In 11" x="1458" y="147" width="14" height="11">
+   <properties>
+    <property name="PI" value=""/>
+   </properties>
+  </object>
+  <object name="Portal Out 12" x="1634" y="66" width="14" height="11">
+   <properties>
+    <property name="PO" value=""/>
+   </properties>
+  </object>
+  <object name="Portal In 12" x="1634" y="84" width="14" height="11">
+   <properties>
+    <property name="PI" value=""/>
+   </properties>
+  </object>
+  <object name="Portal In 13" x="1875" y="146" width="14" height="11">
+   <properties>
+    <property name="PI" value=""/>
+   </properties>
+  </object>
+  <object name="Portal Out 13" x="1875" y="128" width="14" height="11">
+   <properties>
+    <property name="PO" value=""/>
+   </properties>
+  </object>
+  <object name="Portal In 14" x="1956" y="147" width="14" height="11">
+   <properties>
+    <property name="PI" value=""/>
+   </properties>
+  </object>
+  <object name="Portal Out 14" x="1956" y="129" width="14" height="11">
+   <properties>
+    <property name="PO" value=""/>
+   </properties>
+  </object>
+  <object name="Portal Out 15" x="2115" y="131" width="14" height="11">
+   <properties>
+    <property name="PO" value=""/>
+   </properties>
+  </object>
+  <object name="Portal In 15" x="2115" y="146" width="14" height="11">
+   <properties>
+    <property name="PI" value=""/>
+   </properties>
+  </object>
+  <object name="Portal Out 16" x="2196" y="126" width="14" height="11">
+   <properties>
+    <property name="PO" value=""/>
+   </properties>
+  </object>
+  <object name="Portal In 16" x="2196" y="144" width="14" height="11">
+   <properties>
+    <property name="PI" value=""/>
+   </properties>
+  </object>
+  <object name="Portal Out 17" x="2279" y="126" width="14" height="11">
+   <properties>
+    <property name="PO" value=""/>
+   </properties>
+  </object>
+  <object name="Portal In 17" x="2279" y="144" width="14" height="11">
+   <properties>
+    <property name="PI" value=""/>
+   </properties>
+  </object>
+  <object name="Portal Out 18" x="2532" y="127" width="14" height="11">
+   <properties>
+    <property name="PO" value=""/>
+   </properties>
+  </object>
+  <object name="Portal In 18" x="2532" y="145" width="14" height="11">
+   <properties>
+    <property name="PI" value=""/>
+   </properties>
+  </object>
+  <object name="Portal In 19" x="20" y="307" width="14" height="11">
+   <properties>
+    <property name="PI" value=""/>
+   </properties>
+  </object>
+  <object name="Portal Out 19" x="20" y="289" width="14" height="11">
+   <properties>
+    <property name="PO" value=""/>
+   </properties>
+  </object>
+  <object name="Portal In 20" x="180" y="306" width="14" height="11">
+   <properties>
+    <property name="PI" value=""/>
+   </properties>
+  </object>
+  <object name="Portal Out 20" x="180" y="288" width="14" height="11">
+   <properties>
+    <property name="PO" value=""/>
+   </properties>
+  </object>
+  <object name="Portal In 21" x="339" y="306" width="14" height="11">
+   <properties>
+    <property name="PI" value=""/>
+   </properties>
+  </object>
+  <object name="Portal Out 21" x="339" y="288" width="14" height="11">
+   <properties>
+    <property name="PO" value=""/>
+   </properties>
+  </object>
+  <object name="Portal In 22" x="34" y="2545" width="14" height="11">
+   <properties>
+    <property name="PI" value=""/>
+   </properties>
+  </object>
+  <object name="Portal Out 22" x="34" y="2527" width="14" height="11">
+   <properties>
+    <property name="PO" value=""/>
+   </properties>
+  </object>
+  <object name="Portal In 23" x="434" y="2545" width="14" height="11">
+   <properties>
+    <property name="PI" value=""/>
+   </properties>
+  </object>
+  <object name="Portal Out 23" x="434" y="2527" width="14" height="11">
+   <properties>
+    <property name="PO" value=""/>
+   </properties>
+  </object>
+  <object name="Portal In 23" x="388" y="2240" width="14" height="11">
+   <properties>
+    <property name="PI" value=""/>
+   </properties>
+  </object>
+  <object name="Portal Out 23" x="389" y="2256" width="14" height="11">
+   <properties>
+    <property name="PO" value=""/>
+   </properties>
+  </object>
+  <object name="Portal In 24" x="547" y="2543" width="14" height="11">
+   <properties>
+    <property name="PI" value=""/>
+   </properties>
+  </object>
+  <object name="Portal Out 24" x="547" y="2525" width="14" height="11">
+   <properties>
+    <property name="PO" value=""/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup name="Spawns" width="160" height="160">
+  <object name="Villager Spawn 1" x="66" y="34" width="12" height="12">
+   <properties>
+    <property name="villagerspawn1" value=""/>
+   </properties>
+  </object>
+  <object name="Villager Spawn 2" x="199" y="33" width="12" height="12">
+   <properties>
+    <property name="villagerspawn2" value=""/>
+   </properties>
+  </object>
+  <object name="Villager Spawn 3" x="437" y="48" width="12" height="12">
+   <properties>
+    <property name="villagerspawn3" value=""/>
+   </properties>
+  </object>
+  <object name="Villager Spawn 4" x="615" y="34" width="12" height="12">
+   <properties>
+    <property name="villagerspawn4" value=""/>
+   </properties>
+  </object>
+  <object name="Villager Spawn 5" x="681" y="50" width="12" height="12">
+   <properties>
+    <property name="villagerspawn5" value=""/>
+   </properties>
+  </object>
+  <object name="Villager Spawn 6" x="872" y="48" width="12" height="12">
+   <properties>
+    <property name="villagerspawn6" value=""/>
+   </properties>
+  </object>
+  <object name="Villager Spawn 7" x="1093" y="65" width="12" height="12">
+   <properties>
+    <property name="villagerspawn7" value=""/>
+   </properties>
+  </object>
+  <object name="Villager Spawn 8" x="1174" y="18" width="12" height="12">
+   <properties>
+    <property name="villagerspawn8" value=""/>
+   </properties>
+  </object>
+  <object name="Villager Spawn 9" x="1220" y="110" width="12" height="12">
+   <properties>
+    <property name="villagerspawn9" value=""/>
+   </properties>
+  </object>
+  <object name="Villager Spawn 10" x="1318" y="65" width="12" height="12">
+   <properties>
+    <property name="villagerspawn10" value=""/>
+   </properties>
+  </object>
+  <object name="Villager Spawn 11" x="1511" y="49" width="12" height="12">
+   <properties>
+    <property name="villagerspawn11" value=""/>
+   </properties>
+  </object>
+  <object name="Villager Spawn 12" x="1669" y="33" width="12" height="12">
+   <properties>
+    <property name="villagerspawn12" value=""/>
+   </properties>
+  </object>
+  <object name="Villager Spawn 16" x="2374" y="65" width="12" height="12">
+   <properties>
+    <property name="villagerspawn16" value=""/>
+   </properties>
+  </object>
+  <object name="Villager Spawn 17" x="2504" y="13" width="12" height="12">
+   <properties>
+    <property name="villagerspawn17" value=""/>
+   </properties>
+  </object>
+  <object name="Villager Spawn 13" x="1828" y="33" width="12" height="12">
+   <properties>
+    <property name="villagerspawn13" value=""/>
+   </properties>
+  </object>
+  <object name="Villager Spawn 14" x="1973" y="33" width="12" height="12">
+   <properties>
+    <property name="villagerspawn14" value=""/>
+   </properties>
+  </object>
+  <object name="Villager Spawn 15" x="2022" y="35" width="12" height="12">
+   <properties>
+    <property name="villagerspawn15" value=""/>
+   </properties>
+  </object>
+  <object name="Enemy Spawn 1" x="81" y="2473" width="13" height="17">
+   <properties>
+    <property name="pantomimespawn" value=""/>
+   </properties>
+  </object>
+  <object name="Enemy Spawn 1" x="21" y="2472" width="13" height="17">
+   <properties>
+    <property name="pantomimespawn" value=""/>
+   </properties>
+  </object>
+  <object name="Enemy Spawn 1" x="297" y="2296" width="13" height="17">
+   <properties>
+    <property name="slimespawn" value=""/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup name="Fogs" width="160" height="160" opacity="0.51">
+  <object name="Fog In 1" x="1602" y="2" width="158" height="96">
+   <properties>
+    <property name="FI" value="90"/>
+   </properties>
+  </object>
+  <object name="Fog In 2" x="322" y="222" width="93" height="97">
+   <properties>
+    <property name="FI" value="95"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup name="Counters" width="160" height="160">
+  <object name="Counter 1" x="1507" y="64" width="14" height="12">
+   <properties>
+    <property name="counter" value=""/>
+   </properties>
+  </object>
+  <object name="Counter 2" x="1666" y="49" width="14" height="12">
+   <properties>
+    <property name="counter" value=""/>
+   </properties>
+  </object>
+  <object name="Counter 3" x="1827" y="47" width="14" height="12">
+   <properties>
+    <property name="counter" value=""/>
+   </properties>
+  </object>
+  <object name="Counter 4" x="1971" y="44" width="14" height="12">
+   <properties>
+    <property name="counter" value=""/>
+   </properties>
+  </object>
+  <object name="Counter 5" x="2020" y="45" width="14" height="12">
+   <properties>
+    <property name="counter" value=""/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup name="Books" width="160" height="160">
+  <object name="Book 1" x="401" y="34" width="14" height="10">
+   <properties>
+    <property name="book" value="0"/>
+   </properties>
+  </object>
+  <object name="Book 2" x="419" y="32" width="14" height="10">
+   <properties>
+    <property name="book" value="0"/>
+   </properties>
+  </object>
+  <object name="Book 3" x="436" y="33" width="14" height="10">
+   <properties>
+    <property name="book" value="0"/>
+   </properties>
+  </object>
+  <object name="Book 4" x="1300" y="18" width="14" height="10">
+   <properties>
+    <property name="book" value="1"/>
+   </properties>
+  </object>
+  <object name="Book 5" x="1315" y="18" width="14" height="10">
+   <properties>
+    <property name="book" value="1"/>
+   </properties>
+  </object>
+  <object name="Book 6" x="1414" y="16" width="14" height="10">
+   <properties>
+    <property name="book" value="1"/>
+   </properties>
+  </object>
+  <object name="Book 7" x="1396" y="17" width="14" height="10">
+   <properties>
+    <property name="book" value="1"/>
+   </properties>
+  </object>
+  <object name="Book 8" x="1348" y="17" width="14" height="10">
+   <properties>
+    <property name="book" value="0"/>
+   </properties>
+  </object>
+  <object name="Book 9" x="1367" y="17" width="14" height="10">
+   <properties>
+    <property name="book" value="0"/>
+   </properties>
+  </object>
+  <object name="Book 10" x="1457" y="18" width="14" height="10">
+   <properties>
+    <property name="book" value="0"/>
+   </properties>
+  </object>
+  <object name="Book 11" x="1491" y="17" width="14" height="10">
+   <properties>
+    <property name="book" value="0"/>
+   </properties>
+  </object>
+  <object name="Book 12" x="1539" y="16" width="14" height="10">
+   <properties>
+    <property name="book" value="0"/>
+   </properties>
+  </object>
+  <object name="Book 13" x="1570" y="17" width="14" height="10">
+   <properties>
+    <property name="book" value="0"/>
+   </properties>
+  </object>
+  <object name="Book 14" x="19" y="275" width="14" height="10">
+   <properties>
+    <property name="book" value="2"/>
+   </properties>
+  </object>
+  <object name="Book 15" x="36" y="274" width="14" height="10">
+   <properties>
+    <property name="book" value="2"/>
+   </properties>
+  </object>
+  <object name="Book 16" x="118" y="274" width="14" height="10">
+   <properties>
+    <property name="book" value="2"/>
+   </properties>
+  </object>
+  <object name="Book 17" x="136" y="273" width="14" height="10">
+   <properties>
+    <property name="book" value="2"/>
+   </properties>
+  </object>
+  <object name="Book 18" x="21" y="224" width="14" height="10">
+   <properties>
+    <property name="book" value="2"/>
+   </properties>
+  </object>
+  <object name="Book 19" x="37" y="225" width="14" height="10">
+   <properties>
+    <property name="book" value="2"/>
+   </properties>
+  </object>
+  <object name="Book 20" x="116" y="225" width="14" height="10">
+   <properties>
+    <property name="book" value="2"/>
+   </properties>
+  </object>
+  <object name="Book 21" x="136" y="225" width="14" height="10">
+   <properties>
+    <property name="book" value="2"/>
+   </properties>
+  </object>
+  <object name="Book 22" x="36" y="176" width="14" height="10">
+   <properties>
+    <property name="book" value="2"/>
+   </properties>
+  </object>
+  <object name="Book 23" x="133" y="175" width="14" height="10">
+   <properties>
+    <property name="book" value="2"/>
+   </properties>
+  </object>
+  <object name="Book 24" x="56" y="174" width="14" height="10">
+   <properties>
+    <property name="book" value="0"/>
+   </properties>
+  </object>
+  <object name="Book 25" x="103" y="172" width="14" height="10">
+   <properties>
+    <property name="book" value="0"/>
+   </properties>
+  </object>
+  <object name="Book 26" x="20" y="174" width="14" height="10">
+   <properties>
+    <property name="book" value="0"/>
+   </properties>
+  </object>
+  <object name="Book 27" x="73" y="175" width="14" height="10">
+   <properties>
+    <property name="book" value="1"/>
+   </properties>
+  </object>
+  <object name="Book 28" x="88" y="173" width="14" height="10">
+   <properties>
+    <property name="book" value="1"/>
+   </properties>
+  </object>
+  <object name="Book 29" x="123" y="172" width="14" height="10">
+   <properties>
+    <property name="book" value="1"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup name="Interactables" width="160" height="160">
+  <object name="Object 1" x="359" y="2285" width="11" height="15">
+   <properties>
+    <property name="greenblock" value="0, 1, 2, 3"/>
+    <property name="limited" value=""/>
+   </properties>
+  </object>
+  <object name="Object 2" x="373" y="2299" width="11" height="15">
+   <properties>
+    <property name="greenblock" value="0, 1, 2, 3"/>
+    <property name="limited" value=""/>
+   </properties>
+  </object>
+  <object name="Object 3" x="392" y="2301" width="11" height="15">
+   <properties>
+    <property name="greenblock" value="0, 1, 2, 3"/>
+    <property name="limited" value=""/>
+   </properties>
+  </object>
+  <object name="Object 4" x="406" y="2302" width="11" height="15">
+   <properties>
+    <property name="greenblock" value="0, 1, 2, 3"/>
+    <property name="limited" value=""/>
+   </properties>
+  </object>
+  <object name="Object 5" x="375" y="2332" width="11" height="15">
+   <properties>
+    <property name="greenblock" value="0, 1, 2, 3"/>
+    <property name="limited" value=""/>
+   </properties>
+  </object>
+  <object name="Object 6" x="391" y="2332" width="11" height="15">
+   <properties>
+    <property name="greenblock" value="0, 1, 2, 3"/>
+    <property name="limited" value=""/>
+   </properties>
+  </object>
+  <object name="Object 7" x="403" y="2332" width="11" height="15">
+   <properties>
+    <property name="greenblock" value="0, 1, 2, 3"/>
+    <property name="limited" value=""/>
+   </properties>
+  </object>
+ </objectgroup>
+</map>

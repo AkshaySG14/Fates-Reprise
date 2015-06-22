@@ -1,0 +1,26 @@
+
+Items.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+Sword
+  rotate: false
+  xy: 1, 1
+  size: 20, 20
+  orig: 20, 20
+  offset: 0, 0
+  index: -1
+ConcussiveShot
+  rotate: false
+  xy: 23, 6
+  size: 15, 15
+  orig: 15, 15
+  offset: 0, 0
+  index: -1
+Shield
+  rotate: false
+  xy: 40, 6
+  size: 15, 15
+  orig: 15, 15
+  offset: 0, 0
+  index: -1
