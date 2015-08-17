@@ -12,6 +12,7 @@ import com.inoculates.fatesreprise.Items.BasicSwordItem;
 import com.inoculates.fatesreprise.Items.ConcussiveShotItem;
 import com.inoculates.fatesreprise.Screens.GameScreen;
 import com.inoculates.fatesreprise.Text.Dialogue;
+import com.inoculates.fatesreprise.UI.UI;
 
 public class StartingEvent extends Event {
     Messenger messenger;
@@ -61,24 +62,24 @@ public class StartingEvent extends Event {
 
         // Starts the series of events. Similar to the messenger events.
         switch (stage) {
-            case 5:
+            case 0:
                 dialogue = new Dialogue(screen, "Oh dear. It appears I've forgotten something. To aid you in " +
                         "your quest. I have two items of some considerable worth to give to you. The first of which is a " +
                         "runed sword. Here.", this);
                 screen.setText(dialogue, dialogue.getBackground());
                 break;
-            case 0:
+            case 1:
                 // Gives Daur the runed sword.
                 aqItems = new ItemAcquisitionEvents(map, screen, BasicSwordItem.class, this);
                 break;
-            case 3:
+            case 2:
                 dialogue = new Dialogue(screen, "Next, I will teach you a very basic spell. This will come in handy for " +
                         "shocking enemies, so that you may destroy them more easily.",
                         event);
                 screen.setText(dialogue, dialogue.getBackground());
                 screen.daur.stun();
                 break;
-            case 1:
+            case 3:
                 // Gives Daur the concussive shot item.
                 aqItems = new ItemAcquisitionEvents(map, screen, ConcussiveShotItem.class, this);
                 break;
@@ -89,7 +90,7 @@ public class StartingEvent extends Event {
                 screen.setText(dialogue, dialogue.getBackground());
                 screen.daur.stun();
                 break;
-            case 2:
+            case 5:
                 // Ends the event by fading the messenger and unfreezing the screen, as well as Daur.
                 messenger.fade(false);
                 screen.setText(null, null);
@@ -98,6 +99,7 @@ public class StartingEvent extends Event {
                     public void run() {
                         screen.daur.unStun();
                         screen.unFreeze();
+                        screen.unPauseGame();
                         screen.characters1.remove(messenger);
                     }
                 }, 1);

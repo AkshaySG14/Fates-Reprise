@@ -7,7 +7,7 @@ import com.inoculates.fatesreprise.FatesReprise;
 // The class that launches the desktop application. Functional and responsible for the jar file.
 public class DesktopLauncher {
 	public static void main (String[] arg) {
-		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		new LwjglApplication(new FatesReprise(), config);
+        LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+        new LwjglApplication(new FatesReprise(), config);
 	}
 }

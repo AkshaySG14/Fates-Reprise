@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+// This is the superclass for all worlds, and contains valuable methods.
 public abstract class World {
 
     protected Storage storage;
@@ -33,8 +34,11 @@ public abstract class World {
 
     public int cellX = 1, cellY = 16;
 
+    // Rectangular areas that causes a black fog of varying intensity to display.
     protected ArrayList<RectangleMapObject> fogIn = new ArrayList<RectangleMapObject>();
     protected ArrayList<RectangleMapObject> fogOut = new ArrayList<RectangleMapObject>();
+    // Cells of the map, as well as the cells that specifically cause another shader to be used. These are both expressed
+    // as hashmaps.
     protected Map<String, ArrayList<TiledMapTileLayer.Cell>> cells = new HashMap<String, ArrayList<TiledMapTileLayer.Cell>>();
     protected Map<String, Vector2> shaderCells = new HashMap<String, Vector2>();
 
@@ -49,29 +53,34 @@ public abstract class World {
         setShaderTransitions();
         createCellMap();
     }
-
+    // Main method that creates all aspects of the map, including the characters, interactables, and tile objects (like
+    // bushes).
     public void createRenewables() {
         createCharRenewables();
         createInteractableRenewables();
         createTileRenewables();
     }
 
+    // Creates all characters.
     private void createCharRenewables() {
+        // Looks at all rectangular map objects that are in the layer Spawns.
         for (MapObject object : map.getLayers().get("Spawns").getObjects())
             if (object instanceof RectangleMapObject) {
+                // Casts the rectangular object into a normal rectangle.
                 RectangleMapObject rectObject = (RectangleMapObject) object;
                 Rectangle rect = rectObject.getRectangle();
+                // Gets the middle of the spawn rectangle.
                 float x = (int) (rect.getX() / layer.getTileWidth()) * layer.getTileWidth() + layer.getTileWidth() / 2;
                 float y = (int) (rect.getY() / layer.getTileHeight()) * layer.getTileHeight() + layer.getTileHeight() / 2;
                 ArrayList<Character> characterList;
-
+                // The character rendering list is added to depending on the type of world this instance is.
                 if (this instanceof UpperWorld)
                     characterList = screen.characters1;
                 else if (this instanceof UnderWorld)
                     characterList = screen.characters2;
                 else
                     characterList = screen.characters3;
-
+                // Creates the character based on the spawn.
                 if (object.getProperties().containsKey("beetlespawn")) {
                     Beetle beetle = new Beetle(screen, map, screen.characterAtlases.get(2));
                     beetle.setSpawn(x - beetle.getWidth() / 2, y - beetle.getHeight() / 2);
@@ -110,6 +119,7 @@ public abstract class World {
             }
     }
 
+    // Same but for interactables.
     private void createInteractableRenewables() {
         for (MapObject object : map.getLayers().get("Interactables").getObjects())
             if (object instanceof RectangleMapObject) {
@@ -128,6 +138,7 @@ public abstract class World {
             }
     }
 
+    // Same but for tile objects.
     private void createTileRenewables() {
         ArrayList<TiledMapTileLayer.Cell> tempCells = new ArrayList<TiledMapTileLayer.Cell>();
 
@@ -172,9 +183,12 @@ public abstract class World {
         tempCells.clear();
     }
 
+    // This removes all renewables, depending on certain conditions. Note that this method is launched when the player
+    // enters/leaves a world. Meaning if a character enters a dungeon from the overworld, all renewables in the overworld
+    // shall be erased. This is so that when the renewables are recreated, they are not created over existing renewables.
     public void cleanRenewables() {
         ArrayList<Character> characterList = new ArrayList<Character>();
-
+        // Adds to the separate list to create a temporary copy of the corresponding character arraylist.
         if (this instanceof UpperWorld)
             for (Character character : screen.characters1)
                 characterList.add(character);
@@ -184,7 +198,7 @@ public abstract class World {
         else
             for (Character character : screen.characters3)
                 characterList.add(character);
-
+        // If the character is an enemy, deletes it rom the corresponding character list.
         for (Character character : characterList)
             if (character instanceof Enemy) {
                 if (this instanceof UpperWorld)
@@ -194,7 +208,7 @@ public abstract class World {
                 else
                     screen.characters3.remove(character);
             }
-
+        // Same but for all interactables.
         ArrayList<Interactable> interactableList = new ArrayList<Interactable>();
 
         for (Interactable interactable : screen.interactables)
@@ -203,7 +217,7 @@ public abstract class World {
         for (Interactable interactable : interactableList)
             screen.interactables.remove(interactable);
     }
-
+    // This method checks if the cell has a bush tag. If so, creates the bush over the tile and deletes the tag.
     private void checkCell(TiledMapTileLayer.Cell cell) {
         for (TiledMapTileLayer.Cell checkCell : cells.get("Spring Bush")) {
             if (cell.equals(checkCell)) {
@@ -229,6 +243,7 @@ public abstract class World {
 
     }
 
+    // Creates four new array lists, one for each type of bush.
     private void createCellMap() {
         cells.put("Spring Bush", new ArrayList<TiledMapTileLayer.Cell>());
         cells.put("Summer Bush", new ArrayList<TiledMapTileLayer.Cell>());
@@ -236,7 +251,7 @@ public abstract class World {
         cells.put("Winter Bush", new ArrayList<TiledMapTileLayer.Cell>());
     }
 
-
+    // If the player is beyond a certain point (the boundaries of a cell), the camera will pan over to the new cell.
     public void checkCameraChange() {
         if (screen.daur.getX() + screen.daur.getWidth() / 2 > layer.getTileWidth() * 10 * cellX) {
             cellX++;
@@ -254,11 +269,13 @@ public abstract class World {
         }
     }
 
+    // This causes the panning effect when the camera moves a cell.
     protected void setCameraPosition(boolean onXAxis, boolean plus) {
         float deltaTime = 0;
 
         if (onXAxis) {
             if (plus)
+                // Using a delayed for loop, pans the camera to the right.
                 for (float x = camera.position.x; x <= cellX * 10 * layer.getTileWidth() - camera.viewportWidth / 2; x++) {
                     final float newX = x;
                     Timer timer = new Timer();
@@ -266,6 +283,7 @@ public abstract class World {
                         @Override
                         public void run() {
                             camera.position.set(newX, camera.position.y, 0);
+                            // Ensures that the UI pans with the camera, rather than jumps.
                             for (UI ui : screen.UIS)
                                 ui.renewPosition();
                         }
@@ -321,12 +339,15 @@ public abstract class World {
                 }
             }
         }
+        // Resets the position of the max, informs the program which cell the player resides in, checks if a shader
+        // transition is needed, and sets Daur's new spawn point (if the player should fall down a hole).
         screen.mask.setPosition(camera.position.x - camera.viewportWidth / 2, camera.position.y - camera.viewportHeight / 2);
         storage.setCells(cellX, cellY);
         checkShaderTransition();
         setSpawnPoint(onXAxis, plus);
     }
 
+    // Sets the spawn point. This is if the player is erased from the map for any reason, including falling down a hole.
     protected void setSpawnPoint(boolean xAxis, boolean plus) {
         if (xAxis) {
             if (plus)
@@ -341,6 +362,7 @@ public abstract class World {
         }
     }
 
+    // Gets the fog of the cell. If the cell is meant to be a fog in or fog out transition.
     public Rectangle getFog(int p, boolean in) {
         if (in)
             return fogIn.get(p).getRectangle();
@@ -348,6 +370,8 @@ public abstract class World {
             return fogOut.get(p).getRectangle();
     }
 
+    // Checks whether a shader should be used to draw the map and the renewables. This is based on the dictionary shader
+    // cells. If the shader cell indicates a certain transition should be made, it will be made.
     protected void checkShaderTransition() {
         Vector2 cells = new Vector2(cellX, cellY);
         if (shaderCells.get("fwin1").equals(cells) || shaderCells.get("fwin2").equals(cells))
@@ -356,6 +380,7 @@ public abstract class World {
             screen.setCurrentMapShader(null);
     }
 
+    // Adds the fog to the fog array list.
     protected void setFog() {
         for (MapObject object : map.getLayers().get("Fogs").getObjects())
             if (object instanceof RectangleMapObject) {
@@ -368,10 +393,12 @@ public abstract class World {
             }
     }
 
+    // Gets the intensity of the fog (alpha of the mask).
     public float getFogAmount(int p) {
         return Float.parseFloat(fogIn.get(p).getProperties().get("FI").toString());
     }
 
+    // Returns the size of the fog arrays.
     public int getFogSize(boolean in) {
         if (in)
             return fogIn.size();
@@ -394,6 +421,8 @@ public abstract class World {
         cellY = y;
     }
 
+    // This sets the camera instantly to a cell, rather than panning to it. This is useful if the player has just left or
+    // entered a world.
     public void setCameraInstantly() {
         for (int i = 0; i < 16; i++)
             if (screen.daur.getX() + screen.daur.getWidth() / 2 > layer.getTileWidth() * 10 * i)

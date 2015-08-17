@@ -60,7 +60,7 @@ public class MessengerMeeting extends Event {
         final Event event = this;
 
         switch (stage) {
-            case 3:
+            case 0:
                 // Creates the dialogue text, stuns Daur to prevent movement, freezes the screen to prevent the user
                 // from bringing up options, sets the direction of Daur to look up, and makes Daur idle.
                 Dialogue dialogue = new Dialogue(screen, "Closer wanderer...", this);
@@ -112,7 +112,7 @@ public class MessengerMeeting extends Event {
                     }
                 }, 1.8f);
                 break;
-            case 0:
+            case 3:
                 // Fades out and proceeds to the game itself.
                 screen.setText(null, null);
                 // Washes the screen out.

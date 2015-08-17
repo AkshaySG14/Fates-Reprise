@@ -49,10 +49,10 @@ public class Dialogue {
 
     private void createText() {
         AssetManager manager = new AssetManager();
-        manager.load("Text/textbackground.pack", TextureAtlas.class);
+        manager.load("Text/TextBackground.pack", TextureAtlas.class);
         manager.finishLoading();
 
-        background = new TextBackground(screen, (TextureAtlas) manager.get("Text/textbackground.pack"));
+        background = new TextBackground(screen, (TextureAtlas) manager.get("Text/TextBackground.pack"));
         Texture texture = new Texture(Gdx.files.internal("Text/dialogue.png"));
         texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
         TextureRegion region = new TextureRegion(texture);
