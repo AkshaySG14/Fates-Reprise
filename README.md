@@ -5,8 +5,7 @@ formidable dungeons. Fate's Reprise makes use of fluid combat, puzzle-solving, a
 game that users will find both challenging and interesting. By battling with both sword and spells, the game offers a variety of 
 ways to tackle enemies and bosses, as well as numerous difficult puzzles.
 
-As a computer game, Fate's Reprise is operated through the keyboard exclusively, although some of the settings can be changed i
-n game. ALl in-game controls are entirely
+As a computer game, Fate's Reprise is operated through the keyboard exclusively, although some of the settings can be changed in game. All in-game controls are entirely
 modifiable, although the default controls use the WASD setup for movement.
 
 The game was made through use of the java engine Libgdx, but still mostly operates upon the principles of java. The code can be 
