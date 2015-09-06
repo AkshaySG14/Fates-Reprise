@@ -11,6 +11,6 @@ modifiable, although the default controls use the WASD setup for movement.
 The game was made through use of the java engine Libgdx, but still mostly operates upon the principles of java. The code can be 
 looked through and understood with at least a basic level of understanding of Libgdx, and an intermediate understanding of java.
 
-For anyone wishing to play the game itself, a jar is available for download, that allows any OS to easily launch and run the game.
+For anyone wishing to play the game itself, a jar is available for download, which allows any OS to easily launch and run the game.
 
 Made by Akshay Subramaniam.
