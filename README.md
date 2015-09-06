@@ -1,5 +1,5 @@
 # Fates-Reprise
-Fate's Reprise is another desktop game, and it is heavily inspired by the handheld game Link's Awakening. Fate's Reprise is a top-down
+Fate's Reprise is another desktop game, and is heavily inspired by the handheld game Link's Awakening. Fate's Reprise is a top-down
 game where the player controls a single character named Daur. The goal of the game is to rescue eight gods who are trapped in 
 formidable dungeons. Fate's Reprise makes use of fluid combat, puzzle-solving, and dialogue to create an interesting and deep 
 game that users will find both challenging and interesting. By battling with both sword and spells, the game offers a variety of 
