@@ -7,10 +7,9 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Timer;
-import com.inoculates.fatesreprise.AdvSprite;
 import com.inoculates.fatesreprise.Interactables.Interactable;
 import com.inoculates.fatesreprise.Screens.GameScreen;
-import com.inoculates.fatesreprise.Storage;
+import com.inoculates.fatesreprise.Storage.Storage;
 
 import java.awt.*;
 
@@ -38,8 +37,9 @@ public abstract class Character extends AdvSprite {
     // properly calculated when on a platform, as like in real life.
     protected boolean pX = false, pY = false;
     // Whether the character is stunned (cannot move but still properly displays animations) or completely frozen
-    // (animation included).
-    protected boolean stun = false, frozen = false;
+    // (animation included). The ignore camera boolean means that the character is drawn even when outside the current
+    // camera's view.
+    protected boolean stun = false, frozen = false, ignoreCamera;
     // Whether the character is transparent (does NOT collide with other characters).
     protected boolean transparent = false;
 
@@ -68,7 +68,8 @@ public abstract class Character extends AdvSprite {
     // that updates the character's actions, like animation frames or movement.
     public void draw(Batch batch) {
         super.draw(batch);
-        periodicCheck(Gdx.graphics.getDeltaTime());
+        if (!screen.isPaused() || this instanceof Daur)
+            periodicCheck(Gdx.graphics.getDeltaTime());
     }
 
     // Updates the time, updates the character sprite itself, sets the current animation of the character, and sets the
@@ -80,7 +81,7 @@ public abstract class Character extends AdvSprite {
         chooseSprite();
     }
 
-    //Sets the velocity components of the character depending on the modifiers.
+    // Sets the velocity components of the character depending on the modifiers.
     protected void SVX(float x) {
         vel.x = x - modifierX * Math.signum(x);
     }
@@ -117,7 +118,49 @@ public abstract class Character extends AdvSprite {
         // for its properties.
         TiledMapTileLayer.Cell cell = layer.getCell((int) (x / layer.getTileWidth()), (int) (y / layer.getTileHeight()));
         // Checks if one of the cell properties is blocked.
-        return cell != null && cell.getTile() != null && (cell.getTile().getProperties().containsKey("blocked"));
+        return cell != null && cell.getTile() != null && ((cell.getTile().getProperties().containsKey("blocked")));
+    }
+
+    // Checks whether the cell at the x and y point is half blocked (8x8 and does not block missiles). There is one
+    // method for each orientation (bottom left, left, top left, etc.).
+    protected boolean isCellHalfBlockedBL(float x, float y) {
+        TiledMapTileLayer.Cell cell = layer.getCell((int) (x / layer.getTileWidth()), (int) (y / layer.getTileHeight()));
+        return cell != null && cell.getTile() != null && ((cell.getTile().getProperties().containsKey("halfblockedBL")));
+    }
+
+    protected boolean isCellHalfBlockedL(float x, float y) {
+        TiledMapTileLayer.Cell cell = layer.getCell((int) (x / layer.getTileWidth()), (int) (y / layer.getTileHeight()));
+        return cell != null && cell.getTile() != null && ((cell.getTile().getProperties().containsKey("halfblockedL")));
+    }
+
+    protected boolean isCellHalfBlockedTL(float x, float y) {
+        TiledMapTileLayer.Cell cell = layer.getCell((int) (x / layer.getTileWidth()), (int) (y / layer.getTileHeight()));
+        return cell != null && cell.getTile() != null && ((cell.getTile().getProperties().containsKey("halfblockedTL")));
+    }
+
+    protected boolean isCellHalfBlockedT(float x, float y) {
+        TiledMapTileLayer.Cell cell = layer.getCell((int) (x / layer.getTileWidth()), (int) (y / layer.getTileHeight()));
+        return cell != null && cell.getTile() != null && ((cell.getTile().getProperties().containsKey("halfblockedT")));
+    }
+
+    protected boolean isCellHalfBlockedTR(float x, float y) {
+        TiledMapTileLayer.Cell cell = layer.getCell((int) (x / layer.getTileWidth()), (int) (y / layer.getTileHeight()));
+        return cell != null && cell.getTile() != null && ((cell.getTile().getProperties().containsKey("halfblockedTR")));
+    }
+
+    protected boolean isCellHalfBlockedR(float x, float y) {
+        TiledMapTileLayer.Cell cell = layer.getCell((int) (x / layer.getTileWidth()), (int) (y / layer.getTileHeight()));
+        return cell != null && cell.getTile() != null && ((cell.getTile().getProperties().containsKey("halfblockedR")));
+    }
+
+    protected boolean isCellHalfBlockedBR(float x, float y) {
+        TiledMapTileLayer.Cell cell = layer.getCell((int) (x / layer.getTileWidth()), (int) (y / layer.getTileHeight()));
+        return cell != null && cell.getTile() != null && ((cell.getTile().getProperties().containsKey("halfblockedBR")));
+    }
+
+    protected boolean isCellHalfBlockedB(float x, float y) {
+        TiledMapTileLayer.Cell cell = layer.getCell((int) (x / layer.getTileWidth()), (int) (y / layer.getTileHeight()));
+        return cell != null && cell.getTile() != null && ((cell.getTile().getProperties().containsKey("halfblockedB")));
     }
 
     // Checks whether the cell at the x and y point is a hole.
@@ -193,26 +236,17 @@ public abstract class Character extends AdvSprite {
     // Checks whether the cell at the x and y point is shallow water. This is will be checked every time the character's
     // frame is updated.
     protected boolean detectShallowWater() {
-        for (float step = 0; step < getWidth() - 2; step += layer.getTileWidth() / 16)
-            if (isCellShallowWater(getX() + step + 1, getY() + 1))
-                return true;
-        return false;
+        return (isCellShallowWater(getCX(), getY() + 2));
     }
 
     // Same but for normal swimmable water.
     protected boolean detectWater() {
-        for (float step = 0; step < getWidth() - 2; step += layer.getTileWidth() / 16)
-            if (isCellWater(getX() + step + 1, getY() + 1))
-                return true;
-        return false;
+        return (isCellWater(getCX(), getY() + 2));
     }
 
     // Same but for deep water.
     protected boolean detectDeepWater() {
-        for (float step = 0; step < getWidth() - 2; step += layer.getTileWidth() / 16)
-            if (isCellDeepWater(getX() + step + 1, getY() + 1))
-                return true;
-        return false;
+        return (isCellDeepWater(getCX(), getY() + 2));
     }
 
     // Same but for slow cells. Note that the whole character's bounding rectangle is scanned for any point that exists
@@ -242,12 +276,12 @@ public abstract class Character extends AdvSprite {
         // The point of the hole (has both x and y components).
         Point holePoint;
         // Iterates through the character's width (from the x origin to the right end of the character).
-        for (float step = 0; step < getWidth() - 4; step += layer.getTileWidth() / 16)
-            // Checks if the x point and the y origin point of the character are inside a cell that i a hole.
-            if (isCellHole(getX() + 2 + step, getY())) {
+        for (float step = 0; step < getWidth() - 5; step += layer.getTileWidth() / 16)
+            // Iterates through the character's width (from the x origin to the right end of the character).
+            if (isCellHole(getX() + 2 + step, getY() + 2)) {
                 // These complex-looking lines of code simply get the middle of the cell with the hole in it.
                 float holeX = (int) ((getX() + 2 + step) / layer.getTileWidth()) * layer.getTileWidth() + layer.getTileWidth() * 0.5f;
-                float holeY = (int) ((getY()) / layer.getTileHeight()) * layer.getTileHeight() + layer.getTileHeight() * 0.5f;
+                float holeY = (int) ((getY() + 2) / layer.getTileHeight()) * layer.getTileHeight() + layer.getTileHeight() * 0.5f;
                 // Sets the middle of the cell as the hole point and returns it.
                 holePoint = new Point((int) holeX, (int) holeY);
                 return holePoint;
@@ -266,7 +300,7 @@ public abstract class Character extends AdvSprite {
         return false;
     }
 
-    //This periodically checks whether any part of the character is in a blocked cell if his x velocity is negative.
+    // This periodically checks whether any part of the character is in a blocked cell if his x velocity is negative.
     protected boolean collidesLeft() {
         for (float step = 0; step < getHeight() - 5; step += layer.getTileHeight() / 16)
             if (isCellBlocked(getX() + 1, getY() + 1 + step) ||
@@ -276,7 +310,7 @@ public abstract class Character extends AdvSprite {
         return false;
     }
 
-    //This periodically checks whether any part of the character is in a blocked cell if his y velocity is positive.
+    // This periodically checks whether any part of the character is in a blocked cell if his y velocity is positive.
     protected boolean collidesTop() {
         for (float step = 0; step < getWidth() - 2; step += layer.getTileWidth() / 16) {
             if (isCellBlocked(getX() + 1 + step, getY() + getHeight() - 5))
@@ -291,7 +325,7 @@ public abstract class Character extends AdvSprite {
         return false;
     }
 
-    //This periodically checks whether any part of the knight is in a blocked cell if his y velocity is negative.
+    // This periodically checks whether any part of the character is in a blocked cell if his y velocity is negative.
     protected boolean collidesBottom() {
         for (float step = 0; step < getWidth() - 2; step += layer.getTileWidth() / 16)
             if (isCellBlocked(getX() + 1 + step, getY() + 1))
@@ -307,10 +341,10 @@ public abstract class Character extends AdvSprite {
 
     // Checks if this character's bounding rectangle intersects another's.
     protected boolean collidesCharacter() {
-        for (Character character : screen.charIterator)
+        for (Character character : screen.drawnSprites)
             for (float step = 0; step < getWidth() - 2; step += layer.getTileWidth() / 16)
-                for (float step2 = 0; step2 < getHeight() - 1; step2 += layer.getTileHeight() / 16)
-                    if (character.getBoundingRectangle().contains(getX() + 1 + step, getY() + 1 + step2) && !character.equals(this))
+                for (float step2 = 0; step2 < getHeight() + 1; step2 += layer.getTileHeight() / 16)
+                    if (character.getBoundingRectangle().contains(getX() + 1 + step, getY() - 1 + step2) && !character.equals(this))
                         return true;
         return false;
     }
@@ -326,7 +360,87 @@ public abstract class Character extends AdvSprite {
         return false;
     }
 
-    // Modifies the velocity of the character for a short amount of time. NOTE: this overrides the character's current
+    // This method is used to detect collisions with any halfblock orientations. There are four of these methods,
+    // corresponding with the different orientations of Daur.
+    protected boolean collidesHalfBlockRight() {
+        // For half blocks to the left and right.
+        for (float step = 0; step < getHeight() - 5; step += layer.getTileHeight() / 16)
+            if (isCellHalfBlockedL(getX() + getWidth() - 1, getY() + 1 + step) ||
+                    isCellHalfBlockedR(getX() + getWidth() - 8, getY() + 1 + step))
+                return true;
+        // For half blocks to the top.
+        for (float step = 0; step < getHeight() - 14; step += layer.getTileHeight() / 16)
+            if (isCellHalfBlockedTL(getX() + getWidth() - 1, getY() + 1 + step) ||
+                    isCellHalfBlockedT(getX() + getWidth() - 1, getY() + 1 + step) ||
+                    isCellHalfBlockedTR(getX() + getWidth() - 8, getY() + 1 + step))
+                return true;
+        // For half blocks to the bottom.
+        for (float step = 0; step < getHeight() - 14; step += layer.getTileHeight() / 16)
+            if (isCellHalfBlockedBL(getX() + getWidth() - 1, getY() + 8 + step) ||
+                    isCellHalfBlockedBR(getX() + getWidth() - 8, getY() + 8 + step) ||
+                    isCellHalfBlockedB(getX() + getWidth() - 1, getY() + 8 + step))
+                return true;
+        return false;
+    }
+
+    protected boolean collidesHalfBlockLeft() {
+        for (float step = 0; step < getHeight() - 5; step += layer.getTileHeight() / 16)
+            if (isCellHalfBlockedR(getX() + 1, getY() + 1 + step) ||
+                    isCellHalfBlockedL(getX() + 8, getY() + 1 + step))
+                return true;
+        for (float step = 0; step < getHeight() - 14; step += layer.getTileHeight() / 16)
+            if (isCellHalfBlockedTR(getX() + 1, getY() + 1 + step) ||
+                    isCellHalfBlockedT(getX() + 1, getY() + 1 + step) ||
+                    isCellHalfBlockedTL(getX() + 8, getY() + 1 + step))
+                return true;
+        for (float step = 0; step < getHeight() - 14; step += layer.getTileHeight() / 16)
+            if (isCellHalfBlockedB(getX() + 1, getY() + 8 + step) ||
+                    isCellHalfBlockedBR(getX() + 1, getY() + 8 + step) ||
+                    isCellHalfBlockedBL(getX() + 8, getY() + 8 + step))
+                return true;
+        return false;
+    }
+
+    protected boolean collidesHalfBlockTop() {
+        // For bottom and top.
+        for (float step = 0; step < getWidth() - 2; step += layer.getTileWidth() / 16)
+            if (isCellHalfBlockedB(getX() + 1 + step, getY() + getHeight() - 5) ||
+                    isCellHalfBlockedT(getX() + 1 + step, getY() + getHeight() - 12))
+                return true;
+        // For right.
+        for (float step = 0; step < getWidth() - 10; step += layer.getTileWidth() / 16)
+            if (isCellHalfBlockedR(getX() + 1 + step, getY() + getHeight() - 5) ||
+                    isCellHalfBlockedTR(getX() + 1 + step, getY() + getHeight() - 12) ||
+                    isCellHalfBlockedBR(getX() + 1 + step, getY() + getHeight() - 5))
+                return true;
+        // For left.
+        for (float step = 0; step < getWidth() - 10; step += layer.getTileWidth() / 16)
+            if (isCellHalfBlockedL(getX() + 8 + step, getY() + getHeight() - 5) ||
+                    isCellHalfBlockedTL(getX() + 8 + step, getY() + getHeight() - 12) ||
+                    isCellHalfBlockedBL(getX() + 8 + step, getY() + getHeight() - 5))
+                return true;
+        return false;
+    }
+
+    protected boolean collidesHalfBlockBottom() {
+        for (float step = 0; step < getWidth() - 2; step += layer.getTileWidth() / 16)
+            if (isCellHalfBlockedB(getX() + 1 + step, getY() + 8) ||
+                    isCellHalfBlockedT(getX() + 1 + step, getY() + 1))
+                return true;
+        for (float step = 0; step < getWidth() - 10; step += layer.getTileWidth() / 16)
+            if (isCellHalfBlockedR(getX() + 1 + step, getY() + 1) ||
+                    isCellHalfBlockedTR(getX() + 1 + step, getY() + 1) ||
+                    isCellHalfBlockedBR(getX() + 1 + step, getY() + 8))
+                return true;
+        for (float step = 0; step < getWidth() - 10; step += layer.getTileWidth() / 16)
+            if (isCellHalfBlockedL(getX() + 8 + step, getY() + 1) ||
+                    isCellHalfBlockedTL(getX() + 8 + step, getY() + 1) ||
+                    isCellHalfBlockedBL(getX() + 8 + step, getY() + 8))
+                return true;
+        return false;
+    }
+
+        // Modifies the velocity of the character for a short amount of time. NOTE: this overrides the character's current
     // velocity and stuns it.
     public void modifyVelocity(float x, float y, float time) {
         // Sets new velocity.
@@ -335,14 +449,12 @@ public abstract class Character extends AdvSprite {
         // Stuns character.
         stun = true;
         // Unstuns after the specified time.
-        Timer timer = new Timer();
-        timer.scheduleTask(new Timer.Task() {
+        screen.globalTimer.scheduleTask(new Timer.Task() {
             @Override
             public void run() {
                 unStun();
             }
         }, time);
-        timer.start();
     }
 
     // This modifier is used to add or subtract from the character's velocity. Useful for slowing or speeding up the
@@ -389,6 +501,10 @@ public abstract class Character extends AdvSprite {
 
     public boolean isStunned() { return stun; }
 
+    public boolean isIgnoringCamera() {
+        return ignoreCamera;
+    }
+
     public void setFrozen(boolean isFrozen) {
         frozen = isFrozen;
     }
@@ -409,6 +525,16 @@ public abstract class Character extends AdvSprite {
 
     public void unStun() {
         stun = false;
+    }
+
+    public void ignoreCamera() {
+        ignoreCamera = true;
+    }
+
+    // Sets the character's velocity to zero.
+    public void freeze() {
+        vel.x = 0;
+        vel.y = 0;
     }
 
     // These abstract methods are dependant upon the nature of the character, and thus are left for the sub classes to

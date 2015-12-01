@@ -2,7 +2,7 @@ package com.inoculates.fatesreprise.InputProcessor;
 
 import com.badlogic.gdx.InputProcessor;
 import com.inoculates.fatesreprise.Screens.GameScreen;
-import com.inoculates.fatesreprise.Storage;
+import com.inoculates.fatesreprise.Storage.Storage;
 import com.inoculates.fatesreprise.UI.Shop;
 
 // This is the input or the shop.
@@ -78,7 +78,9 @@ public class ShopInput implements InputProcessor {
     private void buyItem() {
         if (storage.coins >= shop.getCost()) {
             storage.coins -= shop.getCost();
+            // Simutaneously adds the item to Daur's inventory, and removes it from the shop.
             storage.items.add(shop.getItem());
+            shop.removeItem();
         }
     }
 

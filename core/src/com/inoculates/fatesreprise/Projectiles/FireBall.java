@@ -59,45 +59,44 @@ public class FireBall extends Projectile {
     }
 
     // When a fireball hits either a terrain object or Daur.
-    protected void explode() {
+    public void explode() {
         // Explodes the terrain object, should it exist.
         explodeTile();
         final Projectile projectile = this;
         vel.x = 0;
         vel.y = 0;
-        Timer timer = new Timer();
         // Fades the fireball out before removing it.
-        timer.scheduleTask(new Timer.Task() {
+        screen.globalTimer.scheduleTask(new Timer.Task() {
             @Override
             public void run() {
                 setAlpha(0.8f);
             }
         }, 0.25f);
-        timer.scheduleTask(new Timer.Task() {
+        screen.globalTimer.scheduleTask(new Timer.Task() {
             @Override
             public void run() {
                 setAlpha(0.8f);
             }
         }, 0.25f);
-        timer.scheduleTask(new Timer.Task() {
+        screen.globalTimer.scheduleTask(new Timer.Task() {
             @Override
             public void run() {
                 setAlpha(0.5f);
             }
         }, 0.5f);
-        timer.scheduleTask(new Timer.Task() {
+        screen.globalTimer.scheduleTask(new Timer.Task() {
             @Override
             public void run() {
                 setAlpha(0.2f);
             }
         }, 0.75f);
-        timer.scheduleTask(new Timer.Task() {
+        screen.globalTimer.scheduleTask(new Timer.Task() {
             @Override
             public void run() {
-                screen.projectiles.remove(projectile);
+                if (screen.projectiles.contains(projectile))
+                    screen.projectiles.remove(projectile);
             }
         }, 1);
-        timer.start();
         exploding = true;
         animationTime = 0;
     }

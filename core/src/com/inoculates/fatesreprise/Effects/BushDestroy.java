@@ -20,32 +20,30 @@ public class BushDestroy extends Effect {
     // This is the method that slowly increases the transparency of the effect until it is finally removed.
     private void destroy() {
         final BushDestroy self = this;
-        Timer timer = new Timer();
-        timer.scheduleTask(new Timer.Task() {
+        screen.globalTimer.scheduleTask(new Timer.Task() {
             @Override
             public void run() {
                 setAlpha(0.75f);
             }
         }, 0.125f);
-        timer.scheduleTask(new Timer.Task() {
+        screen.globalTimer.scheduleTask(new Timer.Task() {
             @Override
             public void run() {
                 setAlpha(0.5f);
             }
         }, 0.25f);
-        timer.scheduleTask(new Timer.Task() {
+        screen.globalTimer.scheduleTask(new Timer.Task() {
             @Override
             public void run() {
                 setAlpha(0.25f);
             }
         }, 0.375f);
-        timer.scheduleTask(new Timer.Task() {
+        screen.globalTimer.scheduleTask(new Timer.Task() {
             @Override
             public void run() {
                 screen.effects.remove(self);
             }
         }, 0.5f);
-        timer.start();
     }
 
     protected void chooseSprite() {

@@ -2,11 +2,9 @@ package com.inoculates.fatesreprise.Effects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.inoculates.fatesreprise.AdvSprite;
+import com.inoculates.fatesreprise.Characters.AdvSprite;
 import com.inoculates.fatesreprise.Screens.GameScreen;
 
 // Effect superclass that allows the game screen to iterate over all effects.
@@ -31,7 +29,8 @@ public abstract class Effect extends AdvSprite {
 
     public void draw(Batch batch) {
         super.draw(batch);
-        update(Gdx.graphics.getDeltaTime());
+        if (!screen.isPaused())
+            update(Gdx.graphics.getDeltaTime());
     }
 
     protected void update(float deltaTime) {

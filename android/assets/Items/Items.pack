@@ -5,21 +5,112 @@ filter: Nearest,Nearest
 repeat: none
 Sword
   rotate: false
-  xy: 1, 1
+  xy: 1, 103
   size: 20, 20
   orig: 20, 20
   offset: 0, 0
   index: -1
+bronze
+  rotate: false
+  xy: 1, 86
+  size: 15, 15
+  orig: 15, 15
+  offset: 0, 0
+  index: -1
+compass
+  rotate: false
+  xy: 23, 108
+  size: 15, 15
+  orig: 15, 15
+  offset: 0, 0
+  index: -1
 ConcussiveShot
   rotate: false
-  xy: 23, 6
+  xy: 1, 69
+  size: 15, 15
+  orig: 15, 15
+  offset: 0, 0
+  index: -1
+copper
+  rotate: false
+  xy: 40, 108
+  size: 15, 15
+  orig: 15, 15
+  offset: 0, 0
+  index: -1
+diamond
+  rotate: false
+  xy: 1, 52
+  size: 15, 15
+  orig: 15, 15
+  offset: 0, 0
+  index: -1
+gold
+  rotate: false
+  xy: 1, 35
+  size: 15, 15
+  orig: 15, 15
+  offset: 0, 0
+  index: -1
+greathollowkey
+  rotate: false
+  xy: 1, 18
+  size: 15, 15
+  orig: 15, 15
+  offset: 0, 0
+  index: -1
+heart
+  rotate: false
+  xy: 1, 1
+  size: 15, 15
+  orig: 15, 15
+  offset: 0, 0
+  index: -1
+hollowkey
+  rotate: false
+  xy: 18, 86
+  size: 15, 15
+  orig: 15, 15
+  offset: 0, 0
+  index: -1
+map
+  rotate: false
+  xy: 18, 69
   size: 15, 15
   orig: 15, 15
   offset: 0, 0
   index: -1
 Shield
   rotate: false
-  xy: 40, 6
+  xy: 18, 52
+  size: 15, 15
+  orig: 15, 15
+  offset: 0, 0
+  index: -1
+silver
+  rotate: false
+  xy: 18, 35
+  size: 15, 15
+  orig: 15, 15
+  offset: 0, 0
+  index: -1
+staff
+  rotate: false
+  xy: 18, 18
+  size: 15, 15
+  orig: 15, 15
+  offset: 0, 0
+  index: -1
+WindSickle
+  rotate: false
+  xy: 18, 1
+  size: 15, 15
+  orig: 15, 15
+  offset: 0, 0
+  index: -1
+ZephyrsWisp
+  rotate: false
+  xy: 35, 91
   size: 15, 15
   orig: 15, 15
   offset: 0, 0

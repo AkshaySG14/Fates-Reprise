@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Timer;
 import com.inoculates.fatesreprise.Characters.Daur;
 import com.inoculates.fatesreprise.Screens.GameScreen;
-import com.inoculates.fatesreprise.Storage;
+import com.inoculates.fatesreprise.Storage.Storage;
 
 // This is the input processor that allows Daur to act when the user presses a keyboard button.
 public class DaurInput implements InputProcessor {
@@ -52,7 +52,7 @@ public class DaurInput implements InputProcessor {
             screen.mask.fadeIn(0.5f);
             // Pauses the game, to ensure that no enemy moves during the pause.
             screen.pauseGame();
-            // Unfreezes the game after 0.5 seconds.
+            // Unfreezes the game after 0.5 seconds. Creates a new timer to accomplish this.
             Timer timer = new Timer();
             timer.scheduleTask(new Timer.Task() {
                 @Override
@@ -60,7 +60,6 @@ public class DaurInput implements InputProcessor {
                     screen.unFreeze();
                 }
             }, 0.5f);
-            timer.start();
         }
 
         // If any of the storage slots are pressed, checks how Daur should react.

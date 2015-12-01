@@ -16,17 +16,21 @@ public class WoodenStatue extends Enemy {
     boolean following = false;
 
     public WoodenStatue(GameScreen screen, TiledMap map, TextureAtlas atlas) {
-        super(screen, map, atlas, 3, 0);
+        super(screen, map, atlas, 5, 0);
     }
 
     protected void update(float deltaTime) {
         if (vel.x == 0 && vel. y == 0)
             setState(IDLE, false);
 
-        if (checkTime > 1 && !isDead() && !following)
+        if (checkTime > 1 && !isDead() && !following) {
             checkFollow();
-        if (!isDead() && following)
+            checkTime = 0;
+        }
+        if (!isDead() && following) {
             follow();
+            checkContinue();
+        }
     }
 
     // Checks if Daur is close enough to follow.
@@ -37,24 +41,31 @@ public class WoodenStatue extends Enemy {
         // Gets the distance itself by using the square root method.
         float distance = (float) Math.sqrt(Math.pow(dX, 2) + Math.pow(dY,2));
 
-        // If the TOTAL distance is less than three times the width, begins following.
-        if (distance < getWidth() * 3) {
-            // Starts to follow and resets after 5 seconds (stops following).
+        // If the TOTAL distance is less than 1.2 times the width, begins following.
+        if (distance < getWidth() * 1.5f) {
+            // Starts to follow.
             following = true;
-            reset();
             return;
         }
-
 
         following = false;
     }
 
+    // Checks if Daur is close enough to CONTINUE to follow.
+    private void checkContinue() {
+        // Resets if Daur is too far away.
+        if (getDistance(getCX(), getCY(), screen.daur.getCX(), screen.daur.getCY()) > getWidth() * 4)
+            reset();
+    }
+
     // Same as the pantomime method.
     private void follow() {
+        // Continuously sets state to running.
+        setState(RUNNING, true);
         float angle = (float) Math.atan2(screen.daur.getY() + getHeight() / 2 - (getY() + getHeight() / 2),
                 screen.daur.getX() + getWidth() / 2 - (getX() + getWidth() / 2));
-        vel.x = (float) Math.cos(angle) / 2;
-        vel.y = (float) Math.sin(angle) / 2;
+        SVX((float) Math.cos(angle) / 2);
+        SVY((float) Math.sin(angle) / 2);
 
         if (Math.abs(vel.x) > Math.abs(vel.y)) {
             if (vel.x > 0)
@@ -73,38 +84,47 @@ public class WoodenStatue extends Enemy {
 
     // Sets following false, and sets state back to normal.
     private void reset() {
-        Timer timer = new Timer();
-        timer.scheduleTask(new Timer.Task() {
-            @Override
-            public void run() {
-                if (isDead())
-                    return;
-                following = false;
-                vel.x = 0;
-                vel.y = 0;
-                checkTime = 0;
-            }
-        }, 5);
-        timer.start();
+        following = false;
+        freeze();
+        checkTime = 0;
     }
 
+    // Overrides super method to prevent being moved and to follow immediately after being attacked.
     public void damageCollision(Sprite sprite, int dmg) {
-        if (armor >= dmg)
+        if (armor >= dmg || isDead())
+            return;
+
+        loseHealth(dmg);
+
+        // If not dead start following.
+        if (!isDead()) {
+            unStun();
+            following = true;
+            follow();
+        }
+        // Stun and immobilize if dead.
+        else {
+            stun();
+            freeze();
+        }
+    }
+
+    // Overridden for the same reason as the above method.
+    public void stunCollision(Sprite sprite, float time) {
+        if (invulnerability || transparent || isDead())
             return;
 
         stun();
-        loseHealth(dmg);
-        Timer timer = new Timer();
-        timer.scheduleTask(new Timer.Task() {
+        vel.x = 0;
+        vel.y = 0;
+        screen.globalTimer.scheduleTask(new Timer.Task() {
             @Override
             public void run() {
-                vel.x = 0;
-                vel.y = 0;
                 unStun();
             }
-        }, 0.1f);
-        timer.start();
+        }, time);
     }
+
     protected void updateTime(float deltaTime) {
         if (!frozen && state != IDLE)
             animationTime += deltaTime;
@@ -122,38 +142,6 @@ public class WoodenStatue extends Enemy {
         run = new Animation(0.25f, FD1, FD2);
     }
 
-    protected void checkCollisions() {
-        float oldX = getX(), oldY = getY();
-        boolean collisionX = false, collisionY = false;
-
-        setX(getX() + vel.x);
-
-        if (vel.x < 0)
-            collisionX = collidesLeft() || getX() < (getCellX() - 1) * layer.getTileWidth() * 10;
-        else if (vel.x > 0)
-            collisionX = collidesRight() || getX() + getWidth() > getCellX() * layer.getTileWidth() * 10;
-
-        if (collisionX) {
-            setX(oldX);
-            vel.x = 0;
-            vel.y = 0;
-        }
-
-        setY(getY() + vel.y);
-
-        if (vel.y < 0)
-            collisionY = collidesBottom() || getY() < (getCellY() - 1) * layer.getTileHeight() * 10;
-
-        else if (vel.y > 0)
-            collisionY = collidesTop() || getY() + getHeight() > getCellY() * layer.getTileHeight() * 10;
-
-        if ((collisionY)) {
-            setY(oldY);
-            vel.x = 0;
-            vel.y = 0;
-        }
-    }
-
     protected boolean overrideCheck() {
         return state == DEAD;
     }
@@ -167,6 +155,10 @@ public class WoodenStatue extends Enemy {
         Animation anim;
         if (state == IDLE)
             anim = idle;
+        else if (state == FALLING)
+            anim = fall;
+        else if (state == DROWNING)
+            anim = drown;
         else
             anim = run;
 

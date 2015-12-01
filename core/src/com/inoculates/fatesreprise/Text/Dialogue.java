@@ -146,15 +146,13 @@ public class Dialogue {
                 // Gets the final version for concurrent threading.
                 final int arrayLine = i;
                 final int charNumber = o;
-                Timer timer = new Timer();
-                timer.scheduleTask(new Timer.Task() {
+                screen.globalTimer.scheduleTask(new Timer.Task() {
                     @Override
                     public void run() {
                         // Slowly adds the characters to the line of the displaylist.
                         displayList[arrayLine] = displayList[arrayLine] + textList[arrayLine].charAt(charNumber);
                     }
                 }, deltaTime);
-                timer.start();
                 // Increases time.
                 deltaTime += 0.025f;
             }

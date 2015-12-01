@@ -11,7 +11,7 @@ import com.inoculates.fatesreprise.Screens.GameScreen;
 // Mud doll class. This is an enemy that shoots mud balls to damage Daur. The majority of the methods and variables are
 // very similar to the beetle class, and thus the beetle class should be looked at first.
 public class Doll extends Enemy {
-    protected static final int SHOOTING = 5;
+    protected static final int SHOOTING = 6;
     boolean cooldown = false;
 
     TextureAtlas.AtlasRegion FU1 = atlas.findRegion("dollU1"), FU2 = atlas.findRegion("dollU2"),
@@ -83,7 +83,7 @@ public class Doll extends Enemy {
         }
     }
 
-    // Creates nad launches a mud ball at Daur.
+    // Creates and launches a mud ball at Daur.
     private void shoot() {
         // Sets state to shooting.
         setState(SHOOTING, false);
@@ -95,20 +95,18 @@ public class Doll extends Enemy {
         cooldown = true;
         // After 0.5 seconds of being stunned, the doll will move again. After 2 seconds, the doll will be able to shoot
         // again.
-        Timer timer = new Timer();
-        timer.scheduleTask(new Timer.Task() {
+        screen.globalTimer.scheduleTask(new Timer.Task() {
             @Override
             public void run() {
                 setState(RUNNING, true);
             }
         }, 0.5f);
-        timer.scheduleTask(new Timer.Task() {
+        screen.globalTimer.scheduleTask(new Timer.Task() {
             @Override
             public void run() {
                 cooldown = false;
             }
         }, 2);
-        timer.start();
     }
 
     private void checkMove() {
@@ -121,23 +119,23 @@ public class Doll extends Enemy {
         else {
             switch (movementDirection) {
                 case 0:
-                    vel.x = 0.5f;
-                    vel.y = 0;
+                    SVX(0.5f);
+                    SVY(0);
                     dir = RIGHT;
                     break;
                 case 1:
-                    vel.x = -0.5f;
-                    vel.y = 0;
+                    SVX(-0.5f);
+                    SVY(0);
                     dir = LEFT;
                     break;
                 case 2:
-                    vel.x = 0;
-                    vel.y = 0.5f;
+                    SVX(0);
+                    SVY(0.5f);
                     dir = UP;
                     break;
                 case 3:
-                    vel.x = 0;
-                    vel.y = -0.5f;
+                    SVX(0);
+                    SVY(-0.5f);
                     dir = DOWN;
                     break;
             }
@@ -149,14 +147,12 @@ public class Doll extends Enemy {
     private void move() {
         if (!cooldown) {
             cooldown = true;
-            Timer timer = new Timer();
-            timer.scheduleTask(new Timer.Task() {
+            screen.globalTimer.scheduleTask(new Timer.Task() {
                 @Override
                 public void run() {
                     cooldown = false;
                 }
             }, 1);
-            timer.start();
         }
 
         movementDirection = ((int) (Math.random() * 16)) / 4;
@@ -211,6 +207,10 @@ public class Doll extends Enemy {
 
         if (state == IDLE || state == DEAD)
             anim = idle;
+        if (state == FALLING)
+            anim = fall;
+        if (state == DROWNING)
+            anim = drown;
         if (state == RUNNING)
             anim = run;
         if (state == SHOOTING)

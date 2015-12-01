@@ -5,266 +5,357 @@ filter: Nearest,Nearest
 repeat: none
 itemacquired
   rotate: false
-  xy: 1, 107
+  xy: 1, 13
   size: 17, 18
   orig: 17, 18
   offset: 0, 0
   index: -1
 toppush1
   rotate: false
-  xy: 1, 87
+  xy: 20, 13
   size: 17, 18
   orig: 17, 18
   offset: 0, 0
   index: -1
 toppush2
   rotate: false
-  xy: 20, 107
+  xy: 39, 13
   size: 17, 18
   orig: 17, 18
   offset: 0, 0
   index: -1
 attackleft1
   rotate: false
-  xy: 1, 67
+  xy: 58, 13
   size: 16, 18
   orig: 16, 18
   offset: 0, 0
   index: -1
 attackleft2
   rotate: false
-  xy: 20, 87
+  xy: 76, 13
   size: 16, 18
   orig: 16, 18
   offset: 0, 0
   index: -1
 attackright1
   rotate: false
-  xy: 39, 107
+  xy: 94, 13
   size: 16, 18
   orig: 16, 18
   offset: 0, 0
   index: -1
 attackright2
   rotate: false
-  xy: 1, 47
+  xy: 112, 13
   size: 16, 18
   orig: 16, 18
   offset: 0, 0
   index: -1
 attackup1
   rotate: false
-  xy: 19, 67
+  xy: 130, 13
   size: 16, 18
   orig: 16, 18
   offset: 0, 0
   index: -1
 bottom1
   rotate: false
-  xy: 38, 87
+  xy: 148, 13
   size: 16, 18
   orig: 16, 18
   offset: 0, 0
   index: -1
 bottom2
   rotate: false
-  xy: 57, 107
+  xy: 166, 13
   size: 16, 18
   orig: 16, 18
   offset: 0, 0
   index: -1
 bottompush1
   rotate: false
-  xy: 1, 27
+  xy: 184, 13
   size: 16, 18
   orig: 16, 18
   offset: 0, 0
   index: -1
 bottompush2
   rotate: false
-  xy: 19, 47
+  xy: 202, 13
+  size: 16, 18
+  orig: 16, 18
+  offset: 0, 0
+  index: -1
+jumpL1
+  rotate: false
+  xy: 220, 15
+  size: 18, 16
+  orig: 18, 16
+  offset: 0, 0
+  index: -1
+jumpL3
+  rotate: false
+  xy: 240, 15
+  size: 18, 16
+  orig: 18, 16
+  offset: 0, 0
+  index: -1
+jumpR1
+  rotate: false
+  xy: 260, 15
+  size: 18, 16
+  orig: 18, 16
+  offset: 0, 0
+  index: -1
+jumpR3
+  rotate: false
+  xy: 280, 15
+  size: 18, 16
+  orig: 18, 16
+  offset: 0, 0
+  index: -1
+jumpL2
+  rotate: false
+  xy: 300, 13
+  size: 16, 18
+  orig: 16, 18
+  offset: 0, 0
+  index: -1
+jumpR2
+  rotate: false
+  xy: 318, 13
   size: 16, 18
   orig: 16, 18
   offset: 0, 0
   index: -1
 left1
   rotate: false
-  xy: 37, 67
+  xy: 336, 13
   size: 16, 18
   orig: 16, 18
   offset: 0, 0
   index: -1
 left2
   rotate: false
-  xy: 56, 87
+  xy: 354, 13
   size: 16, 18
   orig: 16, 18
   offset: 0, 0
   index: -1
 leftpush1
   rotate: false
-  xy: 75, 107
+  xy: 372, 13
   size: 16, 18
   orig: 16, 18
   offset: 0, 0
   index: -1
 leftpush2
   rotate: false
-  xy: 1, 7
+  xy: 390, 13
   size: 16, 18
   orig: 16, 18
   offset: 0, 0
   index: -1
 right1
   rotate: false
-  xy: 19, 27
+  xy: 408, 13
   size: 16, 18
   orig: 16, 18
   offset: 0, 0
   index: -1
 right2
   rotate: false
-  xy: 37, 47
+  xy: 426, 13
   size: 16, 18
   orig: 16, 18
   offset: 0, 0
   index: -1
 rightpush1
   rotate: false
-  xy: 55, 67
+  xy: 444, 13
   size: 16, 18
   orig: 16, 18
   offset: 0, 0
   index: -1
 rightpush2
   rotate: false
-  xy: 74, 87
+  xy: 462, 13
   size: 16, 18
   orig: 16, 18
   offset: 0, 0
   index: -1
 top1
   rotate: false
-  xy: 93, 107
+  xy: 480, 13
   size: 16, 18
   orig: 16, 18
   offset: 0, 0
   index: -1
 top2
   rotate: false
-  xy: 111, 107
+  xy: 498, 13
   size: 16, 18
   orig: 16, 18
   offset: 0, 0
   index: -1
 attackdown1
   rotate: false
-  xy: 19, 7
+  xy: 516, 13
   size: 15, 18
   orig: 15, 18
   offset: 0, 0
   index: -1
 attackdown2
   rotate: false
-  xy: 37, 27
+  xy: 533, 13
   size: 15, 18
   orig: 15, 18
   offset: 0, 0
   index: -1
 attackup2
   rotate: false
-  xy: 55, 47
+  xy: 550, 13
+  size: 15, 18
+  orig: 15, 18
+  offset: 0, 0
+  index: -1
+jumpD1
+  rotate: false
+  xy: 567, 13
+  size: 15, 18
+  orig: 15, 18
+  offset: 0, 0
+  index: -1
+jumpD2
+  rotate: false
+  xy: 584, 13
+  size: 15, 18
+  orig: 15, 18
+  offset: 0, 0
+  index: -1
+jumpD3
+  rotate: false
+  xy: 601, 13
+  size: 15, 18
+  orig: 15, 18
+  offset: 0, 0
+  index: -1
+jumpU1
+  rotate: false
+  xy: 618, 13
+  size: 15, 18
+  orig: 15, 18
+  offset: 0, 0
+  index: -1
+jumpU2
+  rotate: false
+  xy: 635, 13
+  size: 15, 18
+  orig: 15, 18
+  offset: 0, 0
+  index: -1
+jumpU3
+  rotate: false
+  xy: 652, 13
   size: 15, 18
   orig: 15, 18
   offset: 0, 0
   index: -1
 bottomswim1
   rotate: false
-  xy: 73, 71
+  xy: 669, 17
   size: 17, 14
   orig: 17, 14
   offset: 0, 0
   index: -1
 leftswim1
   rotate: false
-  xy: 92, 91
+  xy: 669, 1
   size: 17, 14
   orig: 17, 14
   offset: 0, 0
   index: -1
 rightswim1
   rotate: false
-  xy: 92, 75
+  xy: 688, 17
   size: 17, 14
   orig: 17, 14
   offset: 0, 0
   index: -1
 topswim1
   rotate: false
-  xy: 36, 11
+  xy: 688, 1
   size: 17, 14
   orig: 17, 14
   offset: 0, 0
   index: -1
 bottomswim2
   rotate: false
-  xy: 54, 32
+  xy: 707, 18
   size: 17, 13
   orig: 17, 13
   offset: 0, 0
   index: -1
-falling1
+drown
   rotate: false
-  xy: 111, 91
-  size: 12, 14
-  orig: 12, 14
-  offset: 0, 0
-  index: -1
-dead
-  rotate: false
-  xy: 111, 76
-  size: 11, 13
-  orig: 11, 13
+  xy: 707, 1
+  size: 14, 15
+  orig: 14, 15
   offset: 0, 0
   index: -1
 leftswim2
   rotate: false
-  xy: 55, 17
+  xy: 726, 18
   size: 17, 13
   orig: 17, 13
   offset: 0, 0
   index: -1
 rightswim2
   rotate: false
-  xy: 55, 2
+  xy: 723, 3
   size: 17, 13
   orig: 17, 13
   offset: 0, 0
   index: -1
 topswim2
   rotate: false
-  xy: 92, 60
+  xy: 745, 18
   size: 17, 13
   orig: 17, 13
   offset: 0, 0
   index: -1
+falling1
+  rotate: false
+  xy: 742, 2
+  size: 12, 14
+  orig: 12, 14
+  offset: 0, 0
+  index: -1
+dead
+  rotate: false
+  xy: 764, 18
+  size: 11, 13
+  orig: 11, 13
+  offset: 0, 0
+  index: -1
 sword
   rotate: false
-  xy: 111, 54
+  xy: 777, 11
   size: 6, 20
   orig: 6, 20
   offset: 0, 0
   index: -1
 falling2
   rotate: false
-  xy: 119, 67
+  xy: 1, 4
   size: 6, 7
   orig: 6, 7
   offset: 0, 0
   index: -1
 falling3
   rotate: false
-  xy: 1, 1
+  xy: 756, 12
   size: 4, 4
   orig: 4, 4
   offset: 0, 0

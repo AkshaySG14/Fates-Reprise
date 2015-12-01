@@ -4,7 +4,7 @@ import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
-import com.inoculates.fatesreprise.Storage;
+import com.inoculates.fatesreprise.Storage.Storage;
 
 // This is the class that finds the rectangles on the map that denote the dynamic villager pathing, and creates a
 // dynamic pathing for it.

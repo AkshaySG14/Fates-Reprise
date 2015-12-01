@@ -1,23 +1,17 @@
 package com.inoculates.fatesreprise.Interactables;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Timer;
 import com.inoculates.fatesreprise.Screens.GameScreen;
-import com.inoculates.fatesreprise.Storage;
-import com.inoculates.fatesreprise.UI.UI;
-
-import java.awt.*;
+import com.inoculates.fatesreprise.Storage.Storage;
 
 // These are the blocks that can be pushed by Daur to solve puzzles.
 public abstract class Block extends Interactable {
     private int[] dir;
-    private boolean paused = false, limited;
+    private boolean paused = false, limited, triggered = false;
+    private int trigger = -1;
 
     public Block(GameScreen screen, TiledMap map, TextureAtlas atlas, Storage storage, String direction, boolean limited) {
         super(screen, map, atlas, storage);
@@ -28,6 +22,21 @@ public abstract class Block extends Interactable {
         // Sets direction in which the block can be pushed and whether or not the block can be pushed infinitely.
         this.dir = getDirection(direction);
         this.limited = limited;
+        layer = (TiledMapTileLayer) map.getLayers().get(2);
+    }
+
+    // Secondary constructor, as some blocks need to be pushed into a certain direction.
+    public Block(GameScreen screen, TiledMap map, TextureAtlas atlas, Storage storage, String direction, boolean limited,
+                 int trigger) {
+        super(screen, map, atlas, storage);
+        this.screen = screen;
+        this.map = map;
+        this.atlas = atlas;
+        this.storage = storage;
+        // Sets direction in which the block can be pushed and whether or not the block can be pushed infinitely.
+        this.dir = getDirection(direction);
+        this.limited = limited;
+        this.trigger = trigger;
         layer = (TiledMapTileLayer) map.getLayers().get(2);
     }
 
@@ -48,10 +57,15 @@ public abstract class Block extends Interactable {
             return;
 
         paused = true;
+        // If the block has no specific directional trigger, or has been pushed into the same direction it triggers,
+        // sets triggered to true.
+        if (trigger == -1 || trigger == direction)
+            triggered = true;
+        // If successfully triggered, checks if something has been triggered in the game.
+        if (triggered)
+            screen.checkClear(this);
 
         // Moves in accordance with the direction of Daur.
-        Timer timer = new Timer();
-
         switch (direction) {
             // Slowly moves the block over to the tile on the right.
             case RIGHT:
@@ -59,7 +73,7 @@ public abstract class Block extends Interactable {
                 // movement.
                 for (float x = getX(); x <= getX() + layer.getTileWidth(); x++) {
                     final float newX = x;
-                    timer.scheduleTask(new Timer.Task() {
+                    screen.globalTimer.scheduleTask(new Timer.Task() {
                         @Override
                         public void run() {
                             setX(newX);
@@ -67,13 +81,12 @@ public abstract class Block extends Interactable {
                     }, deltaTime);
                     deltaTime += 0.035f;
                 }
-                timer.start();
                 break;
             // Same but for left.
             case LEFT:
                 for (float x = getX(); x >= getX() - layer.getTileWidth(); x--) {
                     final float newX = x;
-                    timer.scheduleTask(new Timer.Task() {
+                    screen.globalTimer.scheduleTask(new Timer.Task() {
                         @Override
                         public void run() {
                             setX(newX);
@@ -81,12 +94,11 @@ public abstract class Block extends Interactable {
                     }, deltaTime);
                     deltaTime += 0.035f;
                 }
-                timer.start();
                 break;
             case UP:
                 for (float y = getY(); y <= getY() + layer.getTileHeight(); y++) {
                     final float newY = y;
-                    timer.scheduleTask(new Timer.Task() {
+                    screen.globalTimer.scheduleTask(new Timer.Task() {
                         @Override
                         public void run() {
                             setY(newY);
@@ -94,12 +106,11 @@ public abstract class Block extends Interactable {
                     }, deltaTime);
                     deltaTime += 0.035f;
                 }
-                timer.start();
                 break;
             case DOWN:
                 for (float y = getY(); y >= getY() - layer.getTileHeight(); y--) {
                     final float newY = y;
-                    timer.scheduleTask(new Timer.Task() {
+                    screen.globalTimer.scheduleTask(new Timer.Task() {
                         @Override
                         public void run() {
                             setY(newY);
@@ -107,19 +118,17 @@ public abstract class Block extends Interactable {
                     }, deltaTime);
                     deltaTime += 0.035f;
                 }
-                timer.start();
                 break;
         }
 
         // If the block has unlimited movement, sets it able to move again after one second.
         if (!limited) {
-            timer.scheduleTask(new Timer.Task() {
+            screen.globalTimer.scheduleTask(new Timer.Task() {
                 @Override
                 public void run() {
                     paused = false;
                 }
             }, 1);
-            timer.start();
         }
     }
 
@@ -158,16 +167,22 @@ public abstract class Block extends Interactable {
         }
     }
 
+    // Gets the direction from the string list of directions.
     private int[] getDirection(String direction) {
+        // Initializes loop counter and a blank array of possible directions.
         int count = 0;
         int[] dirList = {0, 0, 0, 0};
 
+        // If the character is not a comma or a space, registers it as a proper character.
         for (int i = 0; i < direction.length(); i ++)
             if (direction.charAt(i) != ',' && direction.charAt(i) != ' ') {
+                // Adds the numerical value of the character to the array.
                 dirList[count] = Character.getNumericValue(direction.charAt(i));
                 count ++;
             }
 
+
+        // Creates a blank array that converts all the tile direction values into real ones.
         int[] dirFinal = new int[count];
 
         for (int i = 0; i < count; i ++)
@@ -189,6 +204,10 @@ public abstract class Block extends Interactable {
             case 3:
                 return -2;
         }
+    }
+
+    public boolean isTriggered() {
+        return triggered;
     }
 
     abstract void createAnimations();

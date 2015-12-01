@@ -10,7 +10,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.inoculates.fatesreprise.Characters.*;
 import com.inoculates.fatesreprise.Screens.GameScreen;
-import com.inoculates.fatesreprise.Storage;
+import com.inoculates.fatesreprise.Storage.Storage;
 
 import java.util.ArrayList;
 
@@ -197,5 +197,9 @@ public class Houses extends World {
 
     public int getPortalSize() {
         return portalsIn.size();
+    }
+
+    protected void setQuestEvents() {
+
     }
 }

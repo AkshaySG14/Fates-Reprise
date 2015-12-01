@@ -12,7 +12,7 @@ import com.inoculates.fatesreprise.Screens.GameScreen;
 // This is an enemy that fades in and out of combat to attack Daur with a magic bolt.
 public class Wizard extends Enemy {
     // The state where the wizard is casting his bolt.
-    protected static final int CASTING = 5;
+    protected static final int CASTING = 6;
     private Animation spell;
 
     TextureAtlas.AtlasRegion FU = atlas.findRegion("wizardU"), FSU1 = atlas.findRegion("wizardSU1"),
@@ -130,8 +130,7 @@ public class Wizard extends Enemy {
         final Character character = this;
         // Sets the state to casting.
         setState(CASTING, false);
-        Timer timer = new Timer();
-        timer.scheduleTask(new Timer.Task() {
+        screen.globalTimer.scheduleTask(new Timer.Task() {
             @Override
             public void run() {
                 // Gets angle between Daur and itself.
@@ -142,7 +141,7 @@ public class Wizard extends Enemy {
                 screen.projectiles.add(ball);
             }
         }, 0.8f);
-        timer.scheduleTask(new Timer.Task() {
+        screen.globalTimer.scheduleTask(new Timer.Task() {
             @Override
             public void run() {
                 // Phases the wizard out.
@@ -151,37 +150,35 @@ public class Wizard extends Enemy {
                 setState(IDLE, true);
             }
         }, 1.2f);
-        timer.start();
     }
 
     // Depending on the boolean in, phases the wizard in and out.
     private void phase(boolean in) {
-        Timer timer = new Timer();
         // Note that every task resets the direction, so that the wizard tracks daur, and further increases/decreases
         // the transparency of the wizard.
         if (in) {
-            timer.scheduleTask(new Timer.Task() {
+            screen.globalTimer.scheduleTask(new Timer.Task() {
                 @Override
                 public void run() {
                     setAlpha(0.25f);
                     resetDirection(dir);
                 }
             }, 0.2f);
-            timer.scheduleTask(new Timer.Task() {
+            screen.globalTimer.scheduleTask(new Timer.Task() {
                 @Override
                 public void run() {
                     setAlpha(0.5f);
                     resetDirection(dir);
                 }
             }, 0.4f);
-            timer.scheduleTask(new Timer.Task() {
+            screen.globalTimer.scheduleTask(new Timer.Task() {
                 @Override
                 public void run() {
                     setAlpha(0.75f);
                     resetDirection(dir);
                 }
             }, 0.6f);
-            timer.scheduleTask(new Timer.Task() {
+            screen.globalTimer.scheduleTask(new Timer.Task() {
                 @Override
                 public void run() {
                     setAlpha(1);
@@ -192,28 +189,28 @@ public class Wizard extends Enemy {
             }, 0.8f);
         }
         else {
-            timer.scheduleTask(new Timer.Task() {
+            screen.globalTimer.scheduleTask(new Timer.Task() {
                 @Override
                 public void run() {
                     if (isDead()) return;
                     setAlpha(0.75f);
                 }
             }, 0.2f);
-            timer.scheduleTask(new Timer.Task() {
+            screen.globalTimer.scheduleTask(new Timer.Task() {
                 @Override
                 public void run() {
                     if (isDead()) return;
                     setAlpha(0.5f);
                 }
             }, 0.4f);
-            timer.scheduleTask(new Timer.Task() {
+            screen.globalTimer.scheduleTask(new Timer.Task() {
                 @Override
                 public void run() {
                     if (isDead()) return;
                     setAlpha(0.25f);
                 }
             }, 0.6f);
-            timer.scheduleTask(new Timer.Task() {
+            screen.globalTimer.scheduleTask(new Timer.Task() {
                 @Override
                 public void run() {
                     if (isDead()) return;
@@ -223,7 +220,6 @@ public class Wizard extends Enemy {
                 }
             }, 0.8f);
         }
-        timer.start();
     }
 
     private void resetDirection(int direction) {
@@ -321,6 +317,10 @@ public class Wizard extends Enemy {
 
         if (state == IDLE || state == DEAD)
             anim = idle;
+        if (state == FALLING)
+            anim = fall;
+        if (state == DROWNING)
+            anim = drown;
         if (state == CASTING)
             anim = spell;
 

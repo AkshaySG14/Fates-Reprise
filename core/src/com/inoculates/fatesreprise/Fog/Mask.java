@@ -7,8 +7,10 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Timer;
+import com.inoculates.fatesreprise.Screens.GameScreen;
 
 public class Mask extends Sprite {
+    private Timer timer = new Timer();
 
     // This mask causes the fade in / fade out effects seen in cutscenes.
     public Mask() {
@@ -21,14 +23,12 @@ public class Mask extends Sprite {
         for (float i = 0; i <= fadeTime; i += 0.01) {
             // The use of a timer with an iterated delay is used to gradually wash out the screen.
             final float alpha = i * (1 / fadeTime);
-            Timer timer = new Timer();
             timer.scheduleTask(new Timer.Task() {
                 @Override
                 public void run() {
                     setAlpha(alpha);
                 }
             }, i);
-            timer.start();
         }
     }
 
@@ -36,14 +36,12 @@ public class Mask extends Sprite {
         // Same but for washing the screen in.
         for (float i = fadeTime; i >= 0; i -= 0.01) {
             final float alpha = (i * 1 / fadeTime);
-            Timer timer = new Timer();
             timer.scheduleTask(new Timer.Task() {
                 @Override
                 public void run() {
                     setAlpha(alpha);
                 }
             }, fadeTime - i);
-            timer.start();
         }
     }
 }

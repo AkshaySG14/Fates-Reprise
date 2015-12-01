@@ -16,9 +16,10 @@ public class Slime extends Enemy {
     int movementDirection;
     boolean charging = false;
     boolean cooldown = false;
+    boolean spawning = false;
 
     public Slime(GameScreen screen, TiledMap map, TextureAtlas atlas) {
-        super(screen, map, atlas, 2);
+        super(screen, map, atlas, 1);
         setState(RUNNING, true);
         checkMove();
         move();
@@ -39,7 +40,7 @@ public class Slime extends Enemy {
 
     // If the slime can charge in a direction, does so.
     private void decideMove(int decision) {
-        if (decision > 0 && !charging)
+        if (decision > 0 && !charging && pathingClear())
             charge(decision);
     }
 
@@ -62,23 +63,23 @@ public class Slime extends Enemy {
         else {
             switch (movementDirection) {
                 case 0:
-                    vel.x = 0.5f;
-                    vel.y = 0;
+                    SVX(0.5f);
+                    SVY(0);
                     dir = RIGHT;
                     break;
                 case 1:
-                    vel.x = -0.5f;
-                    vel.y = 0;
+                    SVX(-0.5f);
+                    SVY(0);
                     dir = LEFT;
                     break;
                 case 2:
-                    vel.x = 0;
-                    vel.y = 0.5f;
+                    SVX(0);
+                    SVY(0.5f);
                     dir = UP;
                     break;
                 case 3:
-                    vel.x = 0;
-                    vel.y = -0.5f;
+                    SVX(0);
+                    SVY(-0.5f);
                     dir = DOWN;
                     break;
             }
@@ -97,14 +98,14 @@ public class Slime extends Enemy {
         // If the slime is facing left or right.
         if (direction == 1) {
             // Sets velocity in accordance with whether Daur is to the right or the left of the slime.
-            vel.x = 3 * Math.signum(screen.daur.getX() - getX());
+            SVX(3 * Math.signum(screen.daur.getX() - getX()));
             vel.y = 0;
         }
         // Otherwise if the slime is facing up or down.
         else {
             // Same but for up or down.
             vel.x = 0;
-            vel.y = 3 * Math.signum(screen.daur.getY() - getY());
+            SVY(3 * Math.signum(screen.daur.getY() - getY()));
         }
 
         // Sets cooldown to avoid repeated charging.
@@ -112,31 +113,26 @@ public class Slime extends Enemy {
         // Informs the game the slime is charging to avoid the slime being called to walk normally.
         charging = true;
         // Sets charging false and immobilizes the slime.
-        Timer timer = new Timer();
-        timer.scheduleTask(new Timer.Task() {
+        screen.globalTimer.scheduleTask(new Timer.Task() {
             @Override
             public void run() {
                 resetCharge();
             }
         }, 0.7f);
-        timer.start();
     }
 
     // Resets the charge to make the slime resume normal status.
     private void resetCharge() {
         // Sets charging false and makes the slime's velocity zero.
         charging = false;
-        vel.x = 0;
-        vel.y = 0;
-        Timer timer = new Timer();
-        timer.scheduleTask(new Timer.Task() {
+        freeze();
+        screen.globalTimer.scheduleTask(new Timer.Task() {
             @Override
             public void run() {
                 // Resets cooldown after two seconds, to allow the slime to charge again.
                 cooldown = false;
             }
-        }, 2);
-        timer.start();
+        }, 4);
     }
 
     protected void updateTime(float deltaTime) {
@@ -151,41 +147,62 @@ public class Slime extends Enemy {
         detectConditions();
     }
 
-    protected void createAnimations() {
-        idle = new Animation(0.5f, D1);
-        run = new Animation(0.5f, D1, D2);
-    }
-
+    // Overrides super method to cancel charge upon collision. Also, while spawning, cannot collide.
     protected void checkCollisions() {
         float oldX = getX(), oldY = getY();
         boolean collisionX = false, collisionY = false;
 
+        // Accelerates the enemy accordingly.
+        vel.x += ace.x;
+
         setX(getX() + vel.x);
 
+        // Note that the enemy colliding with the edge of the current cell is counted as a collision. Meaning that the
+        // enemy cannot wander farther than the edge of te cell.
         if (vel.x < 0)
-            collisionX = collidesLeft() || getX() < (getCellX() - 1) * layer.getTileWidth() * 10;
+            collisionX = collidesLeft() || collidesHalfBlockLeft() || collidesInteractable() ||
+                    getX() < (cellX - 1) * layer.getTileWidth() * 10 ;
         else if (vel.x > 0)
-            collisionX = collidesRight() || getX() + getWidth() > getCellX() * layer.getTileWidth() * 10;
+            collisionX = collidesRight() || collidesHalfBlockRight() || collidesInteractable() ||
+                    getX() + getWidth() > cellX * layer.getTileWidth() * 10;
 
-        if (collisionX) {
+        if (collisionX && !spawning) {
             setX(oldX);
-            vel.x = 0;
-            vel.y = 0;
+            if (!charging) {
+                vel.x = vel.x * -1;
+                dir = -dir;
+            }
+            else
+                resetCharge();
         }
+
+        // Accelerates the enemy accordingly.
+        vel.y += ace.y;
 
         setY(getY() + vel.y);
 
         if (vel.y < 0)
-            collisionY = collidesBottom() || getY() < (getCellY() - 1) * layer.getTileHeight() * 10;
+            collisionY = collidesBottom() || collidesHalfBlockBottom() || collidesInteractable() ||
+                    getY() < (cellY - 1) * layer.getTileHeight() * 10;
 
         else if (vel.y > 0)
-            collisionY = collidesTop() || getY() + getHeight() > getCellY() * layer.getTileHeight() * 10;
+            collisionY = collidesTop() || collidesHalfBlockTop() ||  collidesInteractable() ||
+                    getY() + getHeight() > cellY * layer.getTileHeight() * 10;
 
-        if ((collisionY)) {
+        if (collisionY && !spawning) {
             setY(oldY);
-            vel.x = 0;
-            vel.y = 0;
+            if (!charging) {
+                vel.y = vel.y * -1;
+                dir = -dir;
+            }
+            else
+                resetCharge();
         }
+    }
+
+    protected void createAnimations() {
+        idle = new Animation(0.5f, D1);
+        run = new Animation(0.5f, D1, D2);
     }
 
     protected boolean overrideCheck() {
@@ -201,10 +218,19 @@ public class Slime extends Enemy {
         Animation anim = idle;
         if (state == IDLE || isDead())
             anim = idle;
+        else if (state == FALLING)
+            anim = fall;
+        else if (state == DROWNING)
+            anim = drown;
         else
             anim = run;
 
         setRegion(anim.getKeyFrame(animationTime, true));
         setSize(anim.getKeyFrame(animationTime, true).getRegionWidth() * 7 / 8, anim.getKeyFrame(animationTime, true).getRegionHeight() * 7 / 8);
+    }
+
+    public void setSpawning(boolean spawning) {
+        this.spawning = spawning;
+        grounded = !spawning;
     }
 }

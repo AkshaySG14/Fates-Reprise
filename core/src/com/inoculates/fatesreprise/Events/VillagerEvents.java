@@ -5,7 +5,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.inoculates.fatesreprise.Characters.*;
 import com.inoculates.fatesreprise.Characters.Character;
 import com.inoculates.fatesreprise.Screens.GameScreen;
-import com.inoculates.fatesreprise.Storage;
+import com.inoculates.fatesreprise.Storage.Storage;
 import com.inoculates.fatesreprise.Text.Dialogue;
 
 // These are the events that are fired when Daur wishes to talk to someone.
@@ -47,7 +47,7 @@ public class VillagerEvents extends Event {
                         break;
                     case 1:
                         message = "Carthell is a pretty easy place to navigate. In the center, there's a square filled " +
-                                "with shops and markets. East of that square lies the wayward cuckoo statue. Southwest " +
+                                "with shops and markets. East of that square are the four statues. Southwest " +
                                 "of the square is Aragoth's fountain. Northeast of the square is where the library is located.";
                                 break;
                 }
@@ -78,8 +78,8 @@ public class VillagerEvents extends Event {
                         storage.setVillagerStage(3);
                         break;
                     case 1:
-                        message = "That statue is a strange one, isn't it. But, it's been in the town for generations. " +
-                                "Just not exactly sure what it means...";
+                        message = "Those statues are pretty strange, aren't they?. But, they've been in the town for generations. " +
+                                "I'm not just not exactly sure what they're there for...";
                         break;
                 }
                 break;

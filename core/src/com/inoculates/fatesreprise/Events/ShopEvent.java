@@ -10,8 +10,7 @@ import com.badlogic.gdx.utils.Array;
 import com.inoculates.fatesreprise.Characters.*;
 import com.inoculates.fatesreprise.Characters.Character;
 import com.inoculates.fatesreprise.InputProcessor.ShopInput;
-import com.inoculates.fatesreprise.Items.Item;
-import com.inoculates.fatesreprise.Items.ShieldItem;
+import com.inoculates.fatesreprise.Items.*;
 import com.inoculates.fatesreprise.Screens.GameScreen;
 import com.inoculates.fatesreprise.UI.Shop;
 
@@ -164,14 +163,25 @@ public class ShopEvent extends Event {
     // Creates the items themselves. This is the actual item given to Daur that he purchases.
     private Array<Item> createItems() {
         Array<Item> items = new Array<Item>();
-
         switch (type) {
+            // Magic Shop.
             case 0:
                 items.add(new ShieldItem(screen.daurAtlases.get(2)));
-            return items;
+                /*items.add(new FlameGoutItem(screen.daurAtlases.get(2)));
+                items.add(new GiantsMightItem(screen.daurAtlases.get(2)));
+                items.add(new MinorTeleportItem(screen.daurAtlases.get(2)));
+                items.add(new MirrorImageItem(screen.daurAtlases.get(2)));
+                items.add(new PlanarShiftItem(screen.daurAtlases.get(2)));
+                items.add(new LiveWireItem(screen.daurAtlases.get(2)));
+                items.add(new StoneFistItem(screen.daurAtlases.get(2)));
+                items.add(new PulverizeItem(screen.daurAtlases.get(2)));
+                items.add(new ReflectItem(screen.daurAtlases.get(2)));*/
+                return items;
+            // Potion Shop.
             case 1:
                 items.add(new ShieldItem(screen.daurAtlases.get(2)));
                 return items;
+            // Misc Shop.
             case 2:
                 items.add(new ShieldItem(screen.daurAtlases.get(2)));
                 return items;

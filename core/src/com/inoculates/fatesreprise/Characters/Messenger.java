@@ -9,7 +9,7 @@ import com.inoculates.fatesreprise.Screens.GameScreen;
 public class Messenger extends Character {
 
     Animation idle;
-    TextureAtlas.AtlasRegion FD1 = atlas.findRegion("idle1"), FD2 = atlas.findRegion("idle2");
+    TextureAtlas.AtlasRegion FD1 = atlas.findRegion("messenger1"), FD2 = atlas.findRegion("messenger2");
 
     // This class is merely made for the cut scenes in the game. Used for exposition purposes.
     public Messenger(GameScreen screen, TiledMap map, TextureAtlas atlas) {
@@ -44,32 +44,28 @@ public class Messenger extends Character {
             // Sets messenger to transparent.
             setAlpha(0);
             // Increases messenger to opaque over a period of time.
-            Timer timer = new Timer();
             for (float i = 0; i <= 1; i += 0.1) {
                 final float o = i;
-                timer.scheduleTask(new Timer.Task() {
+                screen.globalTimer.scheduleTask(new Timer.Task() {
                     @Override
                     public void run() {
                         setAlpha(o);
                     }
                 }, i);
             }
-            timer.start();
         }
         // Opposite of previous.
         else {
             setAlpha(1);
-            Timer timer = new Timer();
             for (float i = 1; i >= 0; i -= 0.1) {
                 final float o = i;
-                timer.scheduleTask(new Timer.Task() {
+                screen.globalTimer.scheduleTask(new Timer.Task() {
                     @Override
                     public void run() {
                         setAlpha(o);
                     }
                 }, 1 - i);
             }
-            timer.start();
         }
     }
 }

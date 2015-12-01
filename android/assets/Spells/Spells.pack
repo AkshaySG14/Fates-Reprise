@@ -3,87 +3,101 @@ Spells.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+windsickle1
+  rotate: false
+  xy: 1, 11
+  size: 20, 20
+  orig: 20, 20
+  offset: 0, 0
+  index: -1
+windsickle2
+  rotate: false
+  xy: 23, 11
+  size: 20, 20
+  orig: 20, 20
+  offset: 0, 0
+  index: -1
 concussiveshotD1
   rotate: false
-  xy: 1, 1
+  xy: 45, 17
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 concussiveshotD2
   rotate: false
-  xy: 17, 1
+  xy: 45, 1
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 concussiveshotE1
   rotate: false
-  xy: 33, 1
+  xy: 61, 17
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 concussiveshotL1
   rotate: false
-  xy: 49, 1
+  xy: 61, 1
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 concussiveshotL2
   rotate: false
-  xy: 65, 1
+  xy: 77, 17
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 concussiveshotR1
   rotate: false
-  xy: 81, 1
+  xy: 77, 1
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 concussiveshotR2
   rotate: false
-  xy: 97, 1
+  xy: 93, 17
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 concussiveshotU1
   rotate: false
-  xy: 113, 1
+  xy: 93, 1
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 concussiveshotU2
   rotate: false
-  xy: 129, 1
+  xy: 109, 17
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
+concussiveshotE4
+  rotate: false
+  xy: 1, 1
+  size: 8, 8
+  orig: 8, 8
+  offset: 0, 0
+  index: -1
 concussiveshotE2
   rotate: false
-  xy: 145, 3
+  xy: 109, 3
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 concussiveshotE3
   rotate: false
-  xy: 159, 5
+  xy: 125, 21
   size: 10, 10
   orig: 10, 10
-  offset: 0, 0
-  index: -1
-concussiveshotE4
-  rotate: false
-  xy: 171, 7
-  size: 8, 8
-  orig: 8, 8
   offset: 0, 0
   index: -1

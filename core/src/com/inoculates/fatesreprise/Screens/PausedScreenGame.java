@@ -12,12 +12,10 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.inoculates.fatesreprise.InputProcessor.InventoryInput;
-import com.inoculates.fatesreprise.Items.BasicSwordItem;
-import com.inoculates.fatesreprise.Items.ConcussiveShotItem;
-import com.inoculates.fatesreprise.Items.Item;
-import com.inoculates.fatesreprise.Items.ShieldItem;
-import com.inoculates.fatesreprise.Storage;
-import com.inoculates.fatesreprise.UI.RedBarUI;
+import com.inoculates.fatesreprise.Items.*;
+import com.inoculates.fatesreprise.Storage.Storage;
+import com.inoculates.fatesreprise.UI.BlueBar;
+import com.inoculates.fatesreprise.UI.BlueBarUI;
 import com.inoculates.fatesreprise.UI.Cursor;
 import com.inoculates.fatesreprise.UI.UI;
 
@@ -59,12 +57,12 @@ public class PausedScreenGame implements Screen {
 	@Override
 	public void show () {
         paused = new Sprite(new TextureRegion(new Texture(Gdx.files.internal("Screens/pausescreen.png"))));
+        paused.setPosition(0, 0);
         batch = new SpriteBatch();
         batch.getProjectionMatrix().setToOrtho2D(0, 0, 160, 176);
 
         // Creates the cursor and sets it to the position of the first grid item.
         cursor = new Cursor(screen.daurAtlases.get(1));
-        cursor.setPosition(gridX[0], gridY[0]);
         // Sets the mask position to zero, as this screen does not lie on the coordinate plane of any tiled map.
         screen.mask.setPosition(0, 0);
         Gdx.input.setInputProcessor(inputProcessor);
@@ -72,6 +70,7 @@ public class PausedScreenGame implements Screen {
         // Creates all relevant text and sets the current item.
         createText();
         setCurrentItem();
+        cursor.setPosition(gridX[numX], gridY[numY]);
     }
 
 	@Override
@@ -85,10 +84,14 @@ public class PausedScreenGame implements Screen {
         cursor.setPosition(gridX[numX], gridY[numY]);
         // Draws all UI.
         for (UI ui : screen.UIS) {
-            ui.draw(batch);
-            ui.renewPosition();
-            if (ui instanceof RedBarUI)
-                // Sets position of the red bar.
+            // Note that the blue bar does not need to be drawn, as there exits a space for the UI already.
+            if (!(ui instanceof BlueBar)) {
+                ui.draw(batch);
+                ui.renewPosition();
+            }
+            // Sets position of the UI on the blue bar.
+            if (ui instanceof BlueBarUI)
+                // Sets position of the blue bar.
                 ui.setPosition(0, 176 - ui.getHeight());
         }
         // Sets the position of each item, depending on its position in the array list.
@@ -108,7 +111,11 @@ public class PausedScreenGame implements Screen {
         screen.mask.draw(batch);
         batch.end();
         time += delta;
-}
+    }
+
+    public void changeScreen() {
+        game.setScreen(new PausedScreenGame2(game, storage, screen));
+    }
 
 	@Override
 	public void hide () {
@@ -117,7 +124,7 @@ public class PausedScreenGame implements Screen {
 
     @Override
     public void resize (int width, int height) {
-        TiledMapTileLayer layer = (TiledMapTileLayer) screen.world1.getMap().getLayers().get(0);
+        TiledMapTileLayer layer = (TiledMapTileLayer) screen.map.getLayers().get(0);
         screen.camera.viewportWidth = layer.getTileWidth() * 10;
         screen.camera.viewportHeight = layer.getTileHeight() * 10;
         screen.camera.update();
@@ -193,7 +200,11 @@ public class PausedScreenGame implements Screen {
         else if (currentItem instanceof ConcussiveShotItem)
             return "Concussive Shot";
         else if (currentItem instanceof ShieldItem)
-            return "Shield";
+            return "       Shield";
+        else if (currentItem instanceof WindSickleItem)
+            return "    Wind Sickles";
+        else if (currentItem instanceof ZephyrsWispItem)
+            return "   Zephyr's Wisp";
 
         return "";
     }

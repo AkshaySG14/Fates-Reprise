@@ -5,11 +5,11 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.inoculates.fatesreprise.Screens.GameScreen;
 
 // This is the red UI bar at the top of the screen.
-public class RedBar extends UI {
-    RedBarUI owner;
+public class BlueBar extends UI {
+    BlueBarUI owner;
 
-    public RedBar(GameScreen screen, TextureAtlas atlas, RedBarUI owner) {
-        super(atlas.findRegion("WhiteBar"));
+    public BlueBar(GameScreen screen, TextureAtlas atlas, BlueBarUI owner) {
+        super(atlas.findRegion("bluebar"));
         this.screen = screen;
         this.owner = owner;
     }

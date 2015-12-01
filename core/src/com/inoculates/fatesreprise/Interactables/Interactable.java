@@ -2,17 +2,16 @@ package com.inoculates.fatesreprise.Interactables;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Timer;
-import com.inoculates.fatesreprise.AdvSprite;
+import com.inoculates.fatesreprise.Characters.AdvSprite;
 import com.inoculates.fatesreprise.Effects.Grass;
 import com.inoculates.fatesreprise.Effects.Ripple;
 import com.inoculates.fatesreprise.Screens.GameScreen;
-import com.inoculates.fatesreprise.Storage;
+import com.inoculates.fatesreprise.Storage.Storage;
 
 import java.awt.*;
 
@@ -48,11 +47,14 @@ public abstract class Interactable extends AdvSprite {
         this.atlas = atlas;
         this.storage = storage;
         layer = (TiledMapTileLayer) map.getLayers().get(2);
+        createAnimations();
+        chooseSprite();
     }
 
     public void draw(Batch batch) {
         super.draw(batch);
-        periodicCheck(Gdx.graphics.getDeltaTime());
+        if (!screen.isPaused())
+            periodicCheck(Gdx.graphics.getDeltaTime());
         if ((vel.x != 0 || vel.y != 0) && canMove())
             tryMove();
     }

@@ -5,6 +5,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -18,9 +19,12 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.tiles.AnimatedTiledMapTile;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.badlogic.gdx.utils.Array;
-import com.inoculates.fatesreprise.AdvSprite;
+import com.badlogic.gdx.utils.TimeUtils;
+import com.badlogic.gdx.utils.Timer;
+import com.inoculates.fatesreprise.Characters.AdvSprite;
 import com.inoculates.fatesreprise.Characters.*;
 import com.inoculates.fatesreprise.Characters.Character;
+import com.inoculates.fatesreprise.Consumables.Consumable;
 import com.inoculates.fatesreprise.Effects.Effect;
 import com.inoculates.fatesreprise.Events.MessengerMeeting;
 import com.inoculates.fatesreprise.Fog.Mask;
@@ -31,7 +35,7 @@ import com.inoculates.fatesreprise.MeleeWeapons.BasicSword;
 import com.inoculates.fatesreprise.MeleeWeapons.MeleeWeapon;
 import com.inoculates.fatesreprise.Projectiles.Projectile;
 import com.inoculates.fatesreprise.Spells.Spell;
-import com.inoculates.fatesreprise.Storage;
+import com.inoculates.fatesreprise.Storage.Storage;
 import com.inoculates.fatesreprise.Text.Dialogue;
 import com.inoculates.fatesreprise.Text.TextBackground;
 import com.inoculates.fatesreprise.UI.UI;
@@ -49,7 +53,8 @@ public class GameScreen implements Screen {
     public Batch batch;
     public OrthographicCamera camera;
     public TiledMap map;
-    public TiledMapTile blankTile, springBushTile, summerBushTile, fallBushTile, winterBushTile;
+    public TiledMapTile blankTile, springBushTile, summerBushTile, fallBushTile, winterBushTile, brambleTile, springGrassTile,
+    summerGrassTile, fallGrassTile, winterGrassTile;
     public OrthogonalTiledMapRenderer renderer;
     public Storage storage;
     public UpperWorld world1;
@@ -76,10 +81,12 @@ public class GameScreen implements Screen {
     public ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
     public ArrayList<MeleeWeapon> meleeWeapons = new ArrayList<MeleeWeapon>();
     public ArrayList<Interactable> interactables = new ArrayList<Interactable>();
+    public ArrayList<Consumable> consumables = new ArrayList<Consumable>();
     public ArrayList<Character> characters1 = new ArrayList<Character>();
     public ArrayList<Character> characters2 = new ArrayList<Character>();
     public ArrayList<Character> characters3 = new ArrayList<Character>();
     public ArrayList<Character> charIterator = new ArrayList<Character>();
+    public ArrayList<Character> drawnSprites = new ArrayList<Character>();
     public ArrayList<Character> invertedCharacters = new ArrayList<Character>();
     public Array<UI> UIS = new Array<UI>();
 
@@ -89,14 +96,23 @@ public class GameScreen implements Screen {
 
     // The game class, which is what the libgdx program runs.
     private Game game;
-    // The two shaders that are used in the game rendering. The inverted shader is responsible for rendering
+    // The three shaders that are used in the game rendering. The inverted shader is responsible for rendering
     // wounded characters by inverting the color of the character. The current map shader is used to change how the
-    // tile map is rendered based on the area Daur is in.
+    // tile map is rendered based on the area Daur is in. The destruct shader is used for bosses or minibosses that
+    // are dying.
     private ShaderProgram invertedShader;
+    private ShaderProgram destructShader;
     private ShaderProgram currentMapShader;
 
-    // This boolean stops the controls screen initiation from occurring too much.
-    private boolean frozen = false;
+    // This is the public timer for all objects that require a timer. The use of a single timer is to freeze it during
+    // pauses.
+    public Timer globalTimer = new Timer();
+    // Delay used to freeze timer tasks.
+    private long timerDelay;
+
+    // This boolean stops the controls screen initiation from occurring too much. The paused boolean dictates whether
+    // objects will update themselves. Paused essentially stops time.
+    private boolean frozen = false, paused = false;
 
     // These are the layers of the tiledmap.
     private int[] fog = new int[] {0}, objects = new int[] {1}, foreground = new int[] {2}, background = new int[] {3};
@@ -104,7 +120,8 @@ public class GameScreen implements Screen {
     public GameScreen (Game game, Storage storage) {
 		this.game = game;
         this.storage = storage;
-
+        // Informs the storage object the current screen is the game screen.
+        storage.setMainScreen(this);
         // Creates the renderer, the camera, and the batch.
         renderer = new OrthogonalTiledMapRenderer(null);
         camera = new OrthographicCamera();
@@ -114,9 +131,13 @@ public class GameScreen implements Screen {
         // Sets the interactable tiles of the world (bush and other things).
         setTiles();
 
-        // Initializes the first input processor and the inverted shader.
+        // Initializes the first input processor and the shaders.
         interpreter1 = new DaurInput(this, storage);
+        // Inverted shader.
         invertedShader = new ShaderProgram(Gdx.files.internal("Shaders/character.vert"), Gdx.files.internal("Shaders/character.frag"));
+        // Destruct shader (for minibosses and bosses).
+        destructShader = new ShaderProgram(Gdx.files.internal("Shaders/character.vert"), Gdx.files.internal("Shaders/destruct.frag"));
+
         // Does NOT allow any shading misspellings to stop the program.
         ShaderProgram.pedantic = false;
 
@@ -124,8 +145,7 @@ public class GameScreen implements Screen {
         TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(0);
         camera.position.set(layer.getTileWidth() * ((storage.cellX - 1) * 10) + layer.getTileWidth() * 5,
                 layer.getTileHeight() * ((storage.cellY - 1) * 10) + layer.getTileHeight() * 5, 0);
-        // Informs the storage object the current screen is the game screen.
-        storage.setMainScreen(this);
+
     }
 
     // Sets the input processor and updates the mask.
@@ -140,6 +160,10 @@ public class GameScreen implements Screen {
 	public void render (float delta) {
         update();
         camera.update();
+        // Ensures that the camera's position rests on an int. This is to ensure that there is no tile shearing.
+        int camX = (int) camera.position.x;
+        int camY = (int) camera.position.y;
+        camera.position.set(camX, camY, 0);
         // Clears canvas and then renders the art over it.
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -170,6 +194,7 @@ public class GameScreen implements Screen {
     private void drawSprites() {
         batch.begin();
         charIterator = new ArrayList<Character>();
+        drawnSprites = new ArrayList<Character>();
 
         // Depending upon which world  the player currently is in, the screen adds every relevant character
         // (characters in the same cell as the player) to an array. This array helps with collision detection
@@ -188,6 +213,11 @@ public class GameScreen implements Screen {
                     charIterator.add(character);
         charIterator.add(daur);
 
+        // Gets all sprites on the screen and then adds them to the drawnsprites array.
+        for (Character character : charIterator)
+                if (checkDraw(character))
+                    drawnSprites.add(character);
+
         // Sets the filter of every tile that is rendered.
         Iterator<TiledMapTile> tiles = map.getTileSets().getTileSet("Tiles").iterator();
         while (tiles.hasNext()) {
@@ -195,6 +225,14 @@ public class GameScreen implements Screen {
             tile.getTextureRegion().getTexture().setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.MipMapNearestLinear);
         }
 
+        // Draws each consumable, assuming it is in the view of the player. Note that consumables are drawn first so that
+        // everything in the game walks over them.
+        for (Consumable consumable : consumables) {
+            if (checkDraw(consumable)) {
+                consumable.getTexture().setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.MipMapNearestLinear);
+                consumable.draw(batch);
+            }
+        }
         // Checks if the character is within the cell Daur is in, and if so draws it. Additionally, checks if the
         // character needs to inverted. Finally, sets the filter of the character, and then draws it.
         // This is only for the characters of world 1.
@@ -228,6 +266,7 @@ public class GameScreen implements Screen {
                 checkSpriteShaded(interactable);
                 interactable.getTexture().setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.MipMapNearestLinear);
                 interactable.draw(batch);
+                batch.setShader(null);
             }
 
         // Checks if Daur himself needs inversion, sets the filter for his texture, and draws him.
@@ -237,6 +276,7 @@ public class GameScreen implements Screen {
         batch.setShader(null);
 
         // Draws all relevant objects.
+
         for (Item item : items) {
             if (checkDraw(item)) {
                 item.getTexture().setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.MipMapNearestLinear);
@@ -249,6 +289,7 @@ public class GameScreen implements Screen {
                 checkSpriteShaded(spell);
                 spell.getTexture().setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.MipMapNearestLinear);
                 spell.draw(batch);
+                batch.setShader(null);
             }
 
         for (Projectile projectile : projectiles)
@@ -256,6 +297,7 @@ public class GameScreen implements Screen {
                 checkSpriteShaded(projectile);
                 projectile.getTexture().setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.MipMapNearestLinear);
                 projectile.draw(batch);
+                batch.setShader(null);
             }
 
         for (MeleeWeapon weapon : meleeWeapons)
@@ -263,6 +305,7 @@ public class GameScreen implements Screen {
                 checkSpriteShaded(weapon);
                 weapon.getTexture().setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.MipMapNearestLinear);
                 weapon.draw(batch);
+                batch.setShader(null);
             }
 
         for (Effect effect : effects)
@@ -270,6 +313,7 @@ public class GameScreen implements Screen {
                 checkSpriteShaded(effect);
                 effect.getTexture().setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.MipMapNearestLinear);
                 effect.draw(batch);
+                batch.setShader(null);
             }
 
         for (UI ui : UIS) {
@@ -296,10 +340,12 @@ public class GameScreen implements Screen {
         batch.end();
     }
 
-    // Checks if the sprite is inverted. If not, draws the sprite with the current shader.
+    // Checks if the sprite is inverted or destructing. If not, draws the sprite with the current shader.
     private void checkSpriteShaded(AdvSprite advSprite) {
         if (advSprite.getInverted())
             batch.setShader(invertedShader);
+        else if (advSprite.getDestructing())
+            batch.setShader(destructShader);
         else
             batch.setShader(currentMapShader);
     }
@@ -312,10 +358,12 @@ public class GameScreen implements Screen {
         animateTile("winterflowers", "Foreground", "Tiles", 0.5f);
         animateTile("shallowwater", "Background", "Tiles", 0.125f);
         animateTile("water", "Background", "Tiles", 0.125f);
+        animateTile("deepwater", "Background", "Tiles", 0.125f);
         animateTile("fountaintopleft", "Objects", "Tiles", 0.25f);
         animateTile("fountaintopright", "Objects", "Tiles", 0.25f);
         animateTile("fountainbottomleft", "Objects", "Tiles", 0.25f);
         animateTile("fountainbottomright", "Objects", "Tiles", 0.25f);
+        animateTile("torch", "Objects", "Tiles", 0.4f);
         animateTile("redhead", "Fog", "Tiles", 0.5f);
         animateTile("bluehead", "Fog", "Tiles", 0.5f);
         animateTile("yellowhead", "Fog", "Tiles", 0.5f);
@@ -368,7 +416,17 @@ public class GameScreen implements Screen {
                     fallBushTile = tile;
                 if (tile.getProperties().containsKey("winter"))
                     winterBushTile = tile;
+                if (tile.getProperties().containsKey("bramble"))
+                    brambleTile = tile;
             }
+            if (tile.getProperties().containsKey("springgrass"))
+                springGrassTile = tile;
+            if (tile.getProperties().containsKey("summergrass"))
+                summerGrassTile = tile;
+            if (tile.getProperties().containsKey("fallgrass"))
+                fallGrassTile = tile;
+            if (tile.getProperties().containsKey("wintergrass"))
+                winterGrassTile = tile;
         }
     }
 
@@ -419,6 +477,7 @@ public class GameScreen implements Screen {
         manager.load("Spells/Spells.pack", TextureAtlas.class);
         manager.load("Projectiles/Projectiles.pack", TextureAtlas.class);
         manager.load("Interactables/Interactables.pack", TextureAtlas.class);
+        manager.load("Consumables/Consumables.pack", TextureAtlas.class);
         manager.finishLoading();
 
         daurAtlases.add((TextureAtlas) manager.get("SpriteSheets/Daur.pack"));
@@ -431,6 +490,7 @@ public class GameScreen implements Screen {
         characterAtlases.add((TextureAtlas) manager.get("SpriteSheets/Villagers.pack"));
         characterAtlases.add((TextureAtlas) manager.get("SpriteSheets/Enemies.pack"));
         miscAtlases.add((TextureAtlas) manager.get("Interactables/Interactables.pack"));
+        miscAtlases.add((TextureAtlas) manager.get("Consumables/Consumables.pack"));
     }
 
     public void setDaur(Daur daur) {
@@ -439,10 +499,14 @@ public class GameScreen implements Screen {
 
     // Checks if the object is in the screen, so that it may be drawn. This reduces lag of the game.
     private boolean checkDraw(Sprite sprite) {
+        // Checks if the sprite is a character, and is ignoring the camera. If so, returns.
+        if (sprite instanceof Character && ((Character) sprite).isIgnoringCamera())
+            return true;
+
         float posX = camera.position.x, posY = camera.position.y;
-        float sX = sprite.getX() + sprite.getWidth() / 2, sY = sprite.getY() + sprite.getHeight() / 2;
         float width = camera.viewportWidth / 2, height = camera.viewportHeight / 2;
-        return sX > posX - width && sX < posX + width && sY > posY - height && sY < posY + height;
+        return sprite.getX() + sprite.getWidth() > posX - width && sprite.getX() < posX + width &&
+                sprite.getY() + sprite.getHeight() > posY - height && sprite.getY() < posY + height;
     }
     // Cleans up all objects that are not in the current cell and are not persistent. Note that a separate array list
     // is created for each type to iterate through. This is because the object could not be removed from the list it was
@@ -456,6 +520,15 @@ public class GameScreen implements Screen {
         for (Effect effect : effectPlaceholder)
             if (!checkDraw(effect) && !effect.isPersistent())
                 effects.remove(effect);
+
+        ArrayList<Consumable> consumablePlaceholder = new ArrayList<Consumable>();
+
+        for (Consumable consumable : consumables)
+            consumablePlaceholder.add(consumable);
+
+        for (Consumable consumable : consumablePlaceholder)
+            if (!checkDraw(consumable))
+                consumables.remove(consumable);
 
         ArrayList<Spell> spellPlaceholder = new ArrayList<Spell>();
 
@@ -529,6 +602,22 @@ public class GameScreen implements Screen {
         camera.update();
     }
 
+    // Adds a sprite to the rendering list based on the world the sprite is supposed to be in. This avoids concurrent
+    // modifications of the rendering lists.
+    public void addCharacter(Character character, int world) {
+        switch (world) {
+            case 0:
+                characters1.add(character);
+                break;
+            case 1:
+                characters2.add(character);
+                break;
+            case 2:
+                characters3.add(character);
+                break;
+        }
+    }
+
     // Creates each world, giving it the tile map, storage, and camera.
     private void createWorlds() {
         world1 = new UpperWorld(storage, camera, new TmxMapLoader().load("TileMaps/Overworld.tmx"), this);
@@ -547,12 +636,25 @@ public class GameScreen implements Screen {
     }
 
     public void pauseGame() {
+        // Gets the time when the timer is stopped.
+        timerDelay = TimeUtils.nanosToMillis(TimeUtils.nanoTime());
+        // Stops all timed events, to prevent events from firing while the game is paused.
+        globalTimer.stop();
+        // Sets screen to pause.
         PausedScreenGame screen = new PausedScreenGame(game, storage, this);
         game.setScreen(screen);
     }
 
     public void unPauseGame() {
+        // Delays all events by the current time - the timerDelay. This is to prevent timed events from starting
+        // immediately.
+        globalTimer.delay(TimeUtils.nanosToMillis(TimeUtils.nanoTime()) - timerDelay);
+        // Restarts all timed events.
+        globalTimer.start();
+        // Sets screen back.
         game.setScreen(this);
+        //Sets mask to current camera position and renews the position of all UI's so that they display properly.
+        mask.setPosition(camera.position.x - camera.viewportWidth / 2, camera.position.y - camera.viewportHeight / 2);
         for (UI ui : UIS)
             ui.renewPosition();
     }
@@ -567,6 +669,73 @@ public class GameScreen implements Screen {
             return world3;
     }
 
+    // Shakes the screen by moving the camera back and forth.
+    public void shakeScreen(final float displacement, float time) {
+        // Shakes to the right.
+        globalTimer.scheduleTask(new Timer.Task() {
+            @Override
+            public void run() {
+                camera.position.set(camera.position.x + displacement / 2, camera.position.y, 0);
+            }
+        }, time);
+
+        // Creates a loop that shakes back to the left every x time.
+        for (float i = time * 2; i <= time * 9; i += time * 2)
+            globalTimer.scheduleTask(new Timer.Task() {
+                @Override
+                public void run() {
+                    camera.position.set(camera.position.x - displacement, camera.position.y, 0);
+                }
+            }, i);
+        // Creates a loop that shakes back to the right every x + 1 (other) time.
+        for (float i = time * 3; i <= time * 9; i += time * 2)
+            globalTimer.scheduleTask(new Timer.Task() {
+                @Override
+                public void run() {
+                    camera.position.set(camera.position.x + displacement, camera.position.y, 0);
+                }
+            }, i);
+
+        // Moves back to the original position.
+        globalTimer.scheduleTask(new Timer.Task() {
+            @Override
+            public void run() {
+                camera.position.set(camera.position.x - displacement / 2, camera.position.y, 0);
+            }
+        }, time * 10);
+    }
+
+    // This method causes the screen to fade to the given color, then fade out once again.
+    public void transition(Color color) {
+        // Sets color of the mask, makes it opaque, and sets the position to the camera position.
+        mask.setColor(color);
+        mask.setAlpha(1);
+        mask.setPosition(camera.position.x - camera.viewportWidth / 2, camera.position.y - camera.viewportHeight / 2);
+        daur.freeze();
+        daur.setTransitioning(true);
+        // Creates a globalTimer event that unstuns Daur, breaks the game out of transitioning, sets the mask to be
+        // transparent, and finally renews every UI position.
+        globalTimer.scheduleTask(new Timer.Task() {
+            @Override
+            public void run() {
+                daur.setTransitioning(false);
+                mask.setAlpha(0);
+                for (UI ui : UIS)
+                    ui.renewPosition();
+            }
+        }, 0.25f);
+    }
+
+    // Relays check clears to all short term memory classes.
+    public void checkClear(Sprite sprite) {
+        storage.FDstorage.checkClear(sprite);
+    }
+
+    // Relays clears to all short term memory classes.
+    public void clearEvents() {
+        storage.FDstorage.clearEvents();
+    }
+
     public void setCurrentMapShader(ShaderProgram shader) {
         currentMapShader = shader;
     }
@@ -579,11 +748,23 @@ public class GameScreen implements Screen {
         return frozen;
     }
 
+    public boolean isPaused() {
+        return paused;
+    }
+
     public void freeze() {
         frozen = true;
     }
 
+    public void pauseScreen() {
+        paused = true;
+    }
+
     public void unFreeze() {
         frozen = false;
+    }
+
+    public void unPauseScreen() {
+        paused = false;
     }
 }

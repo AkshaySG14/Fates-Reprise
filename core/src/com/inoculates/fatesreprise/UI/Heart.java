@@ -9,11 +9,11 @@ public class Heart extends UI {
     private GameScreen screen;
     private TextureAtlas atlas;
     private int state = 0, heart = 0;
-    private RedBarUI bar;
+    private BlueBarUI bar;
 
     // Note the heart integer, which is used to displace the heart UI by a certain amount. This allows for the creation
     // of multiple hearts
-    public Heart(GameScreen screen, TextureAtlas atlas, RedBarUI bar, int heart) {
+    public Heart(GameScreen screen, TextureAtlas atlas, BlueBarUI bar, int heart) {
         super(atlas.findRegion("heart1"));
         this.atlas = atlas;
         this.bar = bar;

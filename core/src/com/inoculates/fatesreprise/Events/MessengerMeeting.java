@@ -56,11 +56,10 @@ public class MessengerMeeting extends Event {
     }
 
     protected void message() {
-        final Timer timer = new Timer();
         final Event event = this;
 
         switch (stage) {
-            case 0:
+            case 3:
                 // Creates the dialogue text, stuns Daur to prevent movement, freezes the screen to prevent the user
                 // from bringing up options, sets the direction of Daur to look up, and makes Daur idle.
                 Dialogue dialogue = new Dialogue(screen, "Closer wanderer...", this);
@@ -78,7 +77,7 @@ public class MessengerMeeting extends Event {
                 screen.daur.forceState(3);
 
                 // More dialogue, stuns Daur, and makes him idle after one second.
-                timer.scheduleTask(new Timer.Task() {
+                screen.globalTimer.scheduleTask(new Timer.Task() {
                     @Override
                     public void run() {
                         Dialogue dialogue = new Dialogue(screen, "Yes... Come and I will tell you of your fate...",
@@ -94,7 +93,7 @@ public class MessengerMeeting extends Event {
                 screen.daur.modifyVelocity(0, 0.2f, 1.8f);
                 screen.daur.forceState(3);
 
-                timer.scheduleTask(new Timer.Task() {
+                screen.globalTimer.scheduleTask(new Timer.Task() {
                     @Override
                     public void run() {
                         Dialogue dialogue = new Dialogue(screen, "Wanderer, you know not why I brought you here. " +
@@ -112,12 +111,12 @@ public class MessengerMeeting extends Event {
                     }
                 }, 1.8f);
                 break;
-            case 3:
+            case 0:
                 // Fades out and proceeds to the game itself.
                 screen.setText(null, null);
                 // Washes the screen out.
                 screen.mask.fadeOut(1);
-                timer.scheduleTask(new Timer.Task() {
+                screen.globalTimer.scheduleTask(new Timer.Task() {
                     @Override
                     public void run() {
                         // Removes messenger from the rendering list.
@@ -157,13 +156,12 @@ public class MessengerMeeting extends Event {
                     }
                 }, 1);
                 // Creates and launches the next event that immediately proceeds the mesenger meeting.
-                timer.scheduleTask(new Timer.Task() {
+                screen.globalTimer.scheduleTask(new Timer.Task() {
                     @Override
                     public void run() {
                         StartingEvent event = new StartingEvent(screen.world1.getMap(), screen);
                     }
                 }, 2);
-                timer.start();
         }
     }
 }

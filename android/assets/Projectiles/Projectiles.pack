@@ -3,23 +3,58 @@ Projectiles.png
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+electricsphere1
+  rotate: false
+  xy: 1, 6
+  size: 25, 25
+  orig: 25, 25
+  offset: 0, 0
+  index: -1
+electricsphere2
+  rotate: false
+  xy: 28, 6
+  size: 25, 25
+  orig: 25, 25
+  offset: 0, 0
+  index: -1
+electricsphere3
+  rotate: false
+  xy: 55, 6
+  size: 25, 25
+  orig: 25, 25
+  offset: 0, 0
+  index: -1
+beam1
+  rotate: false
+  xy: 82, 17
+  size: 14, 14
+  orig: 14, 14
+  offset: 0, 0
+  index: -1
+beam2
+  rotate: false
+  xy: 82, 1
+  size: 14, 14
+  orig: 14, 14
+  offset: 0, 0
+  index: -1
 fireball1
   rotate: false
-  xy: 1, 1
+  xy: 98, 21
   size: 10, 10
   orig: 10, 10
   offset: 0, 0
   index: -1
 fireball2
   rotate: false
-  xy: 13, 1
+  xy: 98, 9
   size: 10, 10
   orig: 10, 10
   offset: 0, 0
   index: -1
 mudball
   rotate: false
-  xy: 25, 1
+  xy: 110, 21
   size: 10, 10
   orig: 10, 10
   offset: 0, 0

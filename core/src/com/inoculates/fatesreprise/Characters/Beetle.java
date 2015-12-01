@@ -63,26 +63,26 @@ public class Beetle extends Enemy {
             switch (movementDirection) {
                 // If the movement is set to left, sets x component of velocity to 0.5, and the y component to zero.
                 case 0:
-                    vel.x = 0.5f;
+                    SVX(0.5f);
                     vel.y = 0;
                     dir = RIGHT;
                     break;
                 // If left, x = -0.5 and y = 0.
                 case 1:
-                    vel.x = -0.5f;
+                    SVX(-0.5f);
                     vel.y = 0;
                     dir = LEFT;
                     break;
                 // If up, x = 0 and y = 0.5.
                 case 2:
                     vel.x = 0;
-                    vel.y = 0.5f;
+                    SVY(0.5f);
                     dir = UP;
                     break;
                 // If down, x = 0 and y = -0.5.
                 case 3:
                     vel.x = 0;
-                    vel.y = -0.5f;
+                    SVY(-0.5f);
                     dir = DOWN;
                     break;
             }
@@ -149,6 +149,10 @@ public class Beetle extends Enemy {
 
         if (state == IDLE || state == DEAD)
             anim = idle;
+        if (state == FALLING)
+            anim = fall;
+        if (state == DROWNING)
+            anim = drown;
         if (state == RUNNING)
             anim = run;
 

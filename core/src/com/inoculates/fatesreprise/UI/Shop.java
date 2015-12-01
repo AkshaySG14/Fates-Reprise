@@ -100,7 +100,7 @@ public class Shop extends UI {
     public void movePosition(int direction) {
         // Sets the new current item by subtracting the given integer.
         itemNumber -= direction;
-
+        System.out.println(itemNumber);
         // Ensures no overflow.
         if (itemNumber == items.size)
             itemNumber = 0;
@@ -108,6 +108,13 @@ public class Shop extends UI {
             itemNumber = items.size - 1;
 
         indicator.setY(positions[itemNumber] - fonts.get(0).getCapHeight());
+    }
+    // Removes the item and then rearranges the list.
+    public void removeItem() {
+        items.removeIndex(itemNumber);
+        fonts.removeIndex(itemNumber);
+        texts.removeIndex(itemNumber);
+        createPositions();
     }
 
     public Item getItem() {

@@ -14,6 +14,7 @@ public class Slash extends Effect {
         super(screen, map, atlas, true);
         this.owner = owner;
         this.direction = direction;
+        chooseSprite();
     }
 
     // Sets the frame depending on the direction of the slash.

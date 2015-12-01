@@ -2,14 +2,16 @@ package com.inoculates.fatesreprise.Projectiles;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.math.Vector2;
-import com.inoculates.fatesreprise.AdvSprite;
+import com.inoculates.fatesreprise.Characters.AdvSprite;
 import com.inoculates.fatesreprise.Characters.Character;
+import com.inoculates.fatesreprise.Consumables.Bronze;
+import com.inoculates.fatesreprise.Consumables.Copper;
+import com.inoculates.fatesreprise.Consumables.Heart;
 import com.inoculates.fatesreprise.Effects.BushDestroy;
 import com.inoculates.fatesreprise.Interactables.Interactable;
 import com.inoculates.fatesreprise.Screens.GameScreen;
@@ -39,7 +41,8 @@ public abstract class Projectile extends AdvSprite {
 
     public void draw(Batch batch) {
         super.draw(batch);
-        update(Gdx.graphics.getDeltaTime());
+        if (!screen.isPaused())
+            update(Gdx.graphics.getDeltaTime());
     }
 
     protected void update(float deltaTime) {
@@ -222,9 +225,6 @@ public abstract class Projectile extends AdvSprite {
             setY(oldY);
             vel.y = 0;
         }
-
-        // Checks if the projectile is out of the cell bounds.
-        checkOutOfBounds();
     }
 
     protected void detectConditions() {
@@ -275,19 +275,46 @@ public abstract class Projectile extends AdvSprite {
                     world.addCell("Winter Bush", collisionTile);
                     break;
             }
+            // Creates a consumable.
+            createConsumable(collideX + layer.getTileWidth() / 2, collideY + layer.getTileHeight() / 2);
         }
     }
 
-    // Checks if the projectile is out of the cell bounds, and removes itself if so.
-    protected void checkOutOfBounds() {
-        if (getX() > screen.camera.position.x + screen.camera.viewportWidth / 2
-                || getX() + getWidth() < screen.camera.position.x - screen.camera.viewportWidth / 2)
-            screen.projectiles.remove(this);
-        if (getY() > screen.camera.position.y + screen.camera.viewportHeight / 2 - 16
-                || getY() + getHeight() < screen.camera.position.y - screen.camera.viewportHeight / 2)
-            screen.projectiles.remove(this);
+    // Note that this method applies to bushes and small objects. The X and Y are the center of the tile upon which
+    // the bush sits.
+    private void createConsumable(float x, float y) {
+        // Creates a random number between 0 and 20, inclusive.
+        int random = (int) (Math.random() * 20);
+        // Bronze has a 25% chance of spawning from a regular enemy. Copper has a 5% chance. A heart has a 10% chance.
+        // Spawning for bronze.
+        if (random >= 0 && random <= 4) {
+            Bronze bronze = new Bronze(screen, map, screen.miscAtlases.get(1), x, y);
+            screen.consumables.add(bronze);
+        }
+        // For copper.
+        if (random >= 8 && random <= 8) {
+            Copper copper = new Copper(screen, map, screen.miscAtlases.get(1), x, y);
+            screen.consumables.add(copper);
+        }
+        // For a heart.
+        if (random >= 14 && random <= 15) {
+            Heart heart = new Heart(screen, map, screen.miscAtlases.get(1), x, y);
+            screen.consumables.add(heart);
+        }
     }
 
-    abstract void explode();
+    protected boolean checkOutOfBounds() {
+        if ((getX() + getWidth() > screen.camera.position.x + screen.camera.viewportWidth / 2 && vel.x > 0)
+                || (getX() < screen.camera.position.x - screen.camera.viewportWidth / 2 && vel.x < 0))
+            return true;
+        if ((getY() + getHeight() > screen.camera.position.y + screen.camera.viewportHeight / 2 - 16 && vel.y > 0)
+                || (getY() < screen.camera.position.y - screen.camera.viewportHeight / 2) && vel.y < 0) {
+            return true;
+        }
+        else
+            return false;
+    }
+
+    public abstract void explode();
 
 }

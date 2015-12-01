@@ -4,6 +4,7 @@ package com.inoculates.fatesreprise.Characters;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.utils.Timer;
 import com.inoculates.fatesreprise.Screens.GameScreen;
 
 // This is an enemy class that follows Daur, damaging him via collision.
@@ -53,23 +54,23 @@ public class Pantomime extends Enemy {
         else {
             switch (movementDirection) {
                 case 0:
-                    vel.x = 0.5f;
-                    vel.y = 0;
+                    SVX(0.5f);
+                    SVY(0);
                     dir = RIGHT;
                     break;
                 case 1:
-                    vel.x = -0.5f;
-                    vel.y = 0;
+                    SVX(-0.5f);
+                    SVY(0);
                     dir = LEFT;
                     break;
                 case 2:
-                    vel.x = 0;
-                    vel.y = 0.5f;
+                    SVX(0);
+                    SVY(0.5f);
                     dir = UP;
                     break;
                 case 3:
-                    vel.x = 0;
-                    vel.y = -0.5f;
+                    SVX(0);
+                    SVY(-0.5f);
                     dir = DOWN;
                     break;
             }
@@ -85,7 +86,7 @@ public class Pantomime extends Enemy {
 
     // Checks if the player is inside a rectangle of vision, which depends on the direction the pantomime is facing.
     private void checkFollow() {
-        // Gets the distance components between the pantomime and Daur.
+        // Gets the center of Daur.
         float dX = screen.daur.getX() + screen.daur.getWidth() / 2;
         float dY = screen.daur.getY() + screen.daur.getHeight() / 2;
 
@@ -138,12 +139,14 @@ public class Pantomime extends Enemy {
 
     // Constantly acquires an angle and uses it to set the velocity.
     private void follow() {
+        // Continually sets state to running.
+        setState(RUNNING, true);
         // Gets angle between the pantomime and Daur.
         float angle = (float) Math.atan2(screen.daur.getY() + getHeight() / 2 - (getY() + getHeight() / 2),
                 screen.daur.getX() + getWidth() / 2 - (getX() + getWidth() / 2));
         // Sets the velocity based on the cosine and sine of the angle.
-        vel.x = (float) Math.cos(angle) / 2;
-        vel.y = (float) Math.sin(angle) / 2;
+        SVX((float) Math.cos(angle) / 2);
+        SVY((float) Math.sin(angle) / 2);
 
         // Sets the direction based on velocity of the pantomime.
         if (Math.abs(vel.x) > Math.abs(vel.y)) {
@@ -194,6 +197,79 @@ public class Pantomime extends Enemy {
         }
     }
 
+    // Overrides the superclass method so that the pantomime immediately follows the player after being attacked.
+    public void loseHealth(int h) {
+        if (!invulnerability) {
+            health -= (h - armor);
+            invulnerability = true;
+            flickerSprite();
+            // Starts following player if not dead.
+            if (health != 0) {
+                following = true;
+                follow();
+            }
+            screen.globalTimer.scheduleTask(new Timer.Task() {
+                @Override
+                public void run() {
+                    invulnerability = false;
+                    inverted = false;
+                }
+            }, 0.6f);
+
+            if (health == 0)
+                death();
+        }
+    }
+
+    // Overrides super method to prevent changing direction if following and suffering from a collision..
+    protected void checkCollisions() {
+        float oldX = getX(), oldY = getY();
+        boolean collisionX = false, collisionY = false;
+
+        // Accelerates the enemy accordingly.
+        vel.x += ace.x;
+
+        setX(getX() + vel.x);
+
+        // Note that the enemy colliding with the edge of the current cell is counted as a collision. Meaning that the
+        // enemy cannot wander farther than the edge of te cell.
+        if (vel.x < 0)
+            collisionX = collidesLeft() || collidesHalfBlockLeft() || collidesInteractable() ||
+                    getX() < (cellX - 1) * layer.getTileWidth() * 10 ;
+        else if (vel.x > 0)
+            collisionX = collidesRight() || collidesHalfBlockRight() || collidesInteractable() ||
+                    getX() + getWidth() > cellX * layer.getTileWidth() * 10;
+
+        if (collisionX) {
+            setX(oldX);
+            if (!following) {
+                vel.x = vel.x * -1;
+                dir = -dir;
+            }
+        }
+
+        // Accelerates the enemy accordingly.
+        vel.y += ace.y;
+
+        setY(getY() + vel.y);
+
+        if (vel.y < 0)
+            collisionY = collidesBottom() || collidesHalfBlockBottom() || collidesInteractable() ||
+                    getY() < (cellY - 1) * layer.getTileHeight() * 10;
+
+        else if (vel.y > 0)
+            collisionY = collidesTop() || collidesHalfBlockTop() ||  collidesInteractable() ||
+                    getY() + getHeight() > cellY * layer.getTileHeight() * 10;
+
+        if ((collisionY)) {
+            setY(oldY);
+            if (!following) {
+                vel.y = vel.y * -1;
+                dir = -dir;
+            }
+        }
+    }
+
     protected boolean overrideCheck() {
         return state == DEAD;
     }
@@ -208,6 +284,10 @@ public class Pantomime extends Enemy {
 
         if (state == IDLE || isDead())
             anim = idle;
+        else if (state == FALLING)
+            anim = fall;
+        else if (state == DROWNING)
+            anim = drown;
         else
             anim = run;
 

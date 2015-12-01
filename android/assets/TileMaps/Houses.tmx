@@ -89,6 +89,26 @@
     <property name="blocked" value=""/>
    </properties>
   </tile>
+  <tile id="306">
+   <properties>
+    <property name="springgrass" value=""/>
+   </properties>
+  </tile>
+  <tile id="307">
+   <properties>
+    <property name="summergrass" value=""/>
+   </properties>
+  </tile>
+  <tile id="308">
+   <properties>
+    <property name="fallgrass" value=""/>
+   </properties>
+  </tile>
+  <tile id="309">
+   <properties>
+    <property name="wintergrass" value=""/>
+   </properties>
+  </tile>
   <tile id="312">
    <properties>
     <property name="blocked" value=""/>
@@ -148,7 +168,7 @@
   </tile>
   <tile id="2195">
    <properties>
-    <property name="darkness" value=""/>
+    <property name="hole" value=""/>
    </properties>
   </tile>
   <tile id="2244">
@@ -209,7 +229,7 @@
  </layer>
  <layer name="Objects" width="160" height="160">
   <data encoding="base64" compression="zlib">
-   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
+   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
   </data>
  </layer>
  <layer name="Fog" width="160" height="160">
@@ -570,6 +590,36 @@
     <property name="slimespawn" value=""/>
    </properties>
   </object>
+  <object name="Bat Spawn 1" x="455" y="2458" width="18" height="12">
+   <properties>
+    <property name="batspawn" value=""/>
+    <property name="bushheartpiece" value=""/>
+   </properties>
+  </object>
+  <object name="Bat Spawn 2" x="393" y="2414" width="18" height="12">
+   <properties>
+    <property name="batspawn" value=""/>
+    <property name="bushheartpiece" value=""/>
+   </properties>
+  </object>
+  <object name="Bat Spawn 3" x="357" y="2491" width="18" height="12">
+   <properties>
+    <property name="batspawn" value=""/>
+    <property name="bushheartpiece" value=""/>
+   </properties>
+  </object>
+  <object name="Lurker Spawn 1" x="423" y="2462" width="18" height="12">
+   <properties>
+    <property name="bushheartpiece" value=""/>
+    <property name="lurkerspawn" value=""/>
+   </properties>
+  </object>
+  <object name="Lurker Spawn 1" x="344" y="2461" width="18" height="12">
+   <properties>
+    <property name="bushheartpiece" value=""/>
+    <property name="lurkerspawn" value=""/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup name="Fogs" width="160" height="160" opacity="0.51">
   <object name="Fog In 1" x="1602" y="2" width="158" height="96">
@@ -798,6 +848,68 @@
    <properties>
     <property name="greenblock" value="0, 1, 2, 3"/>
     <property name="limited" value=""/>
+   </properties>
+  </object>
+  <object name="Chest Spawn 1" x="231" y="2497" width="8" height="10">
+   <properties>
+    <property name="chest" value="0"/>
+    <property name="greenchest" value="20"/>
+   </properties>
+  </object>
+  <object name="Chest Spawn 2" x="359" y="2338" width="8" height="10">
+   <properties>
+    <property name="chest" value="1"/>
+    <property name="greenchest" value="Heart Piece"/>
+   </properties>
+  </object>
+  <object name="Chest Spawn 3" x="357" y="2529" width="8" height="10">
+   <properties>
+    <property name="chest" value="2"/>
+    <property name="green" value=""/>
+    <property name="greenchestkillspawn" value="Heart Piece"/>
+   </properties>
+  </object>
+  <object name="Chest Spawn 4" x="758" y="2289" width="8" height="10">
+   <properties>
+    <property name="chest" value="3"/>
+    <property name="greenchest" value="Oak Staff"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup name="Triggers" width="160" height="160">
+  <object name="Mage Ambush Start" x="548" y="2371" width="28" height="7">
+   <properties>
+    <property name="MAS" value=""/>
+   </properties>
+  </object>
+  <object name="Mage Spawn 1" x="518" y="2275" width="18" height="12">
+   <properties>
+    <property name="mas" value=""/>
+   </properties>
+  </object>
+  <object name="Mage Spawn 2" x="595" y="2274" width="18" height="12">
+   <properties>
+    <property name="mas" value=""/>
+   </properties>
+  </object>
+  <object name="Mage Spawn 3" x="516" y="2347" width="18" height="12">
+   <properties>
+    <property name="mas" value=""/>
+   </properties>
+  </object>
+  <object name="Mage Ambush Blocker 1" x="625" y="2304" width="13" height="12">
+   <properties>
+    <property name="mab" value=""/>
+   </properties>
+  </object>
+  <object name="Mage Ambush Blocker 2" x="566" y="2383" width="13" height="12">
+   <properties>
+    <property name="mab" value=""/>
+   </properties>
+  </object>
+  <object name="Mage Ambush Blocker 3" x="549" y="2385" width="13" height="12">
+   <properties>
+    <property name="mab" value=""/>
    </properties>
   </object>
  </objectgroup>

@@ -19,9 +19,11 @@ public class MudShot extends Projectile {
         setSize(7.5f, 7.5f);
         setDirection(direction);
         setStart(direction);
+        createAnimations();
+        chooseSprite();
     }
 
-    // Sets the position depending on the direciton of the owner.
+    // Sets the position depending on the direction of the owner.
     private void setStart(int direction) {
         switch (direction) {
             // Doll's direction is to the right, sets the ball slightly to the right of the doll.
@@ -92,7 +94,7 @@ public class MudShot extends Projectile {
         // Otherwise if moving in a lateral direction, revolves backwards from the direction it is moving.
         if (vel.x != 0)
             angle += 10 * -Math.signum(vel.x);
-        // Same but for vertical direction.
+            // Same but for vertical direction.
         else
             angle += 10 * -Math.signum(vel.y);
 
@@ -103,43 +105,42 @@ public class MudShot extends Projectile {
     }
 
     // Same as the fireball.
-    protected void explode() {
+    public void explode() {
         explodeTile();
         final Projectile projectile = this;
         vel.x = 0;
         vel.y = 0;
-        Timer timer = new Timer();
-        timer.scheduleTask(new Timer.Task() {
+        screen.globalTimer.scheduleTask(new Timer.Task() {
             @Override
             public void run() {
                 setAlpha(0.8f);
             }
         }, 0.25f);
-        timer.scheduleTask(new Timer.Task() {
+        screen.globalTimer.scheduleTask(new Timer.Task() {
             @Override
             public void run() {
                 setAlpha(0.8f);
             }
         }, 0.25f);
-        timer.scheduleTask(new Timer.Task() {
+        screen.globalTimer.scheduleTask(new Timer.Task() {
             @Override
             public void run() {
                 setAlpha(0.5f);
             }
         }, 0.5f);
-        timer.scheduleTask(new Timer.Task() {
+        screen.globalTimer.scheduleTask(new Timer.Task() {
             @Override
             public void run() {
                 setAlpha(0.2f);
             }
         }, 0.75f);
-        timer.scheduleTask(new Timer.Task() {
+        screen.globalTimer.scheduleTask(new Timer.Task() {
             @Override
             public void run() {
-                screen.projectiles.remove(projectile);
+                if (screen.projectiles.contains(projectile))
+                    screen.projectiles.remove(projectile);
             }
         }, 1);
-        timer.start();
         exploding = true;
         animationTime = 0;
     }

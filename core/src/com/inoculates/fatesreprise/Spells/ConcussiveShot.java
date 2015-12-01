@@ -44,10 +44,9 @@ public class ConcussiveShot extends Spell {
     }
 
     private void accelerate() {
-        Timer timer = new Timer();
-        // Creates a loop that schedules tasks for the timer, incrementing the time every loop.
+        // Creates a loop that schedules tasks for the screen.globalTimer, incrementing the time every loop.
         for (float delta = 0; delta < 0.5; delta += 0.05)
-            timer.scheduleTask(new Timer.Task() {
+            screen.globalTimer.scheduleTask(new Timer.Task() {
                 @Override
                 public void run() {
                     // Increases the velocity by every iteration by a small, proportional amount.
@@ -55,7 +54,6 @@ public class ConcussiveShot extends Spell {
                     vel.y *= 1.15;
                 }
             }, delta);
-        timer.start();
     }
 
     // Offsets the position based on the direction of the concussive shot.
@@ -111,48 +109,47 @@ public class ConcussiveShot extends Spell {
         final Spell spell = this;
         vel.x = 0;
         vel.y = 0;
-        Timer timer = new Timer();
-        timer.scheduleTask(new Timer.Task() {
+        screen.globalTimer.scheduleTask(new Timer.Task() {
             @Override
             public void run() {
                 setAlpha(0.8f);
             }
         }, 0.25f);
-        timer.scheduleTask(new Timer.Task() {
+        screen.globalTimer.scheduleTask(new Timer.Task() {
             @Override
             public void run() {
                 setAlpha(0.8f);
             }
         }, 0.25f);
-        timer.scheduleTask(new Timer.Task() {
+        screen.globalTimer.scheduleTask(new Timer.Task() {
             @Override
             public void run() {
                 setAlpha(0.5f);
             }
         }, 0.5f);
-        timer.scheduleTask(new Timer.Task() {
+        screen.globalTimer.scheduleTask(new Timer.Task() {
             @Override
             public void run() {
                 setAlpha(0.2f);
             }
         }, 0.75f);
-        timer.scheduleTask(new Timer.Task() {
+        screen.globalTimer.scheduleTask(new Timer.Task() {
             @Override
             public void run() {
                 screen.spells.remove(spell);
             }
         }, 1);
-        timer.start();
         exploding = true;
         animationTime = 0;
     }
 
+    // Stuns the target if it is an enemy and is not invulnerable (due to injury, death, or natural invulnerability).
     protected void effects() {
         if (target == null || !target.isEnemy())
             return;
         final Enemy enemy = (Enemy) target;
-        if (!enemy.isTransparent())
-            enemy.stunCollision(this, 1);
+        if (!enemy.isTransparent() && !enemy.isDead())
+            enemy.stunCollision(this, 2);
     }
 
     public float getRadius() {

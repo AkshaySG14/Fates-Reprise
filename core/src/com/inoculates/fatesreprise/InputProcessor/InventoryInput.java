@@ -6,7 +6,7 @@ import com.badlogic.gdx.utils.Timer;
 import com.inoculates.fatesreprise.Items.Item;
 import com.inoculates.fatesreprise.Screens.GameScreen;
 import com.inoculates.fatesreprise.Screens.PausedScreenGame;
-import com.inoculates.fatesreprise.Storage;
+import com.inoculates.fatesreprise.Storage.Storage;
 
 // This is the input processor that is responsible for keyboard input during a pause screen.
 public class InventoryInput implements InputProcessor {
@@ -60,15 +60,17 @@ public class InventoryInput implements InputProcessor {
             screen.mask.fadeIn(0.5f);
             // Unpauses the game itself.
             screen.unPauseGame();
-            Timer timer = new Timer();
-            timer.scheduleTask(new Timer.Task() {
+            screen.globalTimer.scheduleTask(new Timer.Task() {
                 @Override
                 public void run() {
                     screen.unFreeze();
                 }
             }, 0.5f);
-            timer.start();
         }
+
+        // Goes to the secondary pause screen.
+        if (x == storage.secondary)
+            pScreen.changeScreen();
 
         return true;
     }

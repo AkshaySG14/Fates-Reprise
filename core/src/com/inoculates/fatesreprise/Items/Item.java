@@ -1,7 +1,7 @@
 package com.inoculates.fatesreprise.Items;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.inoculates.fatesreprise.AdvSprite;
+import com.inoculates.fatesreprise.Characters.AdvSprite;
 
 // This is the item super class that is useful for iteration purposes.
 public class Item extends AdvSprite {
