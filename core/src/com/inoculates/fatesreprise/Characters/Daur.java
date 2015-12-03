@@ -542,8 +542,8 @@ public class Daur extends Character {
     // Checks if the SHADOW of Daur has collides. This is used to determine if Daur has collided while jumping. As he
     // must return to his shadow, his shadow is used to determine collision.
     protected boolean collidesShadow() {
-        for (float x = shadow.getX() - 1; x < shadow.getX() + shadow.getWidth() + 2; x ++)
-            for (float y = shadow.getY() + 1; y < shadow.getY() + shadow.getHeight() + 5; y ++)
+        for (float x = shadow.getX() - 2; x < shadow.getX() + shadow.getWidth() + 2; x ++)
+            for (float y = shadow.getY() - 1; y < shadow.getY() + shadow.getHeight() + 5; y ++)
                 if (isCellBlocked(x, y) || isCellPost(x + 6, y) || isCellShrub(x + 4, y))
                     return true;
         return (shadow.collidesCharacter() || shadow.collidesInteractable());

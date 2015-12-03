@@ -977,7 +977,7 @@
     <property name="pantomimespawn" value=""/>
    </properties>
   </object>
-  <object name="Enemy Spawn 7" x="1477" y="1961" width="13" height="17">
+  <object name="Enemy Spawn 7" x="1480" y="1944" width="13" height="17">
    <properties>
     <property name="beetlespawn" value=""/>
    </properties>

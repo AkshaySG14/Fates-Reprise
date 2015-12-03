@@ -18,6 +18,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.tiles.AnimatedTiledMapTile;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.Timer;
@@ -159,11 +160,10 @@ public class GameScreen implements Screen {
 	@Override
 	public void render (float delta) {
         update();
-        camera.update();
         // Ensures that the camera's position rests on an int. This is to ensure that there is no tile shearing.
-        int camX = (int) camera.position.x;
-        int camY = (int) camera.position.y;
-        camera.position.set(camX, camY, 0);
+        camera.position.set(MathUtils.round(camera.position.x), MathUtils.round(camera.position.y), 0);
+        camera.update();
+
         // Clears canvas and then renders the art over it.
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -380,6 +380,7 @@ public class GameScreen implements Screen {
         TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(0);
         camera.viewportWidth = layer.getTileWidth() * 10;
         camera.viewportHeight = layer.getTileHeight() * 11;
+        camera.position.set(MathUtils.round(camera.position.x), MathUtils.round(camera.position.y), 0);
         camera.update();
     }
 
@@ -597,8 +598,10 @@ public class GameScreen implements Screen {
 
         // Gets the camera width and height, and updates it.
         TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(0);
-        camera.viewportWidth = layer.getTileWidth() * 10;
-        camera.viewportHeight = layer.getTileHeight() * 11;
+        camera.viewportWidth = (int) layer.getTileWidth() * 10;
+        camera.viewportHeight = (int) layer.getTileHeight() * 11;
+        // Ensures that the camera's position rests on an int. This is to ensure that there is no tile shearing.
+        camera.position.set(MathUtils.round(camera.position.x), MathUtils.round(camera.position.y), 0);
         camera.update();
     }
 
@@ -620,9 +623,14 @@ public class GameScreen implements Screen {
 
     // Creates each world, giving it the tile map, storage, and camera.
     private void createWorlds() {
-        world1 = new UpperWorld(storage, camera, new TmxMapLoader().load("TileMaps/Overworld.tmx"), this);
-        world2 = new UnderWorld(storage, camera, new TmxMapLoader().load("TileMaps/Underworld.tmx"), this);
-        world3 = new Houses(storage, camera, new TmxMapLoader().load("TileMaps/Houses.tmx"), this);
+        // Texture filters for the tiles.
+        TmxMapLoader.Parameters params = new TmxMapLoader.Parameters();
+        params.textureMagFilter = Texture.TextureFilter.Nearest;
+        params.textureMinFilter = Texture.TextureFilter.Nearest;
+        // Creates the worlds, along with their maps.
+        world1 = new UpperWorld(storage, camera, new TmxMapLoader().load("TileMaps/Overworld.tmx", params), this);
+        world2 = new UnderWorld(storage, camera, new TmxMapLoader().load("TileMaps/Underworld.tmx", params), this);
+        world3 = new Houses(storage, camera, new TmxMapLoader().load("TileMaps/Houses.tmx", params), this);
     }
 
     // Instantly pans the camera.
