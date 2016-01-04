@@ -47,6 +47,7 @@ public class FairyEvent extends Event {
                             "assist in your task.",
                             this);
                     screen.setText(dialogue, dialogue.getBackground());
+                    screen.daur.forceState(0);
                     screen.daur.stun();
                     screen.pauseScreen();
                     break;
@@ -58,6 +59,7 @@ public class FairyEvent extends Event {
                     dialogue = new Dialogue(screen, "Very well. I gave you the tool for the job. Now get to it.",
                             this);
                     screen.setText(dialogue, dialogue.getBackground());
+                    screen.daur.forceState(0);
                     screen.daur.stun();
                     break;
                 case 3:
@@ -78,6 +80,7 @@ public class FairyEvent extends Event {
                                 "you stop wasting both my time and yours and go find it.",
                                 this);
                         screen.setText(dialogue, dialogue.getBackground());
+                        screen.daur.forceState(0);
                         screen.daur.stun();
                         screen.pauseScreen();
                         break;
@@ -97,6 +100,7 @@ public class FairyEvent extends Event {
                                 "most... commendable. I suppose I must keep my end of the bargain. Well, here it is.",
                                 this);
                         screen.setText(dialogue, dialogue.getBackground());
+                        screen.daur.forceState(0);
                         screen.daur.stun();
                         screen.pauseScreen();
                         break;
@@ -111,6 +115,7 @@ public class FairyEvent extends Event {
                                 "I wish you luck.",
                                 this);
                         screen.setText(dialogue, dialogue.getBackground());
+                        screen.daur.forceState(0);
                         screen.daur.stun();
                         break;
                     case 3:
@@ -130,6 +135,7 @@ public class FairyEvent extends Event {
                         dialogue = new Dialogue(screen, "I do not believe we have anything more to discuss.",
                                 this);
                         screen.setText(dialogue, dialogue.getBackground());
+                        screen.daur.forceState(0);
                         screen.daur.stun();
                         screen.pauseScreen();
                         break;

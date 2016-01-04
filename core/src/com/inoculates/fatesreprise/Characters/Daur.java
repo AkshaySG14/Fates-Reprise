@@ -469,7 +469,7 @@ public class Daur extends Character {
 
         // If Daur collides with character, does largely the same as terrain. However, Daur will not be set to his
         // pushing state.
-        if (collidesCharacter()) {
+        if (collidesCharacter() && grounded) {
             setX(oldX);
             vel.x = 0;
 
@@ -523,7 +523,7 @@ public class Daur extends Character {
                 setState(PUSHING, false);
         }
 
-        if (collidesCharacter()) {
+        if (collidesCharacter() && grounded) {
             setY(oldY);
             if (swimming) {
                 dragTimer.clear();
@@ -2235,6 +2235,11 @@ public class Daur extends Character {
             return;
         // Breaks channeling.
         stopChanneling();
+        // Removes slow effect if slowed.
+        if (slowed) {
+            slowed = false;
+            resetModifier(0.35f, 0.35f);
+        }
         // Starts cooldown.
         coolDown(0.2f);
         // Sets state to jumping.

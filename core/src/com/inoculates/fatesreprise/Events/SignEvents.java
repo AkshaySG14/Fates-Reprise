@@ -63,9 +63,9 @@ public class SignEvents extends Event {
             case 0:
                 Dialogue dialogue = new Dialogue(screen, message, this);
                 screen.setText(dialogue, dialogue.getBackground());
-                screen.daur.modifyVelocity(0, 0, 0);
-                screen.daur.stun();
                 screen.daur.forceState(0);
+                screen.daur.freeze();
+                screen.daur.stun();
                 break;
             case 1:
                 screen.setText(null, null);
