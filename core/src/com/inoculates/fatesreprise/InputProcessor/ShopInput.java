@@ -1,6 +1,9 @@
 package com.inoculates.fatesreprise.InputProcessor;
 
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.utils.Timer;
+import com.inoculates.fatesreprise.Events.ItemAcquisitionEvents;
+import com.inoculates.fatesreprise.Items.Item;
 import com.inoculates.fatesreprise.Screens.GameScreen;
 import com.inoculates.fatesreprise.Storage.Storage;
 import com.inoculates.fatesreprise.UI.Shop;
@@ -74,14 +77,39 @@ public class ShopInput implements InputProcessor {
             shop.movePosition(1);
     }
 
-    // If the user can afford the selected item, buys it.
+    // If the user can afford the selected item, and does not have it in the inventory already, buys it.
     private void buyItem() {
-        if (storage.coins >= shop.getCost()) {
+        if (storage.coins >= shop.getCost() && !hasItem()) {
             storage.coins -= shop.getCost();
-            // Simutaneously adds the item to Daur's inventory, and removes it from the shop.
-            storage.items.add(shop.getItem());
-            shop.removeItem();
+            // Creates an acquisition event so that Daur receives the item. Uses a timer to prevent input spilling into
+            // the acquisition event.
+            Timer timer = new Timer();
+            timer.scheduleTask(new Timer.Task() {
+                @Override
+                public void run() {
+                    ItemAcquisitionEvents event = new ItemAcquisitionEvents(screen.map, screen, shop.getItem().getClass(),
+                            shop.getShopEvent());
+                }
+            }, 0.01f);
+            shop.end();
         }
+    }
+
+    // If the user has an item of the same type, returns true. Else, returns false.
+    private boolean hasItem() {
+        // Goes through all the items in Daur's inventory, trying to find one that is the same class as the given one.
+        for (Item item : storage.items)
+            if (item != null && item.getClass() == shop.getItem().getClass())
+                return true;
+        // Checks all slot items as well.
+        if (storage.item1 != null && storage.item1.getClass() == shop.getItem().getClass())
+            return true;
+        else if (storage.item2 != null && storage.item2.getClass() == shop.getItem().getClass())
+            return true;
+        else if (storage.item3 != null && storage.item3.getClass() == shop.getItem().getClass())
+            return true;
+        // Else Daur does NOT have the item; returns false.
+        return false;
     }
 
 }

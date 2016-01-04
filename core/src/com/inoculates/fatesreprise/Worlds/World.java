@@ -33,7 +33,7 @@ public abstract class World {
     protected TiledMapTileLayer layer;
     protected ArrayList<RectangleMapObject> triggers = new ArrayList<RectangleMapObject>();
 
-    public int cellX = 1, cellY = 16;
+    public int cellX = 0, cellY = 15;
 
     // Rectangular areas that causes a black fog of varying intensity to display.
     protected ArrayList<RectangleMapObject> fogIn = new ArrayList<RectangleMapObject>();
@@ -57,7 +57,6 @@ public abstract class World {
         setShaderTransitions();
         setTriggers();
         createCellMap();
-        setQuestEvents();
     }
 
     // Main method that creates all aspects of the map, including the characters, interactables, and tile objects (like
@@ -197,18 +196,26 @@ public abstract class World {
                     screen.interactables.add(interactable);
                 }
                 if (object.getProperties().containsKey("woodblock")) {
-                        if (!(rectObject.getProperties().get("limited").toString()).equals(""))
-                            interactable = new WoodBlock(screen, map, screen.miscAtlases.get(0), storage,
-                                    rectObject.getProperties().get("woodblock").toString(),
-                                    object.getProperties().containsKey("limited"),
-                                    Integer.parseInt(rectObject.getProperties().get("limited").toString()));
-                        else
-                            interactable = new WoodBlock(screen, map, screen.miscAtlases.get(0), storage,
-                                    rectObject.getProperties().get("woodblock").toString(),
-                                    object.getProperties().containsKey("limited"));
-                        interactable.setSpawn(x - interactable.getWidth() / 2, y - interactable.getHeight() / 2);
-                        screen.interactables.add(interactable);
+                    if (!(rectObject.getProperties().get("limited").toString()).equals(""))
+                        interactable = new WoodBlock(screen, map, screen.miscAtlases.get(0), storage,
+                                rectObject.getProperties().get("woodblock").toString(),
+                                object.getProperties().containsKey("limited"),
+                                Integer.parseInt(rectObject.getProperties().get("limited").toString()));
+                    else
+                        interactable = new WoodBlock(screen, map, screen.miscAtlases.get(0), storage,
+                                rectObject.getProperties().get("woodblock").toString(),
+                                object.getProperties().containsKey("limited"));
+                    interactable.setSpawn(x - interactable.getWidth() / 2, y - interactable.getHeight() / 2);
+                    screen.interactables.add(interactable);
                 }
+                if (object.getProperties().containsKey("GHMS") && storage.mainQuestStage > 2) {
+                    interactable = new WoodChest(screen, map, screen.miscAtlases.get(0), storage,
+                            rectObject.getProperties().get("GHMS").toString(), x, y,
+                            Integer.parseInt(rectObject.getProperties().get("chest").toString()));
+                    interactable.setSpawn(x - interactable.getWidth() / 2, y - interactable.getHeight() / 2);
+                    screen.interactables.add(interactable);
+                }
+                // For the Zephyr's Wisp chest.
                 if (object.getProperties().containsKey("woodchest")) {
                     interactable = new WoodChest(screen, map, screen.miscAtlases.get(0), storage,
                             rectObject.getProperties().get("woodchest").toString(), x, y,
@@ -234,12 +241,29 @@ public abstract class World {
                     interactable = new WoodClosedDoorVertical(screen, map, screen.miscAtlases.get(0), storage,
                             x, y, Integer.parseInt(object.getProperties().get("closed").toString()));
                     interactable.setSpawn(x - interactable.getWidth() / 2, y - interactable.getHeight() / 4);
-                    screen.interactables.add(interactable);
                 }
                 if (object.getProperties().containsKey("ghclosedh")) {
                     interactable = new WoodClosedDoorHorizontal(screen, map, screen.miscAtlases.get(0), storage,
                             x, y, Integer.parseInt(object.getProperties().get("closed").toString()));
                     interactable.setSpawn(x - interactable.getWidth() / 4, y - interactable.getHeight() / 2);
+                }
+                if (object.getProperties().containsKey("platformspawn")) {
+                    interactable = new Platform(screen, map, screen.miscAtlases.get(0), storage,
+                            Float.parseFloat(object.getProperties().get("velocityX").toString()),
+                            Float.parseFloat(object.getProperties().get("velocityY").toString()));
+                    interactable.setSpawn(x - interactable.getWidth() / 2, y - interactable.getHeight() / 2);
+                    screen.interactables.add(interactable);
+                }
+                if (object.getProperties().containsKey("bossh") &&
+                        !storage.bossDoors[Integer.parseInt(object.getProperties().get("bossdoor").toString())]) {
+                    interactable = new BossDoorHorizontal(screen, map, screen.miscAtlases.get(0), storage);
+                    interactable.setSpawn(x - interactable.getWidth() / 2, y - interactable.getHeight() / 4);
+                    screen.interactables.add(interactable);
+                }
+                if (object.getProperties().containsKey("bossv") &&
+                        !storage.bossDoors[Integer.parseInt(object.getProperties().get("bossdoor").toString())]) {
+                    interactable = new BossDoorVertical(screen, map, screen.miscAtlases.get(0), storage);
+                    interactable.setSpawn(x - interactable.getWidth() / 2, y - interactable.getHeight() / 4);
                     screen.interactables.add(interactable);
                 }
                 checkEvents(object, interactable);
@@ -258,13 +282,13 @@ public abstract class World {
                 float x = (int) (rect.getX() / layer.getTileWidth()) * layer.getTileWidth() + layer.getTileWidth() / 2;
                 float y = (int) (rect.getY() / layer.getTileHeight()) * layer.getTileHeight() + layer.getTileHeight() / 2;
                 Teleporter tp;
-                if (object.getProperties().containsKey("TP1Spawn") && storage.minibosses[0]) {
+                if (object.getProperties().containsKey("TP1Spawn") && storage.mainQuestStage > 2) {
                     tp = new Teleporter(screen, screen.map, screen.miscAtlases.get(0), storage, this);
                     tp.setSpawn(x - tp.getWidth() / 2, y - tp.getHeight() / 2);
                     screen.interactables.add(tp);
                     checkEvents(object, tp);
                 }
-                if (object.getProperties().containsKey("TP2Spawn") && storage.minibosses[0]) {
+                if (object.getProperties().containsKey("TP2Spawn") && storage.mainQuestStage > 2) {
                     tp = new Teleporter(screen, screen.map, screen.miscAtlases.get(0), storage, this);
                     tp.setSpawn(x - tp.getWidth() / 2, y - tp.getHeight() / 2);
                     screen.interactables.add(tp);
@@ -277,47 +301,38 @@ public abstract class World {
     private void createTileRenewables() {
         for (TiledMapTileLayer.Cell cell : cells.get("Spring Bush"))
             cell.setTile(screen.springBushTile);
-
         cells.get("Spring Bush").clear();
 
         for (TiledMapTileLayer.Cell cell : cells.get("Summer Bush"))
             cell.setTile(screen.summerBushTile);
-
         cells.get("Summer Bush").clear();
 
         for (TiledMapTileLayer.Cell cell : cells.get("Fall Bush"))
             cell.setTile(screen.fallBushTile);
-
         cells.get("Fall Bush").clear();
 
         for (TiledMapTileLayer.Cell cell : cells.get("Winter Bush"))
             cell.setTile(screen.winterBushTile);
-
         cells.get("Winter Bush").clear();
 
         for (TiledMapTileLayer.Cell cell : cells.get("Bramble"))
             cell.setTile(screen.brambleTile);
-
         cells.get("Bramble").clear();
 
         for (TiledMapTileLayer.Cell cell : cells.get("Spring Grass"))
             cell.setTile(screen.springGrassTile);
-
         cells.get("Spring Grass").clear();
 
         for (TiledMapTileLayer.Cell cell : cells.get("Summer Grass"))
             cell.setTile(screen.summerGrassTile);
-
         cells.get("Summer Grass").clear();
 
         for (TiledMapTileLayer.Cell cell : cells.get("Fall Grass"))
             cell.setTile(screen.fallGrassTile);
-
         cells.get("Fall Grass").clear();
 
         for (TiledMapTileLayer.Cell cell : cells.get("Winter Grass"))
             cell.setTile(screen.winterGrassTile);
-
         cells.get("Winter Grass").clear();
     }
 
@@ -336,7 +351,7 @@ public abstract class World {
         else
             for (Character character : screen.characters3)
                 characterList.add(character);
-        // If the character is an enemy, deletes it rom the corresponding character list.
+        // If the character is an enemy, deletes it from the corresponding character list.
         for (Character character : characterList)
             if (character instanceof Enemy) {
                 if (this instanceof UpperWorld)
@@ -348,6 +363,12 @@ public abstract class World {
             }
         // Same for all interactables.
         screen.interactables.clear();
+        // Same for all projectiles.
+        screen.projectiles.clear();
+        // Same for all consumables.
+        screen.consumables.clear();
+        // Clears global timer.
+        screen.globalTimer.clear();
     }
 
     // This method checks if the cell has a bush tag. If so, creates the bush over the tile and deletes the tag.
@@ -364,7 +385,7 @@ public abstract class World {
                 cells.get("Summer Bush").remove(cell);
             }
         for (TiledMapTileLayer.Cell checkCell : cells.get("Fall Bush"))
-            if (cell.equals(checkCell)){
+            if (cell.equals(checkCell)) {
                 cell.setTile(screen.fallBushTile);
                 cells.get("Fall Bush").remove(cell);
             }
@@ -397,7 +418,7 @@ public abstract class World {
             event = new HeartPieceBushEvent(screen.map, screen, storage);
         // If the player has entered the Great Hollow Dungeon, initiates the informing dialogue, and sets the dungeon
         // integer to 0 (which indicates Daur is in the Great Hollow Dungeon).
-        if (trigger.getProperties().containsKey(("GHD")) && !storage.FDstorage.greatHollowDialogue)
+        if (trigger.getProperties().containsKey(("GHD")) && storage.dungeon != 0)
             event = new GreatHollowDialogue(screen.map, screen, storage);
         // If the player has exited the Great Hollow Dungeon, sets the dungeon integer to read -1 (no dungeon).
         if (trigger.getProperties().containsKey(("GHE")))
@@ -409,10 +430,21 @@ public abstract class World {
         if (trigger.getProperties().containsKey("GHT2") && !storage.FDstorage.GHT2)
             storage.FDstorage.closeDoor2();
         // If the player has stepped on the Great Hollow miniboss trigger, closes the trigger door and creates the
-        // miniboss: the Slime King.
-        if (trigger.getProperties().containsKey("GHMT") && !storage.minibosses[0] && !storage.FDstorage.GHMT) {
+        // miniboss: the Slime King. Also resets Daur's spawn point.
+        if (trigger.getProperties().containsKey("GHMT") && storage.mainQuestStage < 3 && !storage.FDstorage.GHMT) {
             storage.FDstorage.closeDoor3();
             storage.FDstorage.createMiniboss();
+            // Sets Daur's new spawn point.
+            screen.daur.setSpawnPoint(trigger.getRectangle().getX() + trigger.getRectangle().getWidth() / 2
+                    - screen.daur.getWidth() / 2, trigger.getRectangle().getY() + trigger.getRectangle().getHeight() / 2
+                    - screen.daur.getHeight() / 2);
+        }
+        if (trigger.getProperties().containsKey("GHBT") && storage.mainQuestStage < 4 && !storage.FDstorage.GHBT) {
+            storage.FDstorage.closeDoor4();
+            storage.FDstorage.startBossFight();
+            screen.daur.setSpawnPoint(trigger.getRectangle().getX() + trigger.getRectangle().getWidth() / 2
+                    - screen.daur.getWidth() / 2, trigger.getRectangle().getY() + trigger.getRectangle().getHeight() / 2
+                    - screen.daur.getHeight() / 2);
         }
     }
 
@@ -431,20 +463,26 @@ public abstract class World {
 
     // If the player is beyond a certain point (the boundaries of a cell), the camera will pan over to the new cell.
     public void checkCameraChange() {
-        if (screen.daur.getX() + screen.daur.getWidth() / 2 > layer.getTileWidth() * 10 * cellX) {
+        // Does NOT work if Daur is flying for whatever reason.
+        if (!screen.daur.isGrounded())
+            return;
+        if (screen.daur.getX() + screen.daur.getWidth() / 2 > layer.getTileWidth() * 10 * (cellX + 1)) {
             cellX++;
             setCameraPosition(true, true);
-        } else if (screen.daur.getX() + screen.daur.getWidth() / 2 < layer.getTileWidth() * 10 * (cellX - 1)) {
+        } else if (screen.daur.getX() + screen.daur.getWidth() / 2 < layer.getTileWidth() * 10 * cellX) {
             cellX--;
             setCameraPosition(true, false);
         }
-        if (screen.daur.getY() + screen.daur.getHeight() / 2 > layer.getTileWidth() * 10 * cellY) {
+        if (screen.daur.getY() + screen.daur.getHeight() / 2 > layer.getTileWidth() * 10 * (cellY + 1)) {
             cellY++;
             setCameraPosition(false, true);
-        } else if (screen.daur.getY() + screen.daur.getHeight() / 2 < layer.getTileWidth() * 10 * (cellY - 1)) {
+        } else if (screen.daur.getY() + screen.daur.getHeight() / 2 < layer.getTileWidth() * 10 * cellY) {
             cellY--;
             setCameraPosition(false, false);
         }
+        // If this is the overworld, sets the cell to be explored.
+        if (this instanceof UpperWorld)
+            storage.setExplored(cellX, cellY);
     }
 
     // This causes the panning effect when the camera moves a cell.
@@ -452,12 +490,23 @@ public abstract class World {
         float deltaTime = 0;
         // Freezes the screen temporarily.
         screen.freeze();
-        screen.daur.modifyVelocity(0, 0, 0.1f);
+        screen.daur.freeze();
+        screen.daur.setTransitioning(true);
+        // After 0.16 seconds sets the camera to a static point. This is to avoid any
+        // different camera positions from occurring.
+        screen.globalTimer.scheduleTask(new Timer.Task() {
+            @Override
+            public void run() {
+                camera.position.set(cellX * 10 * layer.getTileWidth() + camera.viewportWidth / 2,
+                        cellY * 10 * layer.getTileHeight() + camera.viewportHeight / 2, 0);
+                screen.daur.setTransitioning(false);
+            }
+        }, 0.16f);
 
         if (onXAxis) {
             if (plus)
                 // Using a delayed for loop, pans the camera to the right.
-                for (float x = camera.position.x; x <= cellX * 10 * layer.getTileWidth() - camera.viewportWidth / 2; x++) {
+                for (float x = camera.position.x; x <= cellX * 10 * layer.getTileWidth() + camera.viewportWidth / 2; x++) {
                     final float newX = x;
                     screen.globalTimer.scheduleTask(new Timer.Task() {
                         @Override
@@ -471,7 +520,7 @@ public abstract class World {
                     deltaTime += 0.001f;
                 }
             else
-                for (float x = camera.position.x; x >= cellX * 10 * layer.getTileWidth() - camera.viewportWidth / 2; x--) {
+                for (float x = camera.position.x; x >= cellX * 10 * layer.getTileWidth() + camera.viewportWidth / 2; x--) {
                     final float newX = x;
                     screen.globalTimer.scheduleTask(new Timer.Task() {
                         @Override
@@ -485,7 +534,7 @@ public abstract class World {
                 }
         } else {
             if (plus)
-                for (float y = camera.position.y; y <= cellY * 10 * layer.getTileHeight() - camera.viewportHeight / 2 + 16; y++) {
+                for (float y = camera.position.y; y <= cellY * 10 * layer.getTileHeight() + camera.viewportHeight / 2; y++) {
                     final float newY = y;
                     screen.globalTimer.scheduleTask(new Timer.Task() {
                         @Override
@@ -498,7 +547,7 @@ public abstract class World {
                     deltaTime += 0.001f;
                 }
             else {
-                for (float y = camera.position.y; y >= cellY * 10 * layer.getTileHeight() - camera.viewportHeight / 2 + 16; y--) {
+                for (float y = camera.position.y; y >= cellY * 10 * layer.getTileHeight() + camera.viewportHeight / 2; y--) {
                     final float newY = y;
                     screen.globalTimer.scheduleTask(new Timer.Task() {
                         @Override
@@ -555,7 +604,10 @@ public abstract class World {
     // cells. If the shader cell indicates a certain transition should be made, it will be made.
     protected void checkShaderTransition() {
         Vector2 cells = new Vector2(cellX, cellY);
-        if (shaderCells.get("fwin1").equals(cells) || shaderCells.get("fwin2").equals(cells) || shaderCells.get("fwin3").equals(cells))
+        if (shaderCells.get("fwin1").equals(cells) || shaderCells.get("fwin2").equals(cells) ||
+                shaderCells.get("fwin3").equals(cells) || shaderCells.get("fwin4").equals(cells) ||
+                shaderCells.get("fwin5").equals(cells) || shaderCells.get("fwin6").equals(cells) ||
+                shaderCells.get("fwin7").equals(cells))
             screen.setCurrentMapShader(new ShaderProgram(Gdx.files.internal("Shaders/faron.vert"), Gdx.files.internal("Shaders/faron.frag")));
         else if (shaderCells.get("fwout1").equals(cells) || shaderCells.get("fwout2").equals(cells))
             screen.setCurrentMapShader(null);
@@ -625,16 +677,20 @@ public abstract class World {
     public void setCameraInstantly() {
         for (int i = 0; i < 16; i++)
             if (screen.daur.getX() + screen.daur.getWidth() / 2 > layer.getTileWidth() * 10 * i)
-                cellX = i + 1;
+                cellX = i;
         for (int i = 0; i < 16; i++)
             if (screen.daur.getY() + screen.daur.getHeight() / 2 > layer.getTileWidth() * 10 * i)
-                cellY = i + 1;
-        camera.position.set(cellX * 10 * layer.getTileWidth() - camera.viewportWidth / 2, cellY * 10 * layer.getTileHeight() - camera.viewportHeight / 2 + 16, 0);
+                cellY = i;
+        camera.position.set(cellX * 10 * layer.getTileWidth() + camera.viewportWidth / 2,
+                cellY * 10 * layer.getTileHeight() + camera.viewportHeight / 2, 0);
         screen.mask.setPosition(camera.position.x - camera.viewportWidth / 2, camera.position.y - camera.viewportHeight / 2);
         // Resets the position of the mask, informs the program which cell the player resides in, checks if a shader
         // transition is needed, and sets Daur's new spawn point (if the player should fall down a hole).
         storage.setCells(cellX, cellY);
         screen.daur.setSpawnPoint(screen.daur.getX(), screen.daur.getY());
+        // If this is the overworld, sets the cell to be explored.
+        if (this instanceof UpperWorld)
+            storage.setExplored(cellX, cellY);
         checkShaderTransition();
     }
 
@@ -654,12 +710,14 @@ public abstract class World {
             storage.FDstorage.addGreatHollowTrigger4Sprites(sprite);
         if (object.getProperties().containsKey("greathollowtrigger5"))
             storage.FDstorage.addGreatHollowTrigger5Sprites(sprite);
-        if (object.getProperties().containsKey("greathollowtrigger6")) {
+        if (object.getProperties().containsKey("greathollowtrigger6"))
             storage.FDstorage.addGreatHollowTrigger6Sprites(sprite);
-        }
-        if (object.getProperties().containsKey("greathollowminiboss")) {
+        if (object.getProperties().containsKey("greathollowminiboss"))
             storage.FDstorage.addGreatHollowMinibossDoor((ClosedDoor) sprite);
-        }
+        if (object.getProperties().containsKey("greathollowboss"))
+            storage.FDstorage.addGreatHollowBossDoor((ClosedDoor) sprite);
+        if (object.getProperties().containsKey("greathollowboss2"))
+            storage.FDstorage.addGreatHollowBossDoor2((ClosedDoor) sprite);
     }
 
     public void addCell(String key, TiledMapTileLayer.Cell value) {

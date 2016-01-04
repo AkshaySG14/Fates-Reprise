@@ -5,10 +5,11 @@ import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Timer;
 import com.inoculates.fatesreprise.Characters.Enemy;
+import com.inoculates.fatesreprise.Characters.MasterWizard;
 import com.inoculates.fatesreprise.Characters.SlimeKing;
+import com.inoculates.fatesreprise.Events.GreatHollowBossFight;
 import com.inoculates.fatesreprise.Interactables.*;
 import com.inoculates.fatesreprise.Screens.GameScreen;
 
@@ -38,11 +39,16 @@ public class FirstDungeonStorage {
     private ArrayList<Sprite> greatHollowTrigger5Sprites = new ArrayList<Sprite>();
     private ArrayList<Sprite> greatHollowTrigger6Sprites = new ArrayList<Sprite>();
     private ClosedDoor greatHollowMinibossTriggerDoor;
+    private ClosedDoor greatHollowBossTriggerDoor;
+    private ClosedDoor greatHollowBossTriggerDoor2;
     // The two teleporters. The first refers to the entrance and the second the miniboss room.
     Teleporter tp1, tp2;
 
     public boolean ambush = false, heartPieceEvent = false, greatHollowDialogue = false, GHT1 = false, GHT2 = false,
-    GHMT = false, compass = false, map = false;
+    GHMT = false, GHBT = false;
+
+    // THe level Daur is on.
+    public int level = 0;
 
     public FirstDungeonStorage(GameScreen screen, Storage storage) {
         this.screen = screen;
@@ -89,6 +95,14 @@ public class FirstDungeonStorage {
         greatHollowMinibossTriggerDoor = door;
     }
 
+    public void addGreatHollowBossDoor (ClosedDoor door) {
+        greatHollowBossTriggerDoor = door;
+    }
+
+    public void addGreatHollowBossDoor2 (ClosedDoor door) {
+        greatHollowBossTriggerDoor2 = door;
+    }
+
     public void beginAmbush() {
         ambush = true;
     }
@@ -111,6 +125,7 @@ public class FirstDungeonStorage {
         checkClearGreatHollowTrigger5(sprite);
         checkClearGreatHollowTrigger6(sprite);
         checkClearMiniboss(sprite);
+        checkClearBoss(sprite);
     }
 
     // If all ambush enemies are dead, clears away the bushes. The object in the constructor is used to determine whether
@@ -126,7 +141,7 @@ public class FirstDungeonStorage {
         // Otherwise clears the bushes.
         for (BushBlock block : ambushBushBlocks)
             block.fade();
-        // Sets the main quest forward.
+        // Sets the main quest forward to 1.
         storage.setMainQuestStage();
         // Clears array.
         ambushEnemies.clear();
@@ -237,9 +252,31 @@ public class FirstDungeonStorage {
             screen.globalTimer.scheduleTask(new Timer.Task() {
                 @Override
                 public void run() {
+                    // Increments the main quest to 3, for trigger-related purposes.
+                    screen.storage.setMainQuestStage();
                     spawnChest("GHMS");
                     createTeleporters();
                     greatHollowMinibossTriggerDoor.open(-2);
+                }
+            }, 0.5f);
+        }
+    }
+
+    // If the Master Wizard has died, opens the door to the first sage and the door to the boss.
+    private void checkClearBoss(Sprite sprite) {
+        if (sprite instanceof MasterWizard) {
+            // Increments the main quest to 4, for trigger-related purposes.
+            storage.setMainQuestStage();
+            screen.globalTimer.scheduleTask(new Timer.Task() {
+                @Override
+                public void run() {
+                    greatHollowBossTriggerDoor.open(-2);
+                }
+            }, 0.5f);
+            screen.globalTimer.scheduleTask(new Timer.Task() {
+                @Override
+                public void run() {
+                    greatHollowBossTriggerDoor2.open(2);
                 }
             }, 0.5f);
         }
@@ -305,12 +342,18 @@ public class FirstDungeonStorage {
         GHT2 = true;
         for (Sprite sprite : greatHollowTrigger4Sprites)
             if ((sprite instanceof WoodClosedDoorHorizontal))
-                ((WoodClosedDoorHorizontal) sprite).close(2);
+                ((WoodClosedDoorHorizontal) sprite).close(-1);
     }
 
     public void closeDoor3() {
         GHMT = true;
         greatHollowMinibossTriggerDoor.close(2);
+    }
+
+    public void closeDoor4() {
+        GHBT = true;
+        greatHollowBossTriggerDoor.close(2);
+        greatHollowBossTriggerDoor2.close(-2);
     }
 
     // Creates the miniboss: the King Slime.
@@ -335,6 +378,11 @@ public class FirstDungeonStorage {
                     screen.characters2.add(sKing);
                 }
             }
+    }
+
+    // Begins the boss fight (begins dialogue and then initiates boss fight).
+    public void startBossFight() {
+        GreatHollowBossFight bossFight = new GreatHollowBossFight(screen.map, screen);
     }
 
     // This method is fired off after the death of the King Slime. Creates the teleporters at the beginning of the
@@ -364,14 +412,8 @@ public class FirstDungeonStorage {
             }
     }
 
-    // Tells the game Daur has the compass for the Great Hollow Dungeon.
-    public void addCompass() {
-        compass = true;
+    // Sets the level Daur is currently on.
+    public void setLevel(int magnitude) {
+        level += magnitude;
     }
-
-    // Tells the game Daur has the map for the Great Hollow Dungeon.
-    public void addMap() {
-        map = true;
-    }
-
 }

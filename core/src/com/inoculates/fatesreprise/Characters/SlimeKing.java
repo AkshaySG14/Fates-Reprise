@@ -22,7 +22,7 @@ public class SlimeKing extends Enemy {
     Shadow shadow;
 
     public SlimeKing(GameScreen screen, TiledMap map, TextureAtlas atlas) {
-        super(screen, map, atlas, 1);
+        super(screen, map, atlas, 12);
         setState(RUNNING, true);
         // Stuns the King Slime to prevent any premature movement.
         stun();
@@ -258,8 +258,6 @@ public class SlimeKing extends Enemy {
                 removeSelf();
             }
         }, 3);
-        // Sets storage to show that the first miniboss is dead.
-        storage.setMinibosses(0);
     }
 
     // Note that all this method does is blink invert and revert the King Slime to create a different death animation.
@@ -279,7 +277,6 @@ public class SlimeKing extends Enemy {
                 }
             }, time);
     }
-
 
     protected void createAnimations() {
         idle = new Animation(0.5f, D1);

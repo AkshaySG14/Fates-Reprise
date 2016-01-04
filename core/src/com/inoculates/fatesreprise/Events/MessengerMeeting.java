@@ -14,6 +14,7 @@ import com.inoculates.fatesreprise.Text.Dialogue;
 // This is the class responsible for the beginning cutscene.
 public class MessengerMeeting extends Event {
     Messenger messenger;
+    Timer timer = new Timer();
 
     public MessengerMeeting(TiledMap map, GameScreen screen) {
         super(screen, map);
@@ -43,26 +44,33 @@ public class MessengerMeeting extends Event {
                 }
             }
         // Sets the cell to the beginning cell (top left cell).
-        screen.world2.setCellX(1);
-        screen.world2.setCellY(16);
+        screen.world2.setCellX(0);
+        screen.world2.setCellY(15);
+        screen.world2.setCameraInstantly();
 
         // Sets the mask position to the top left cell to enable the game to fade in and out.
-        screen.mask.setPosition(screen.camera.position.x - screen.camera.viewportWidth / 2, screen.camera.position.y - screen.camera.viewportHeight / 2);
+        screen.mask.setPosition(screen.camera.position.x - screen.camera.viewportWidth / 2, screen.camera.position.y -
+                screen.camera.viewportHeight / 2);
         screen.mask.setColor(Color.BLACK);
         screen.mask.fadeIn(1);
 
-        // Starts the dialogue.
-        message();
+        // Starts the dialogue after 0.01 seconds to avoid input spillage.
+        timer.scheduleTask(new Timer.Task() {
+            @Override
+            public void run() {
+                message();
+            }
+        }, 0.01f);
     }
 
     protected void message() {
         final Event event = this;
 
         switch (stage) {
-            case 3:
+            case 0:
                 // Creates the dialogue text, stuns Daur to prevent movement, freezes the screen to prevent the user
                 // from bringing up options, sets the direction of Daur to look up, and makes Daur idle.
-                Dialogue dialogue = new Dialogue(screen, "Closer wanderer...", this);
+                Dialogue dialogue = new Dialogue(screen, "Come wanderer...", this);
                 screen.setText(dialogue, dialogue.getBackground());
                 screen.daur.stun();
                 screen.daur.setDirection(2);
@@ -77,12 +85,13 @@ public class MessengerMeeting extends Event {
                 screen.daur.forceState(3);
 
                 // More dialogue, stuns Daur, and makes him idle after one second.
-                screen.globalTimer.scheduleTask(new Timer.Task() {
+                timer.scheduleTask(new Timer.Task() {
                     @Override
                     public void run() {
-                        Dialogue dialogue = new Dialogue(screen, "Yes... Come and I will tell you of your fate...",
+                        Dialogue dialogue = new Dialogue(screen, "Yes... Come closer and I will tell you of your fate...",
                                 event);
                         screen.setText(dialogue, dialogue.getBackground());
+                        screen.daur.freeze();
                         screen.daur.stun();
                         screen.daur.forceState(0);
                     }
@@ -93,7 +102,7 @@ public class MessengerMeeting extends Event {
                 screen.daur.modifyVelocity(0, 0.2f, 1.8f);
                 screen.daur.forceState(3);
 
-                screen.globalTimer.scheduleTask(new Timer.Task() {
+                timer.scheduleTask(new Timer.Task() {
                     @Override
                     public void run() {
                         Dialogue dialogue = new Dialogue(screen, "Wanderer, you know not why I brought you here. " +
@@ -106,17 +115,18 @@ public class MessengerMeeting extends Event {
                                 "of Carthell. Find out where the gods are being held, and free them. Good luck.",
                                 event);
                         screen.setText(dialogue, dialogue.getBackground());
+                        screen.daur.freeze();
                         screen.daur.stun();
                         screen.daur.forceState(0);
                     }
                 }, 1.8f);
                 break;
-            case 0:
+            case 3:
                 // Fades out and proceeds to the game itself.
                 screen.setText(null, null);
                 // Washes the screen out.
                 screen.mask.fadeOut(1);
-                screen.globalTimer.scheduleTask(new Timer.Task() {
+                timer.scheduleTask(new Timer.Task() {
                     @Override
                     public void run() {
                         // Removes messenger from the rendering list.
@@ -155,8 +165,8 @@ public class MessengerMeeting extends Event {
                         screen.mask.fadeIn(1);
                     }
                 }, 1);
-                // Creates and launches the next event that immediately proceeds the mesenger meeting.
-                screen.globalTimer.scheduleTask(new Timer.Task() {
+                // Creates and launches the next event that immediately proceeds the messenger meeting.
+                timer.scheduleTask(new Timer.Task() {
                     @Override
                     public void run() {
                         StartingEvent event = new StartingEvent(screen.world1.getMap(), screen);

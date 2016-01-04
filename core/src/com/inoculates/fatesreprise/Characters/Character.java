@@ -440,7 +440,7 @@ public abstract class Character extends AdvSprite {
         return false;
     }
 
-        // Modifies the velocity of the character for a short amount of time. NOTE: this overrides the character's current
+    // Modifies the velocity of the character for a short amount of time. NOTE: this overrides the character's current
     // velocity and stuns it.
     public void modifyVelocity(float x, float y, float time) {
         // Sets new velocity.

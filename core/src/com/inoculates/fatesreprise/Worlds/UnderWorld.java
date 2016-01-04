@@ -6,6 +6,7 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.inoculates.fatesreprise.Characters.Druni;
 import com.inoculates.fatesreprise.Screens.GameScreen;
 import com.inoculates.fatesreprise.Storage.Storage;
 
@@ -31,13 +32,7 @@ public class UnderWorld extends World {
     }
 
     protected void createCharacters() {
-        for (MapObject object : map.getLayers().get("Spawns").getObjects())
-            if (object instanceof RectangleMapObject) {
-                RectangleMapObject rectObject = (RectangleMapObject) object;
-                Rectangle rect = rectObject.getRectangle();
-                float x = (int) (rect.getX() / layer.getTileWidth()) * layer.getTileWidth() + layer.getTileWidth() / 2;
-                float y = (int) (rect.getY() / layer.getTileHeight()) * layer.getTileHeight() + layer.getTileHeight() / 2;
-            }
+
     }
 
     // Adds all the exits and entrances.
@@ -83,7 +78,7 @@ public class UnderWorld extends World {
 
     protected void setShaderTransitions() {
         Vector2 vec;
-        vec = new Vector2(2, 16);
+        vec = new Vector2(1, 15);
         shaderCells.put("fwout1", vec);
     }
 
@@ -127,7 +122,20 @@ public class UnderWorld extends World {
         return teleporters1.size();
     }
 
-    protected void setQuestEvents() {
-
+    public void setQuestEvents() {
+        // Spawns Druni if not obtained.
+        for (MapObject object : map.getLayers().get("Spawns").getObjects())
+            if (object instanceof RectangleMapObject) {
+                RectangleMapObject rectObject = (RectangleMapObject) object;
+                Rectangle rect = rectObject.getRectangle();
+                float x = (int) (rect.getX() / layer.getTileWidth()) * layer.getTileWidth() + layer.getTileWidth() / 2;
+                float y = (int) (rect.getY() / layer.getTileHeight()) * layer.getTileHeight() + layer.getTileHeight() / 2;
+                // If the first sage has not been rescued, spawns him accordingly.
+                if (object.getProperties().containsKey("drunispawn") && !storage.sages[0]) {
+                    Druni druni = new Druni(screen, map, screen.characterAtlases.get(0));
+                    druni.setPosition(x - druni.getWidth() / 2, y - druni.getHeight() / 2);
+                    screen.characters2.add(druni);
+                }
+            }
     }
 }

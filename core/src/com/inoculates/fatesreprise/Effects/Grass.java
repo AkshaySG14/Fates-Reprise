@@ -16,7 +16,10 @@ public class Grass extends Effect {
 
     // Gets the character owner so that the grass can periodically set its position.
     public Grass(GameScreen screen, TiledMap map, TextureAtlas atlas, Character owner) {
-        super(screen, map, atlas, true);
+        super(screen, map, atlas, false);
+        // Is persistent if owner is player.
+        if (owner instanceof Daur)
+            persistent = true;
         this.owner = owner;
     }
 

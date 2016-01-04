@@ -165,17 +165,17 @@ public class Houses extends World {
     }
 
     // This method adds very vectors which store the CELL positions of the various shader transitions. For example, a
-    // shader transition will occur at cell 1x, 14y.
+    // shader transition will occur at cell 0x, 13y.
     protected void setShaderTransitions() {
         Vector2 vec;
-        vec = new Vector2(1, 14);
+        vec = new Vector2(3, 0);
         shaderCells.put("fwin1", vec);
-        vec = new Vector2(1, 15);
-        shaderCells.put("fwout1", vec);
-        vec = new Vector2(3, 14);
+        vec = new Vector2(2, 1);
         shaderCells.put("fwin2", vec);
-        vec = new Vector2(3, 15);
-        shaderCells.put("fwout2", vec);
+        vec = new Vector2(2, 1);
+        shaderCells.put("fwin3", vec);
+        vec = new Vector2(0, 0);
+        shaderCells.put("fwin4", vec);
     }
 
     // Gets the portal based on the integer given.
@@ -191,15 +191,13 @@ public class Houses extends World {
         Vector2 cells = new Vector2(cellX, cellY);
         if (shaderCells.get("fwin1").equals(cells) || shaderCells.get("fwin2").equals(cells))
             screen.setCurrentMapShader(new ShaderProgram(Gdx.files.internal("Shaders/faron.vert"), Gdx.files.internal("Shaders/faron.frag")));
-        else if (shaderCells.get("fwout1").equals(cells) || shaderCells.get("fwout2").equals(cells))
-            screen.setCurrentMapShader(null);
     }
 
     public int getPortalSize() {
         return portalsIn.size();
     }
 
-    protected void setQuestEvents() {
+    public void setQuestEvents() {
 
     }
 }

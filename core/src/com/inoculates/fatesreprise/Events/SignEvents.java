@@ -24,7 +24,8 @@ public class SignEvents extends Event {
     private void setMessage() {
         switch (sign) {
             case 0:
-                message = "Welcome to Carthell!";
+                message = "Head east to Carthell Square, north east to the Marketplace, south to Aragoth's Fountain, and " +
+                        "far north east to Carthell Library.";
                 break;
             case 1:
                 message = "South to Faron Woods.";
@@ -39,7 +40,7 @@ public class SignEvents extends Event {
                 message = "Road to Mt. Morrow. Passage currently blocked.";
                 break;
             case 5:
-                message = "Here lie the primordial stones of te north, south, east, and west.";
+                message = "Here lie the primordial stones of the north, south, east, and west.";
                 break;
             case 6:
                 message = "Lairon looks to the North.";

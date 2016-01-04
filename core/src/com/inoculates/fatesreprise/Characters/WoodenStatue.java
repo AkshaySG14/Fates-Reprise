@@ -16,7 +16,7 @@ public class WoodenStatue extends Enemy {
     boolean following = false;
 
     public WoodenStatue(GameScreen screen, TiledMap map, TextureAtlas atlas) {
-        super(screen, map, atlas, 5, 0);
+        super(screen, map, atlas, 4, 0);
     }
 
     protected void update(float deltaTime) {

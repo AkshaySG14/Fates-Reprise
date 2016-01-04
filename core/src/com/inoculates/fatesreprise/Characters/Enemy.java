@@ -66,7 +66,7 @@ public abstract class Enemy extends Character {
             if (state != FALLING && state != DROWNING)
                 update(deltaTime);
         }
-        if ((vel.x != 0 || vel.y != 0) && canMove())
+        if ((vel.x != 0 || vel.y != 0 || ace.x != 0 || ace.y != 0) && canMove() && state != FALLING && state != DROWNING)
             tryMove();
 
         createAnimations();
@@ -303,6 +303,8 @@ public abstract class Enemy extends Character {
         // Causes the enemy to be motionless and receive no input.
         freeze();
         stun();
+        ace.x = 0;
+        ace.y = 0;
         // This method adjusts the position of enemy's sprite to emulate the enemy falling down the center of the hole.
         setPosition(hole.x - getWidth() / 2, hole.y - getHeight() / 2);
         resetPosition(hole);
@@ -325,22 +327,22 @@ public abstract class Enemy extends Character {
         if (state == DROWNING)
             return;
         setState(DROWNING, true);
+        // Causes the enemy to be motionless and receive no input.
+        freeze();
+        stun();
+        setPosition((int) ((getCX()) / layer.getTileWidth()) * layer.getTileWidth() + layer.getTileWidth() / 2 - getWidth() / 2,
+                (int) ((getY() + 2) / layer.getTileHeight()) * layer.getTileHeight() + layer.getTileHeight() / 2 - getHeight() / 2);
         chooseSprite();
-        setPosition((int) (getCX() / layer.getTileWidth()) * layer.getTileWidth() + layer.getTileWidth() / 2 -
-                        getWidth() / 2,
-                (int) ((getY() + 2) / layer.getTileHeight()) * layer.getTileHeight() + layer.getTileHeight() / 2 -
-                        getHeight() / 2);
+        setPosition((int) ((getCX()) / layer.getTileWidth()) * layer.getTileWidth() + layer.getTileWidth() / 2 - getWidth() / 2,
+                (int) ((getY() + 2) / layer.getTileHeight()) * layer.getTileHeight() + layer.getTileHeight() / 2 - getHeight() / 2);
         // Adds the small splash effect.
         Splash splash = new Splash(screen, map, screen.daurAtlases.get(3), this);
         screen.effects.add(splash);
         // Makes enemy invulnerable and transparent to prevent any damage or stun while falling.
         invulnerability = true;
         transparent = true;
-        // Causes the enemy to be motionless and receive no input.
-        freeze();
-        stun();
 
-        // After 0.75 seconds  of falling, the enemy will be removed from the game.
+        // After 0.75 seconds  of drowning, the enemy will be removed from the game.
         final Enemy enemy = this;
         screen.globalTimer.scheduleTask(new Timer.Task() {
             @Override

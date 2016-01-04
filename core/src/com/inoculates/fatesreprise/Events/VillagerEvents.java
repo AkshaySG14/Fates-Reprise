@@ -46,9 +46,9 @@ public class VillagerEvents extends Event {
                         storage.setVillagerStage(0);
                         break;
                     case 1:
-                        message = "Carthell is a pretty easy place to navigate. In the center, there's a square filled " +
-                                "with shops and markets. East of that square are the four statues. Southwest " +
-                                "of the square is Aragoth's fountain. Northeast of the square is where the library is located.";
+                        message = "Carthell is a pretty easy place to navigate. In the center, there's a marketplace filled " +
+                                "with shops. East of that is the Four Statue Square. Southwest " +
+                                "of the square is Aragoth's fountain. North of the Four Statue Square is where the library is located.";
                                 break;
                 }
                 break;
@@ -73,8 +73,7 @@ public class VillagerEvents extends Event {
                 switch (storage.villagerStages[3]) {
                     case 0:
                         message = "Hello stranger. Have you checked out the local spell shop? " +
-                                "It's stocked with plenty of spells for a magical adventurer such as yourself. I heard they even " +
-                                "have a free sample to entice new customers!";
+                                "It's stocked with plenty of spells for a magical adventurer such as yourself.";
                         storage.setVillagerStage(3);
                         break;
                     case 1:
@@ -117,8 +116,14 @@ public class VillagerEvents extends Event {
                         storage.setVillagerStage(6);
                         break;
                     case 2:
-                        message = "I heard there's a magical item in Faron Woods, inside a great oak tree. But, you'll have to find your " +
-                                "way there first.";
+                        // Note that this message changes based on how far Daur is in the main quest.
+                        if (storage.mainQuestStage < 4)
+                            message = "I heard there's a magical person imprisoned to the south in Faron Woods, inside a great oak tree." +
+                                    " But, you'll have to find your way there first.";
+                            // The rest of the game hasn't been fleshed out yet, so this part has not been fully done (the
+                            // main quest amount).
+                        else
+                            message = "Hmmmm. There seems to be all kinds of trouble in the east now.";
                         storage.setVillagerStage(6);
                         break;
                     case 3:
@@ -126,6 +131,16 @@ public class VillagerEvents extends Event {
                         storage.setVillagerStage(6);
                         break;
                     case 4:
+                        // Same as the above exception.
+                        if (storage.mainQuestStage < 2)
+                            message = "If you ever feel lost in Faron Woods, you could always consult the Fairy Queen. She knows " +
+                                    "even more than I do.";
+                        else
+                            message = "The rugged lands to the east sure are dangerous to explore. I wouldn't go in any " +
+                                    "of the caves without some kind of light.";
+                        storage.setVillagerStage(6);
+                        break;
+                    case 5:
                         message = "When facing a skeleton, the only way to kill it for good is to light it up.";
                         storage.setVillagerStageSp(6, 1);
                         break;
@@ -244,7 +259,7 @@ public class VillagerEvents extends Event {
             case 18:
                 switch (storage.villagerStages[18]) {
                     case 0:
-                        message = "Are you here on behalf of my sister? If so, I'd advise you to leave immediately. I'm never going to live with her " +
+                        message = "Are you here on behalf of my sister? If so, I'd advise you to leave immediately. I'm never going to move in with her " +
                                 "for as long as she lives. And there's absolutely nothing you can do to convince me.";
                         break;
                 }
@@ -255,6 +270,10 @@ public class VillagerEvents extends Event {
                         message = "Oh dear, are you an adventurer? If you are, would you mind doing me a favor? I've always " +
                                 "wanted a copy of the book \"A Bestiary of Extraordinary Creatures\" by Melvin Shermille. If you " +
                                 "could find and give it to me, I would reward you quite handsomely.";
+                        storage.setVillagerStage(19);
+                        break;
+                    case 1:
+                        message = "Did you find a copy of the book yet?";
                         break;
                 }
                 break;
@@ -331,8 +350,8 @@ public class VillagerEvents extends Event {
                 switch (storage.villagerStages[24]) {
                     case 0:
                         message = "Hi there! I'm the mayor's aide, and I'm here to answer any concerns you may have about Carthell. " +
-                                "If you have any questions in the future, don't hesitate to ask me. If need be, I'll even act as direct " +
-                                "correspondence to the mayor.";
+                                "If you have any questions in the future, don't hesitate to ask me. If need be, I'll even act as a direct " +
+                                "correspondent to the mayor.";
                         storage.setVillagerStage(24);
                         break;
                     case 1:

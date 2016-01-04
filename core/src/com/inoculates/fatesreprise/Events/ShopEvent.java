@@ -81,6 +81,11 @@ public class ShopEvent extends Event {
         screen.UIS.removeValue(shop, false);
     }
 
+    // Destroys the shopUI only.
+    public void endShop() {
+        screen.UIS.removeValue(shop, false);
+    }
+
     // Creates the bitmap fonts, which is later used for the text.
     private Array<BitmapFont> createFonts() {
         Array<BitmapFont> fonts = new Array<BitmapFont>();
@@ -92,7 +97,7 @@ public class ShopEvent extends Event {
         switch (type) {
             case 0:
                 // Magic shop.
-                // Creates the actual bitmap font itself. Note that 10 separate fonts are created for all 9 items.
+                // Creates the actual bitmap font itself. Note that 10 separate fonts are created for all 10 items.
                 for (int i = 0; i < 10; i++) {
                     BitmapFont font = new BitmapFont(Gdx.files.internal("Text/shop.fnt"), region, false);
                     font.setUseIntegerPositions(false);
@@ -101,7 +106,7 @@ public class ShopEvent extends Event {
                 return fonts;
             case 1:
                 // Potion shop.
-                // For the 3 items.
+                // For the 4 items.
                 for (int i = 0; i < 4; i++) {
                     BitmapFont font = new BitmapFont(Gdx.files.internal("Text/shop.fnt"), region, false);
                     font.setUseIntegerPositions(false);
@@ -110,7 +115,7 @@ public class ShopEvent extends Event {
                 return fonts;
             case 2:
                 // Misc shop.
-                // For the 4 items.
+                // For the 5 items.
                 for (int i = 0; i < 5; i++) {
                     BitmapFont font = new BitmapFont(Gdx.files.internal("Text/shop.fnt"), region, false);
                     font.setUseIntegerPositions(false);
@@ -142,7 +147,7 @@ public class ShopEvent extends Event {
                 return texts;
             case 1:
                 // Potion shop.
-                texts.add("Minor Health" + getSpaces("Minor Health") + " 80g");
+                texts.add("Minor Health" + getSpaces("Minor Health") + " 15g");
                 texts.add("Minor Haste" + getSpaces("Minor Haste") + "130g");
                 texts.add("Lesser Rejuv" + getSpaces("Lesser Rejuv") + "210g");
                 texts.add("Steelskin" + getSpaces("Steelskin") + "255g");
@@ -161,28 +166,36 @@ public class ShopEvent extends Event {
     }
 
     // Creates the items themselves. This is the actual item given to Daur that he purchases.
+    // Note most of the items here are just copies of the shield item to serve as place holders.
     private Array<Item> createItems() {
         Array<Item> items = new Array<Item>();
         switch (type) {
             // Magic Shop.
             case 0:
                 items.add(new ShieldItem(screen.daurAtlases.get(2)));
-                /*items.add(new FlameGoutItem(screen.daurAtlases.get(2)));
-                items.add(new GiantsMightItem(screen.daurAtlases.get(2)));
-                items.add(new MinorTeleportItem(screen.daurAtlases.get(2)));
-                items.add(new MirrorImageItem(screen.daurAtlases.get(2)));
-                items.add(new PlanarShiftItem(screen.daurAtlases.get(2)));
-                items.add(new LiveWireItem(screen.daurAtlases.get(2)));
-                items.add(new StoneFistItem(screen.daurAtlases.get(2)));
-                items.add(new PulverizeItem(screen.daurAtlases.get(2)));
-                items.add(new ReflectItem(screen.daurAtlases.get(2)));*/
+                items.add(new ShieldItem(screen.daurAtlases.get(2)));
+                items.add(new ShieldItem(screen.daurAtlases.get(2)));
+                items.add(new ShieldItem(screen.daurAtlases.get(2)));
+                items.add(new ShieldItem(screen.daurAtlases.get(2)));
+                items.add(new ShieldItem(screen.daurAtlases.get(2)));
+                items.add(new ShieldItem(screen.daurAtlases.get(2)));
+                items.add(new ShieldItem(screen.daurAtlases.get(2)));
+                items.add(new ShieldItem(screen.daurAtlases.get(2)));
+                items.add(new ShieldItem(screen.daurAtlases.get(2)));
                 return items;
             // Potion Shop.
             case 1:
+                items.add(new MinorHealthPotionItem(screen.daurAtlases.get(2)));
+                items.add(new ShieldItem(screen.daurAtlases.get(2)));
+                items.add(new ShieldItem(screen.daurAtlases.get(2)));
                 items.add(new ShieldItem(screen.daurAtlases.get(2)));
                 return items;
             // Misc Shop.
             case 2:
+                items.add(new ShieldItem(screen.daurAtlases.get(2)));
+                items.add(new ShieldItem(screen.daurAtlases.get(2)));
+                items.add(new ShieldItem(screen.daurAtlases.get(2)));
+                items.add(new ShieldItem(screen.daurAtlases.get(2)));
                 items.add(new ShieldItem(screen.daurAtlases.get(2)));
                 return items;
             default:

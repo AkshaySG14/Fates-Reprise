@@ -114,7 +114,8 @@ public class Electrosphere extends Projectile {
             if (character != owner)
                 for (float step = 0; step < character.getWidth(); step += layer.getTileWidth() / 16)
                     for (float step2 = 0; step2 < character.getHeight(); step2 += layer.getTileHeight() / 16)
-                        if (Math.abs(character.getX() + step - getCenterX()) < RADIUS && Math.abs(character.getY() + step2 - getCenterY()) < RADIUS) {
+                        if (Math.abs(character.getX() + step - getCenterX()) < RADIUS &&
+                                Math.abs(character.getY() + step2 - getCenterY()) < RADIUS && isValidTarget(character)) {
                             target = character;
                             effects();
                             return true;

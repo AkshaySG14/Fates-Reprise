@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.utils.Timer;
 import com.inoculates.fatesreprise.InputProcessor.InventoryInput2;
 import com.inoculates.fatesreprise.Items.*;
 import com.inoculates.fatesreprise.Storage.Storage;
@@ -215,7 +216,7 @@ public class PausedScreenGame2 implements Screen {
     public void resize (int width, int height) {
         TiledMapTileLayer layer = (TiledMapTileLayer) screen.map.getLayers().get(0);
         screen.camera.viewportWidth = layer.getTileWidth() * 10;
-        screen.camera.viewportHeight = layer.getTileHeight() * 10;
+        screen.camera.viewportHeight = layer.getTileHeight() * 11;
         screen.camera.update();
     }
 
@@ -464,7 +465,7 @@ public class PausedScreenGame2 implements Screen {
             }
     }
 
-    // Crates the bitmapfont that displays the item name.
+    // Creates the bitmapfont that displays the item name.
     private void createText() {
         Texture texture = new Texture(Gdx.files.internal("Text/item.png"));
         texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
@@ -495,8 +496,8 @@ public class PausedScreenGame2 implements Screen {
                 return "Great Hollow Key";
             else if (currentItem instanceof GreatHollowSmallKey)
                 return "Great Hollow Dungeon Key";
-            else if (currentItem instanceof WindSickleItem)
-                return "    Wind Sickles";
+            else if (currentItem instanceof GreatHollowBossKey)
+                return "    Boss Key";
 
             return "";
         }
@@ -510,9 +511,9 @@ public class PausedScreenGame2 implements Screen {
                 case 2:
                     // If Druni is free, returns Druni's name and title, if not returns only his color and his title.
                     if (storage.sages[position - 2])
-                        return "Sage Druni";
+                        return "    Sage Druni";
                     else
-                        return "The Red Sage";
+                        return "  The Red Sage";
                 case 3:
                     if (storage.sages[position - 2])
                         return "Sage Khalin";
@@ -522,7 +523,7 @@ public class PausedScreenGame2 implements Screen {
                     if (storage.sages[position - 2])
                         return "Sage Laylia";
                     else
-                        return "The Blue Sage";
+                        return "  The Blue Sage";
                 case 5:
                     if (storage.sages[position - 2])
                         return "Sage Ragnor";
@@ -532,18 +533,18 @@ public class PausedScreenGame2 implements Screen {
                     if (storage.sages[position - 2])
                         return "Sage Voorhe";
                     else
-                        return "The Cyan Sage";
+                        return " The Cyan Sage";
                 case 7:
                     if (storage.sages[position - 2])
                         return "Sage Xalo";
                     else
-                        return "The Pink Sage";
+                        return "  The Pink Sage";
                 // Save game button.
                 case 8:
-                    return "Saves the game.";
+                    return "Saves the game";
                 // End game button
                 case 9:
-                    return "Quits the game.";
+                    return "Quits the game";
             }
         }
     }
@@ -581,6 +582,39 @@ public class PausedScreenGame2 implements Screen {
             currentItem = null;
         else
             currentItem = items.get(position);
+    }
+
+    // Checks if the quit button or save game button is hovered over while the talk button is pressed. If so, quits or
+    // saves the game.
+    public void checkButtonPressed() {
+        // Button is save game, saves the game and informs the user by turning the text green for 0.4 seconds.
+        if (position == 8) {
+            storage.store();
+            saveGame.setColor(Color.GREEN);
+            // Freezes screen for 0.4 seconds.
+            screen.freeze();
+            Timer timer = new Timer();
+            timer.scheduleTask(new Timer.Task() {
+                @Override
+                public void run() {
+                    saveGame.setColor(Color.BLACK);
+                    screen.unFreeze();
+                }
+            }, 0.4f);
+        }
+        // Button is quit game. Simply quits the game,
+        if (position == 9) {
+            quitGame.setColor(Color.GREEN);
+            // Freezes screen until exit.
+            screen.freeze();
+            Timer timer = new Timer();
+            timer.scheduleTask(new Timer.Task() {
+                @Override
+                public void run() {
+                    Gdx.app.exit();
+                }
+            }, 0.4f);
+        }
     }
 
     // Changes the screen to the game screen.

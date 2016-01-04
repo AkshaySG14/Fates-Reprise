@@ -6,6 +6,6 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 public class MinorHealthPotionItem extends Item {
 
     public MinorHealthPotionItem(TextureAtlas atlas) {
-        super(atlas.findRegion("Minor Health Potion"), 180);
+        super(atlas.findRegion("HealthPotion"), 15);
     }
 }

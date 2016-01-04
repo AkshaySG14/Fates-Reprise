@@ -1,0 +1,33 @@
+
+Tiles.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+GraySquare
+  rotate: false
+  xy: 1, 1
+  size: 20, 20
+  orig: 20, 20
+  offset: 0, 0
+  index: -1
+Indicator1
+  rotate: false
+  xy: 23, 1
+  size: 20, 20
+  orig: 20, 20
+  offset: 0, 0
+  index: -1
+Indicator2
+  rotate: false
+  xy: 45, 1
+  size: 20, 20
+  orig: 20, 20
+  offset: 0, 0
+  index: -1
+DaurIcon
+  rotate: false
+  xy: 67, 9
+  size: 13, 12
+  orig: 13, 12
+  offset: 0, 0
+  index: -1

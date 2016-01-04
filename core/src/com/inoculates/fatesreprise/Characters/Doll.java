@@ -27,7 +27,7 @@ public class Doll extends Enemy {
     int movementDirection;
 
     public Doll(GameScreen screen, TiledMap map, TextureAtlas atlas) {
-        super(screen, map, atlas, 2);
+        super(screen, map, atlas, 1);
         setState(RUNNING, false);
         checkMove();
         move();

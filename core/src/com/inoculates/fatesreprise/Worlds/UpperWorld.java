@@ -75,16 +75,24 @@ public class UpperWorld extends World {
 
     protected void setShaderTransitions() {
         Vector2 vec;
-        vec = new Vector2(8, 5);
+        vec = new Vector2(7, 4);
         shaderCells.put("fwin1", vec);
-        vec = new Vector2(8, 6);
+        vec = new Vector2(7, 5);
         shaderCells.put("fwout1", vec);
-        vec = new Vector2(10, 5);
+        vec = new Vector2(9, 4);
         shaderCells.put("fwin2", vec);
-        vec = new Vector2(10, 6);
-        shaderCells.put("fwout2", vec);
         vec = new Vector2(9, 5);
+        shaderCells.put("fwout2", vec);
+        vec = new Vector2(8, 4);
         shaderCells.put("fwin3", vec);
+        vec = new Vector2(9, 3);
+        shaderCells.put("fwin4", vec);
+        vec = new Vector2(8, 1);
+        shaderCells.put("fwin5", vec);
+        vec = new Vector2(7, 0);
+        shaderCells.put("fwin6", vec);
+        vec = new Vector2(7, 2);
+        shaderCells.put("fwin7", vec);
     }
 
     protected void createCharacters() {
@@ -176,32 +184,30 @@ public class UpperWorld extends World {
     }
 
     // This method sets all corresponding quest events. E.g. if a door was opened by a quest event, it will remain open.
-    protected void setQuestEvents() {
+    public void setQuestEvents() {
         // Great Hollow should be open.
-        if (storage.mainQuestStage > 2)
+        if (storage.mainQuestStage > 1)
             openGreatHollow();
     }
 
     private void openGreatHollow() {
-        // Count for keeping rack of the openings.
-        int count = 0;
         // Recreates layer so it relates to the object layer.
-        TiledMapTileLayer layer = (TiledMapTileLayer) screen.map.getLayers().get(2);
+        TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(2);
 
         // First acquires the opening tile.
-        Iterator<TiledMapTile> tiles = screen.map.getTileSets().getTileSet("Tiles").iterator();
+        Iterator<TiledMapTile> tiles = map.getTileSets().getTileSet("Tiles").iterator();
         TiledMapTile openingTile = null;
         while (tiles.hasNext()) {
             TiledMapTile tile = tiles.next();
-            if (tile.getProperties().containsKey("bushdoor")) {
-                // Sets the tile and breaks from the loop.
+            if (tile.getProperties().containsKey("greathollowopen")) {
+                // Sets the left tile.
                 openingTile = tile;
                 break;
             }
         }
 
         // Finds the Great Hollow opening and then alters the tiles accordingly.
-        for (MapObject object : screen.map.getLayers().get("Triggers").getObjects())
+        for (MapObject object : map.getLayers().get("Triggers").getObjects())
             if (object instanceof RectangleMapObject) {
                 RectangleMapObject rectObject = (RectangleMapObject) object;
                 Rectangle rect = rectObject.getRectangle();
@@ -209,14 +215,12 @@ public class UpperWorld extends World {
                 float y = (int) (rect.getY() / layer.getTileHeight()) * layer.getTileHeight() + layer.getTileHeight() / 2;
                 // Finds the rectangle that is necessary.
                 if (object.getProperties().containsKey("GHO")) {
-                    // Gets the cell and sets it to the opening tile.
+                    // Gets the cell and sets it to the opening tile. Returns afterwards
                     TiledMapTileLayer.Cell cell = layer.getCell((int) (x / layer.getTileWidth()), (int) (y / layer.getTileHeight()));
                     cell.setTile(openingTile);
-                    count ++;
-                    // Returns the method if this is the second opening.
-                    if (count == 2)
-                        return;
+                    return;
                 }
             }
     }
+
 }

@@ -40,4 +40,9 @@ public class TextBackground extends Sprite {
         else
             addition = square;
     }
+
+    // Returns the width of the background + the additional arrow/square. This is used for screen placement.
+    public float getTrueWidth() {
+        return getWidth() + arrow.getWidth();
+    }
 }

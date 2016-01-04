@@ -2,6 +2,7 @@
 package com.inoculates.fatesreprise.Characters;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
@@ -144,8 +145,6 @@ public class Ghost extends Enemy {
             }
     }
 
-    // This method moves the beetle depending on the x and y components of its velocity. Additionally, it checks for any
-    // collisions, including those with the edge of the screen. The actual methods are in the super class Enemy.
     protected void tryMove() {
         checkCollisions();
         detectConditions();
@@ -162,6 +161,12 @@ public class Ghost extends Enemy {
             run = new Animation(0.25f, FL1, FL2);
     }
 
+    // Overrides the stun collision method to prevent stunning.
+    public void stunCollision(Sprite sprite, float time) {
+
+    }
+
+
     // If returned true, the new state will not override the old.
     protected boolean overrideCheck() {
         return state == DEAD;
@@ -172,7 +177,6 @@ public class Ghost extends Enemy {
         return state == DEAD;
     }
 
-    //This method periodically sets the frame of the beetle depending on both the state and the animationTime.
     protected void chooseSprite()
     {
         Animation anim = run;

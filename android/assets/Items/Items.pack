@@ -52,65 +52,79 @@ gold
   orig: 15, 15
   offset: 0, 0
   index: -1
-greathollowkey
+greathollowbosskey
   rotate: false
   xy: 1, 18
   size: 15, 15
   orig: 15, 15
   offset: 0, 0
   index: -1
-heart
+greathollowkey
   rotate: false
   xy: 1, 1
   size: 15, 15
   orig: 15, 15
   offset: 0, 0
   index: -1
-hollowkey
+HealthPotion
   rotate: false
   xy: 18, 86
   size: 15, 15
   orig: 15, 15
   offset: 0, 0
   index: -1
-map
+heart
   rotate: false
   xy: 18, 69
   size: 15, 15
   orig: 15, 15
   offset: 0, 0
   index: -1
-Shield
+hollowkey
   rotate: false
   xy: 18, 52
   size: 15, 15
   orig: 15, 15
   offset: 0, 0
   index: -1
-silver
+map
   rotate: false
   xy: 18, 35
   size: 15, 15
   orig: 15, 15
   offset: 0, 0
   index: -1
-staff
+Shield
   rotate: false
   xy: 18, 18
   size: 15, 15
   orig: 15, 15
   offset: 0, 0
   index: -1
-WindSickle
+silver
   rotate: false
   xy: 18, 1
   size: 15, 15
   orig: 15, 15
   offset: 0, 0
   index: -1
-ZephyrsWisp
+staff
   rotate: false
   xy: 35, 91
+  size: 15, 15
+  orig: 15, 15
+  offset: 0, 0
+  index: -1
+WindSickle
+  rotate: false
+  xy: 35, 74
+  size: 15, 15
+  orig: 15, 15
+  offset: 0, 0
+  index: -1
+ZephyrsWisp
+  rotate: false
+  xy: 35, 57
   size: 15, 15
   orig: 15, 15
   offset: 0, 0

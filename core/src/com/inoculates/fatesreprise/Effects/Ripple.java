@@ -13,7 +13,10 @@ public class Ripple extends Effect {
 
     // Ripple effect when a character steps on water.
     public Ripple(GameScreen screen, TiledMap map, TextureAtlas atlas, Character owner) {
-        super(screen, map, atlas, true);
+        super(screen, map, atlas, false);
+        // Is persistent if owner is player.
+        if (owner instanceof Daur)
+            persistent = true;
         this.owner = owner;
     }
 

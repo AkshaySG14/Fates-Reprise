@@ -6,17 +6,18 @@ import com.badlogic.gdx.utils.Timer;
 import com.inoculates.fatesreprise.Characters.Daur;
 import com.inoculates.fatesreprise.Screens.GameScreen;
 import com.inoculates.fatesreprise.Storage.Storage;
+import com.inoculates.fatesreprise.Worlds.Houses;
+import com.inoculates.fatesreprise.Worlds.UnderWorld;
+import com.inoculates.fatesreprise.Worlds.UpperWorld;
 
 // This is the input processor that allows Daur to act when the user presses a keyboard button.
 public class DaurInput implements InputProcessor {
     GameScreen screen;
     Storage storage;
-    Daur daur;
 
     public DaurInput(GameScreen screen, Storage storage) {
         this.screen = screen;
         this.storage = storage;
-        daur = screen.daur;
     }
 
     public boolean touchDown(int x, int y, int pointer, int button) {
@@ -42,7 +43,7 @@ public class DaurInput implements InputProcessor {
             return true;
 
         // Pauses the screen, if Daur is not currently stunned.
-        if (x == storage.pause && !daur.isStunned()) {
+        if (x == storage.pause && !screen.daur.isStunned()) {
             // Freezes the screen to disallow further input for a short while. This is to avoid the user hitting the
             // pause button too many times.
             screen.freeze();
@@ -62,9 +63,33 @@ public class DaurInput implements InputProcessor {
             }, 0.5f);
         }
 
+        // Pauses the screen and goes the map screen, if Daur is not currently stunned. This will only work if Daur is
+        // in the upperworld, or is in the underworld and has a map.
+        if (x == storage.secondary && !screen.daur.isStunned() && (!(screen.getWorld(storage.map) instanceof UnderWorld) ||
+                (screen.getWorld(storage.map) instanceof UnderWorld && storage.hasMap())) &&
+                !(screen.getWorld(storage.map) instanceof Houses)) {
+            // Freezes the screen to disallow further input for a short while. This is to avoid the user hitting the
+            // pause button too many times.
+            screen.freeze();
+            // Fades in with white.
+            screen.mask.setColor(Color.WHITE);
+            screen.mask.setAlpha(1);
+            screen.mask.fadeIn(0.5f);
+            // Pauses the game, to ensure that no enemy moves during the pause.
+            screen.goToMap();
+            // Unfreezes the game after 0.5 seconds. Creates a new timer to accomplish this.
+            Timer timer = new Timer();
+            timer.scheduleTask(new Timer.Task() {
+                @Override
+                public void run() {
+                    screen.unFreeze();
+                }
+            }, 0.5f);
+        }
+
         // If any of the storage slots are pressed, checks how Daur should react.
         if (x == storage.slotOne || x == storage.slotTwo || x == storage.slotThree)
-            daur.checkItem(x);
+            screen.daur.checkItem(x);
 
         return true;
     }

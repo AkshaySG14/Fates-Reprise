@@ -126,7 +126,7 @@ public class PausedScreenGame implements Screen {
     public void resize (int width, int height) {
         TiledMapTileLayer layer = (TiledMapTileLayer) screen.map.getLayers().get(0);
         screen.camera.viewportWidth = layer.getTileWidth() * 10;
-        screen.camera.viewportHeight = layer.getTileHeight() * 10;
+        screen.camera.viewportHeight = layer.getTileHeight() * 11;
         screen.camera.update();
     }
 
@@ -181,7 +181,7 @@ public class PausedScreenGame implements Screen {
         setCurrentItem();
     }
 
-    // Crates the bitmapfont that displays the item name.
+    // Creates the bitmapfont that displays the item name.
     private void createText() {
         Texture texture = new Texture(Gdx.files.internal("Text/item.png"));
         texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
@@ -205,6 +205,8 @@ public class PausedScreenGame implements Screen {
             return "    Wind Sickles";
         else if (currentItem instanceof ZephyrsWispItem)
             return "   Zephyr's Wisp";
+        else if (currentItem instanceof MinorHealthPotionItem)
+            return "Minor Health Potion";
 
         return "";
     }

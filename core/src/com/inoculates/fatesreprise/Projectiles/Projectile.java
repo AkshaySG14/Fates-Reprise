@@ -9,6 +9,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.math.Vector2;
 import com.inoculates.fatesreprise.Characters.AdvSprite;
 import com.inoculates.fatesreprise.Characters.Character;
+import com.inoculates.fatesreprise.Characters.Daur;
 import com.inoculates.fatesreprise.Consumables.Bronze;
 import com.inoculates.fatesreprise.Consumables.Copper;
 import com.inoculates.fatesreprise.Consumables.Heart;
@@ -24,13 +25,13 @@ public abstract class Projectile extends AdvSprite {
     Cell collisionTile;
     TiledMapTileLayer layer;
     TextureAtlas atlas;
-    Character owner;
+    AdvSprite owner;
     protected Vector2 vel = new Vector2();
 
     float animationTime = 0;
     float collideX = 0, collideY = 0;
 
-    public Projectile(GameScreen screen, TiledMap map, TextureAtlas atlas, Character owner) {
+    public Projectile(GameScreen screen, TiledMap map, TextureAtlas atlas, AdvSprite owner) {
         super(atlas.getRegions().get(0));
         this.screen = screen;
         this.map = map;
@@ -168,7 +169,8 @@ public abstract class Projectile extends AdvSprite {
             if (character != owner)
                 for (float step = 0; step < getWidth() - 1; step += layer.getTileWidth() / 16)
                     for (float step2 = 0; step2 < getHeight() - 1; step2 += layer.getTileHeight() / 16)
-                        if (character.getBoundingRectangle().contains(getX() + 1 + step, getY() + 1 + step2))
+                        if (character.getBoundingRectangle().contains(getX() + 1 + step, getY() + 1 + step2) &&
+                                isValidTarget(character))
                             return true;
         }
         return false;
@@ -313,6 +315,10 @@ public abstract class Projectile extends AdvSprite {
         }
         else
             return false;
+    }
+
+    protected boolean isValidTarget(Character character) {
+        return !(character instanceof Daur && !screen.daur.isGrounded());
     }
 
     public abstract void explode();

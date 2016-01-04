@@ -46,6 +46,10 @@ public class InventoryInput2 implements InputProcessor {
         if (x == storage.moveDown || x == storage.moveUp || x == storage.moveLeft || x == storage.moveRight)
             checkPausedMovement(x);
 
+        // Checks if the user is attempting to save or quit the game.
+        if (x == storage.talk)
+            pScreen.checkButtonPressed();
+
         // The user is attempting to unpause the game.
         if (x == storage.pause) {
             // Virtually the same as the Daur input processor, but changes game back to normal instead of paused.

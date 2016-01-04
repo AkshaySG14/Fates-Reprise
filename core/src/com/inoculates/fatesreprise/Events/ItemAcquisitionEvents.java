@@ -48,6 +48,17 @@ public class ItemAcquisitionEvents extends Event {
                     "swiftness.";
             aqItem = new WindSickleItem(screen.daurAtlases.get(2));
         }
+        // Daur has received the wind sickle spell.
+        else if (item.equals(ZephyrsWispItem.class)) {
+            message = "You have learned the spell Wind Sickle! Use it to cut through both enemies and bushes with great " +
+                    "swiftness.";
+            aqItem = new ZephyrsWispItem(screen.daurAtlases.get(2));
+        }
+        // Daur has received a minor health potion.
+        else if (item.equals(MinorHealthPotionItem.class)) {
+            message = "You obtained a minor health potion. Use this to recover three hearts.";
+            aqItem = new MinorHealthPotionItem(screen.daurAtlases.get(2));
+        }
         // Daur has received the Great Hollow Key.
         else if (item.equals(GreatHollowKey.class)) {
             message = "You have received the Great Hollow Key! Use this to open the door to the Great Hollow, where the " +
@@ -78,6 +89,7 @@ public class ItemAcquisitionEvents extends Event {
                 Dialogue dialogue = new Dialogue(screen, message, this);
                 screen.setText(dialogue, dialogue.getBackground());
                 screen.daur.stun();
+                screen.freeze();
                 break;
             case 1:
                 screen.setText(null, null);
@@ -85,6 +97,7 @@ public class ItemAcquisitionEvents extends Event {
                 screen.daur.unStun();
                 starter.proceed();
                 screen.daur.forceState(0);
+                screen.unFreeze();
                 break;
         }
     }

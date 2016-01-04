@@ -24,37 +24,86 @@ electricsphere3
   orig: 25, 25
   offset: 0, 0
   index: -1
+magicsphere1
+  rotate: false
+  xy: 82, 6
+  size: 25, 25
+  orig: 25, 25
+  offset: 0, 0
+  index: -1
+magicsphere2
+  rotate: false
+  xy: 109, 6
+  size: 25, 25
+  orig: 25, 25
+  offset: 0, 0
+  index: -1
+triplesphere
+  rotate: false
+  xy: 136, 6
+  size: 25, 25
+  orig: 25, 25
+  offset: 0, 0
+  index: -1
 beam1
   rotate: false
-  xy: 82, 17
+  xy: 163, 17
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
 beam2
   rotate: false
-  xy: 82, 1
+  xy: 163, 1
   size: 14, 14
   orig: 14, 14
   offset: 0, 0
   index: -1
+magicbullet1
+  rotate: false
+  xy: 179, 21
+  size: 15, 10
+  orig: 15, 10
+  offset: 0, 0
+  index: -1
+magicbullet2
+  rotate: false
+  xy: 179, 9
+  size: 15, 10
+  orig: 15, 10
+  offset: 0, 0
+  index: -1
 fireball1
   rotate: false
-  xy: 98, 21
+  xy: 196, 21
   size: 10, 10
   orig: 10, 10
   offset: 0, 0
   index: -1
 fireball2
   rotate: false
-  xy: 98, 9
+  xy: 196, 9
   size: 10, 10
   orig: 10, 10
   offset: 0, 0
   index: -1
 mudball
   rotate: false
-  xy: 110, 21
+  xy: 208, 21
+  size: 10, 10
+  orig: 10, 10
+  offset: 0, 0
+  index: -1
+splinter1
+  rotate: false
+  xy: 208, 9
+  size: 10, 10
+  orig: 10, 10
+  offset: 0, 0
+  index: -1
+splinter2
+  rotate: false
+  xy: 220, 21
   size: 10, 10
   orig: 10, 10
   offset: 0, 0

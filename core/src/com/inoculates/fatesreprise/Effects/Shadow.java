@@ -11,6 +11,7 @@ import com.inoculates.fatesreprise.Characters.Daur;
 import com.inoculates.fatesreprise.Characters.Enemy;
 import com.inoculates.fatesreprise.Consumables.Consumable;
 import com.inoculates.fatesreprise.Interactables.Interactable;
+import com.inoculates.fatesreprise.Interactables.Platform;
 import com.inoculates.fatesreprise.Interactables.Teleporter;
 import com.inoculates.fatesreprise.Screens.GameScreen;
 
@@ -19,11 +20,13 @@ Created by akshaysubramaniam on 13/9/15.
 */
 public class Shadow extends Effect {
     private AdvSprite owner;
+    private TiledMapTileLayer layer;
 
     public Shadow(GameScreen screen, TiledMap map, TextureAtlas atlas, AdvSprite owner, float spawnX, float spawnY, float ratio) {
         super(screen, map, atlas, false);
         this.owner = owner;
         setRegion(atlas.findRegion("shadow"));
+        layer = (TiledMapTileLayer) screen.map.getLayers().get(0);
         // Sets the width and height in accordance with the ratio given.
         setSize(getRegionWidth() * ratio, getRegionHeight() * ratio);
         setPosition(spawnX, spawnY);
@@ -41,13 +44,11 @@ public class Shadow extends Effect {
 
     // Checks if the shadow has collided with any interactable.
     public boolean collidesInteractable() {
-        TiledMapTileLayer layer = (TiledMapTileLayer) screen.map.getLayers().get(0);
-
         for (Interactable interactable : screen.interactables) {
             for (float step = 0; step < getWidth() - 2; step += layer.getTileWidth() / 16)
                 for (float step2 = 0; step2 < getHeight() + 5; step2 += layer.getTileHeight() / 16)
                     if (interactable.getBoundingRectangle().contains(getX() + 1 + step, getY() + 1 + step2) &&
-                            !(interactable instanceof Teleporter))
+                            !(interactable instanceof Teleporter || interactable instanceof Platform))
                         return true;
         }
         return false;
@@ -55,8 +56,6 @@ public class Shadow extends Effect {
 
     // Checks if the shadow has collided with any character.
     public boolean collidesCharacter() {
-        TiledMapTileLayer layer = (TiledMapTileLayer) screen.map.getLayers().get(0);
-
         for (Character character : screen.drawnSprites)
             for (float step = 0; step < getWidth() - 2; step += layer.getTileWidth() / 16)
                 for (float step2 = 0; step2 < getHeight() + 5; step2 += layer.getTileHeight() / 16)

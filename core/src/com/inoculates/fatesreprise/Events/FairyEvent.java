@@ -38,7 +38,7 @@ public class FairyEvent extends Event {
                 case 0:
                     dialogue = new Dialogue(screen, "Greetings wanderer. It seems I am in a bit of a predicament, and seeing as you are the only one " +
                             "capable of assisting me, I must count on you to get me out of it. Unfortunately, my staff has " +
-                            "recently been taken from me. Stolen in fact. Naturally, the perpetrator, who I can only assume " +
+                            "recently been taken from me. Stolen in fact. Naturally, the perpetrator, whom I can only assume " +
                             "is some middling fool, has hid it in one of the many caves here in Faron Wood. Seeing as I am " +
                             "incapable of using my powers without my staff, I implore you to recover it for me. Of course, I " +
                             "shall reward you handsomely. I know you require something in the Great Hollow. Whatever it is, you " +

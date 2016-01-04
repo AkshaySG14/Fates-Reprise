@@ -69,6 +69,8 @@ public class GameScreen implements Screen {
     public Daur daur;
     // Mask that fades the game in and out.
     public Mask mask;
+    // Defeat mask that is used only if Daur has lost.
+    private Mask defeatMask;
 
     // All textures used for frames and animations. These are stored as texture atlases for compression and ease of use.
     public Array<TextureAtlas> daurAtlases = new Array<TextureAtlas>();
@@ -88,7 +90,6 @@ public class GameScreen implements Screen {
     public ArrayList<Character> characters3 = new ArrayList<Character>();
     public ArrayList<Character> charIterator = new ArrayList<Character>();
     public ArrayList<Character> drawnSprites = new ArrayList<Character>();
-    public ArrayList<Character> invertedCharacters = new ArrayList<Character>();
     public Array<UI> UIS = new Array<UI>();
 
     // These two objects are drawn to create the dialogue box.
@@ -131,7 +132,6 @@ public class GameScreen implements Screen {
         generateWorld();
         // Sets the interactable tiles of the world (bush and other things).
         setTiles();
-
         // Initializes the first input processor and the shaders.
         interpreter1 = new DaurInput(this, storage);
         // Inverted shader.
@@ -139,14 +139,51 @@ public class GameScreen implements Screen {
         // Destruct shader (for minibosses and bosses).
         destructShader = new ShaderProgram(Gdx.files.internal("Shaders/character.vert"), Gdx.files.internal("Shaders/destruct.frag"));
 
-        // Does NOT allow any shading misspellings to stop the program.
-        ShaderProgram.pedantic = false;
-
+        // Initializes tile map.
+        setTileMap(0);
         // Get the layer and sets the camera position.
         TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(0);
-        camera.position.set(layer.getTileWidth() * ((storage.cellX - 1) * 10) + layer.getTileWidth() * 5,
-                layer.getTileHeight() * ((storage.cellY - 1) * 10) + layer.getTileHeight() * 5, 0);
+        camera.position.set(layer.getTileWidth() * ((storage.cellX) * 10) + layer.getTileWidth() * 5,
+                layer.getTileHeight() * ((storage.cellY) * 10) + layer.getTileHeight() * 5, 0);
 
+        // Does NOT allow any shading misspellings to stop the program.
+        ShaderProgram.pedantic = false;
+    }
+
+    public void newGame() {
+        // Sets tile map and then creates the beginning event: the messenger meeting.
+        setTileMap(1);
+        // Wipes all data.
+        storage.wipe();
+        // Beginning event.
+        MessengerMeeting meeting = new MessengerMeeting(map, this);
+        // Creates the quest events. They should all launch as none have been completed as of yet.
+        world1.setQuestEvents();
+        world2.setQuestEvents();
+        world3.setQuestEvents();
+    }
+
+    public void loadGame() {
+        // Makes storage load all the variables from the preferences.
+        storage.loadVariables();
+        // Sets the tile map in accordance with the one given by the storage.
+        if (storage.map.equals(world1.getMap()))
+            setTileMap(0);
+        else if (storage.map.equals(world2.getMap()))
+            setTileMap(1);
+        else
+            setTileMap(3);
+        // Loads Daur into the game via his respawn point.
+        daur = new Daur(this, map, daurAtlases.get(0));
+        daur.setPosition(storage.respawnX, storage.respawnY);
+        daur.setRespawnPoint();
+        daur.setSpawnPoint(storage.respawnX, storage.respawnY);
+        // Sets camera instantly and transitions.
+        getWorld(map).setCameraInstantly();
+        world1.setQuestEvents();
+        world2.setQuestEvents();
+        world3.setQuestEvents();
+        transition(Color.BLACK);
     }
 
     // Sets the input processor and updates the mask.
@@ -154,6 +191,7 @@ public class GameScreen implements Screen {
 	public void show () {
         Gdx.input.setInputProcessor(interpreter1);
         mask.setPosition(camera.position.x - camera.viewportWidth / 2, camera.position.y - camera.viewportHeight / 2);
+        defeatMask.setPosition(camera.position.x - camera.viewportWidth / 2, camera.position.y - camera.viewportHeight / 2);
     }
 
     // Renders all objects, and updates them.
@@ -233,6 +271,14 @@ public class GameScreen implements Screen {
                 consumable.draw(batch);
             }
         }
+        // Does the same for all interactables.
+        for (Interactable interactable : interactables)
+            if (checkDraw(interactable)) {
+                checkSpriteShaded(interactable);
+                interactable.getTexture().setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.MipMapNearestLinear);
+                interactable.draw(batch);
+                batch.setShader(null);
+            }
         // Checks if the character is within the cell Daur is in, and if so draws it. Additionally, checks if the
         // character needs to inverted. Finally, sets the filter of the character, and then draws it.
         // This is only for the characters of world 1.
@@ -260,20 +306,14 @@ public class GameScreen implements Screen {
                 character.draw(batch);
                 batch.setShader(null);
             }
-        // Does the same for all interactables.
-        for (Interactable interactable : interactables)
-            if (checkDraw(interactable)) {
-                checkSpriteShaded(interactable);
-                interactable.getTexture().setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.MipMapNearestLinear);
-                interactable.draw(batch);
-                batch.setShader(null);
-            }
-
-        // Checks if Daur himself needs inversion, sets the filter for his texture, and draws him.
-        checkSpriteShaded(daur);
-        daur.getTexture().setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.MipMapNearestLinear);
-        daur.draw(batch);
-        batch.setShader(null);
+        // Checks if Daur himself needs inversion, sets the filter for his texture, and draws him. This occurs only if
+        // Daur is alive.
+        if (!daur.isDead()) {
+            checkSpriteShaded(daur);
+            daur.getTexture().setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.MipMapNearestLinear);
+            daur.draw(batch);
+            batch.setShader(null);
+        }
 
         // Draws all relevant objects.
 
@@ -335,6 +375,18 @@ public class GameScreen implements Screen {
         // Renders the fog layer last. This is so that the layer is drawn ON TOP of any objects, including Daur.
         renderer.renderTileLayer((TiledMapTileLayer) map.getLayers().get(3));
 
+        // Draws the defeat mask to obscure all but Daur, if necessary.
+        defeatMask.draw(batch);
+
+        // If Daur is dead, draws him above the fog layer and the defeat mask so that he is the only thing visible when
+        // dead.
+        if (daur.isDead()) {
+            checkSpriteShaded(daur);
+            daur.getTexture().setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.MipMapNearestLinear);
+            daur.draw(batch);
+            batch.setShader(null);
+        }
+
         // Draws the mask even above the fog, to obscure everything.
         mask.draw(batch);
         batch.end();
@@ -368,6 +420,7 @@ public class GameScreen implements Screen {
         animateTile("bluehead", "Fog", "Tiles", 0.5f);
         animateTile("yellowhead", "Fog", "Tiles", 0.5f);
         animateTile("greenhead", "Fog", "Tiles", 0.5f);
+        animateTile("slowtile", "Objects", "Tiles", 0.3333333f);
     }
 
 	@Override
@@ -403,7 +456,7 @@ public class GameScreen implements Screen {
     // cell.
     private void setTiles() {
         Iterator<TiledMapTile> tiles = world1.getMap().getTileSets().getTileSet("Tiles").iterator();
-
+        // Gets the bush tiles.
         while (tiles.hasNext()) {
             TiledMapTile tile = tiles.next();
             if (tile.getProperties().containsKey("blank"))
@@ -417,9 +470,10 @@ public class GameScreen implements Screen {
                     fallBushTile = tile;
                 if (tile.getProperties().containsKey("winter"))
                     winterBushTile = tile;
-                if (tile.getProperties().containsKey("bramble"))
-                    brambleTile = tile;
             }
+            // Gets all other types of tiles.
+            if (tile.getProperties().containsKey("bramble"))
+                brambleTile = tile;
             if (tile.getProperties().containsKey("springgrass"))
                 springGrassTile = tile;
             if (tile.getProperties().containsKey("summergrass"))
@@ -435,8 +489,6 @@ public class GameScreen implements Screen {
     public void generateWorld() {
         loadObjects();
         createWorlds();
-        setTileMap(1);
-        MessengerMeeting meeting = new MessengerMeeting(map, this);
     }
 
     // This method finds all non-static tiles and animates them.
@@ -459,7 +511,7 @@ public class GameScreen implements Screen {
         for (int i = 0; i < layer.getWidth(); i++) {
             for (int o = 0; o < layer.getHeight(); o++) {
                 TiledMapTileLayer.Cell cell = layer.getCell(i, o);
-                if (cell != null && cell.getTile().getProperties().containsKey(key))
+                if (cell != null && cell.getTile() != null && cell.getTile().getProperties().containsKey(key))
                     cell.setTile(animatedTile);
             }
         }
@@ -479,6 +531,7 @@ public class GameScreen implements Screen {
         manager.load("Projectiles/Projectiles.pack", TextureAtlas.class);
         manager.load("Interactables/Interactables.pack", TextureAtlas.class);
         manager.load("Consumables/Consumables.pack", TextureAtlas.class);
+        manager.load("Tiles/Tiles.pack", TextureAtlas.class);
         manager.finishLoading();
 
         daurAtlases.add((TextureAtlas) manager.get("SpriteSheets/Daur.pack"));
@@ -492,6 +545,7 @@ public class GameScreen implements Screen {
         characterAtlases.add((TextureAtlas) manager.get("SpriteSheets/Enemies.pack"));
         miscAtlases.add((TextureAtlas) manager.get("Interactables/Interactables.pack"));
         miscAtlases.add((TextureAtlas) manager.get("Consumables/Consumables.pack"));
+        miscAtlases.add((TextureAtlas) manager.get("Tiles/Tiles.pack"));
     }
 
     public void setDaur(Daur daur) {
@@ -509,6 +563,12 @@ public class GameScreen implements Screen {
         return sprite.getX() + sprite.getWidth() > posX - width && sprite.getX() < posX + width &&
                 sprite.getY() + sprite.getHeight() > posY - height && sprite.getY() < posY + height;
     }
+
+    // Returns true if object is drawn (is in the camera). Otherwise, returns false
+    public boolean isInView(Sprite sprite) {
+        return checkDraw(sprite);
+    }
+
     // Cleans up all objects that are not in the current cell and are not persistent. Note that a separate array list
     // is created for each type to iterate through. This is because the object could not be removed from the list it was
     // iterating from.
@@ -590,6 +650,7 @@ public class GameScreen implements Screen {
         renderer.setMap(map);
         storage.setMap(map);
         mask = new Mask();
+        defeatMask = new Mask();
 
         // Sets camera for each world.
         world1.setCamera(camera);
@@ -653,6 +714,24 @@ public class GameScreen implements Screen {
         game.setScreen(screen);
     }
 
+    // Similar to the pauseGame method, except concerning maps.
+    public void goToMap() {
+        // Gets the time when the timer is stopped.
+        timerDelay = TimeUtils.nanosToMillis(TimeUtils.nanoTime());
+        // Stops all timed events, to prevent events from firing while the game is paused.
+        globalTimer.stop();
+        // Sets screen to the overworld map if in the overworld, or the respective dungeon map. Does not work in a house.
+        if (getWorld(map) instanceof UpperWorld) {
+            OverworldMapScreen screen = new OverworldMapScreen(game, storage, this);
+            game.setScreen(screen);
+        }
+        // For the dungeon map.
+        if (getWorld(map) instanceof UnderWorld) {
+            UnderworldMapScreen screen = new UnderworldMapScreen(game, storage, this);
+            game.setScreen(screen);
+        }
+    }
+
     public void unPauseGame() {
         // Delays all events by the current time - the timerDelay. This is to prevent timed events from starting
         // immediately.
@@ -661,10 +740,23 @@ public class GameScreen implements Screen {
         globalTimer.start();
         // Sets screen back.
         game.setScreen(this);
-        //Sets mask to current camera position and renews the position of all UI's so that they display properly.
+        // Resets the masks size, regardless if necessary.
+        mask.setSize(160, 176);
+        // Sets mask to current camera position and renews the position of all UI's so that they display properly.
         mask.setPosition(camera.position.x - camera.viewportWidth / 2, camera.position.y - camera.viewportHeight / 2);
+        defeatMask.setPosition(camera.position.x - camera.viewportWidth / 2, camera.position.y - camera.viewportHeight / 2);
         for (UI ui : UIS)
             ui.renewPosition();
+    }
+
+    public void defeat() {
+        // Gets the time when the timer is stopped.
+        timerDelay = TimeUtils.nanosToMillis(TimeUtils.nanoTime());
+        // Stops all timed events, to prevent events from firing while the game is paused.
+        globalTimer.stop();
+        // Sets screen to the defeat screen.
+        DefeatScreen screen = new DefeatScreen(game, storage, this);
+        game.setScreen(screen);
     }
 
     // Gets the world, depending on the current tile map.
@@ -711,6 +803,15 @@ public class GameScreen implements Screen {
                 camera.position.set(camera.position.x - displacement / 2, camera.position.y, 0);
             }
         }, time * 10);
+    }
+
+    // This method causes the defeat mask to immediately become opaque or transparent, depending on the parameter given.
+    public void defeatMask(boolean in) {
+        defeatMask.setPosition(camera.position.x - camera.viewportWidth / 2, camera.position.y - camera.viewportHeight / 2);
+        if (in)
+            defeatMask.setAlpha(1);
+        else
+            defeatMask.setAlpha(0);
     }
 
     // This method causes the screen to fade to the given color, then fade out once again.

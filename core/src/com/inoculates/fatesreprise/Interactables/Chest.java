@@ -112,6 +112,8 @@ public abstract class Chest extends Interactable {
             return new OakStaff(screen.daurAtlases.get(2));
         if (contents.equals("Great Hollow Dungeon Key"))
             return new GreatHollowSmallKey(screen.daurAtlases.get(2));
+        if (contents.equals("Great Hollow Boss Key"))
+            return new GreatHollowBossKey(screen.daurAtlases.get(2));
         if (contents.equals("Compass"))
             return new Compass(screen.daurAtlases.get(2));
         if (contents.equals("Dungeon Map"))
@@ -139,6 +141,8 @@ public abstract class Chest extends Interactable {
             return "the Fairy Queen's oak staff. Remember, return this to her at once!";
         if (contents.equals("Great Hollow Dungeon Key"))
             return "a dungeon key for the Great Hollow. Use this to open locked doors.";
+        if (contents.equals("Great Hollow Boss Key"))
+            return "the boss key for the Great Hollow. This can open the door to the lair of the guardian of a sage!";
         if (contents.equals("Compass"))
             return "a Compass. This object will elucidate the locations of hidden chests, as well as the boss and any " +
                     "mini-bosses.";

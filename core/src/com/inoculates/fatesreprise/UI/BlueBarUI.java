@@ -15,7 +15,7 @@ public class BlueBarUI extends UI {
     // This class is basically the three sets of brackets and the coin as a sprite.
     BitmapFont firstSlot, secondSlot, thirdSlot, money, keys;
     ShaderProgram fontShader;
-    BlueBar bar;
+    public BlueBar bar;
 
     public BlueBarUI(GameScreen screen, TextureAtlas atlas) {
         super(atlas.findRegion("blueui"));

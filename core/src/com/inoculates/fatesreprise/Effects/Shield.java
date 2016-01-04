@@ -5,7 +5,9 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.inoculates.fatesreprise.Characters.Character;
 import com.inoculates.fatesreprise.Characters.Enemy;
+import com.inoculates.fatesreprise.Projectiles.MagicSphere;
 import com.inoculates.fatesreprise.Projectiles.Projectile;
+import com.inoculates.fatesreprise.Projectiles.Splinter;
 import com.inoculates.fatesreprise.Screens.GameScreen;
 
 public class Shield extends Effect {
@@ -63,9 +65,14 @@ public class Shield extends Effect {
             for (float x = projectile.getX(); x < projectile.getX() + projectile.getWidth(); x ++)
                 for (float y = projectile.getY(); y < projectile.getY() + projectile.getHeight(); y ++)
                     // If projectile within range of shield, explodes the projectile.
-                    if (Math.sqrt(Math.pow(cX - x, 2) + Math.pow(cY - y, 2)) < RADIUS)
+                    if (Math.sqrt(Math.pow(cX - x, 2) + Math.pow(cY - y, 2)) < RADIUS && isIncluded(projectile))
                         projectile.explode();
 
+    }
+
+    // Checks if the projectile is excluded from being blocked (cannot be shielded)
+    private boolean isIncluded(Projectile proj) {
+        return !(proj instanceof MagicSphere || proj instanceof Splinter);
     }
 
     // Shield animation

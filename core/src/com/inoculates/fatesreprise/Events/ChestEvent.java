@@ -24,7 +24,8 @@ public class ChestEvent extends Event {
         // Note that the chest event first checks if the item obtained is a quest item. This is because quest items are
         // added to the quest item list rather than the normal one.
         questItem = (chest.getContents() instanceof OakStaff || chest.getContents() instanceof GreatHollowSmallKey ||
-                chest.getContents() instanceof Compass || chest.getContents() instanceof Map);
+                chest.getContents() instanceof Compass || chest.getContents() instanceof Map ||
+        chest.getContents() instanceof GreatHollowBossKey);
         // Sends the necessary dialogue and the item.
         setMessage();
     }
@@ -38,9 +39,13 @@ public class ChestEvent extends Event {
                 screen.daur.getY() + screen.daur.getHeight() + 2);
         // Adds the item to the rendering list.
         screen.items.add(aqItem);
-        // If the item is a coin, adds it to the storage coins.
-        if (aqItem instanceof CoinItem)
-            screen.storage.setCoins(screen.storage.coins + chest.acquireContents());
+        // If the item is a coin, adds it to the storage coins. Also prevents overflow.
+        if (aqItem instanceof CoinItem) {
+            if (screen.storage.coins + chest.acquireContents() < 999)
+                screen.storage.setCoins(screen.storage.coins + chest.acquireContents());
+            else
+                screen.storage.setCoins(999);
+        }
         // If the item is a heart piece, adds it to the storage heart pieces.
         else if (aqItem instanceof HeartPiece)
             screen.daur.addHeartPiece();
@@ -56,14 +61,13 @@ public class ChestEvent extends Event {
                 // Adds the key depending on the type of item it is.
                 else if (aqItem instanceof GreatHollowSmallKey)
                     screen.storage.addKey(aqItem);
-                // Adds the compass based on the dungeon.
+                    // Adds the compass based on the dungeon.
                 else if (aqItem instanceof Compass)
                     screen.storage.addCompass();
-                // Adds the Map based on the dungeon.
+                    // Adds the Map based on the dungeon.
                 else if (aqItem instanceof Map)
                     screen.storage.addMap();
-            }
-            else
+            } else
                 screen.storage.items.set(getEnd(), aqItem);
         }
         // Forces Daur to do the item acquisition frame.
@@ -78,12 +82,14 @@ public class ChestEvent extends Event {
                 Dialogue dialogue = new Dialogue(screen, message, this);
                 screen.setText(dialogue, dialogue.getBackground());
                 screen.daur.stun();
+                screen.freeze();
                 break;
             case 1:
                 screen.setText(null, null);
                 screen.items.remove(aqItem);
                 screen.daur.unStun();
                 screen.daur.forceState(0);
+                screen.unFreeze();
                 break;
         }
     }

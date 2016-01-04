@@ -39,6 +39,8 @@ public class BasicSword extends MeleeWeapon {
                 // Sets the position of the sword to look like Daur is holding it.
                 setX(owner.getX() + owner.getWidth());
                 setY(owner.getY() - 6);
+                // Destroys the terrain object (like a bush) to the right, if there is any.
+                sliceTile(RIGHT);
                 screen.globalTimer.scheduleTask(new Timer.Task() {
                     @Override
                     public void run() {
@@ -74,6 +76,8 @@ public class BasicSword extends MeleeWeapon {
                 setRotation(90);
                 setX(owner.getX() - getWidth());
                 setY(owner.getY() + owner.getHeight() / 2 - 5);
+                // Destroys the terrain object (like a bush) to the left, if there is any.
+                sliceTile(LEFT);
                 screen.globalTimer.scheduleTask(new Timer.Task() {
                     @Override
                     public void run() {
@@ -101,6 +105,8 @@ public class BasicSword extends MeleeWeapon {
                 setRotation(0);
                 setX(owner.getX() + getWidth() / 2 + 2);
                 setY(owner.getY() + owner.getHeight());
+                // Destroys the terrain object (like a bush) to the top, if there is any.
+                sliceTile(UP);
                 screen.globalTimer.scheduleTask(new Timer.Task() {
                     @Override
                     public void run() {
@@ -128,6 +134,8 @@ public class BasicSword extends MeleeWeapon {
                 setRotation(0);
                 setX(owner.getX());
                 setY(owner.getY() + owner.getHeight());
+                // Destroys the terrain object (like a bush) to the top, if there is any.
+                sliceTile(UP);
                 screen.globalTimer.scheduleTask(new Timer.Task() {
                     @Override
                     public void run() {

@@ -137,6 +137,24 @@
     <property name="blocked" value=""/>
    </properties>
   </tile>
+  <tile id="2094">
+   <properties>
+    <property name="slow" value=""/>
+    <property name="slowtile" value=""/>
+   </properties>
+  </tile>
+  <tile id="2095">
+   <properties>
+    <property name="slow" value=""/>
+    <property name="slowtile" value=""/>
+   </properties>
+  </tile>
+  <tile id="2096">
+   <properties>
+    <property name="slow" value=""/>
+    <property name="slowtile" value=""/>
+   </properties>
+  </tile>
   <tile id="2097">
    <properties>
     <property name="blocked" value=""/>
@@ -228,17 +246,17 @@
  </tileset>
  <layer name="Background" width="160" height="160">
   <data encoding="base64" compression="zlib">
-   eJzt2U2KwkAQgFGz85rO4JGGHEhc5FZDiELTdP4GK+Xge1CIIeDmo9tOTifI9X1enqev8/LsvQ9Gr+xv7R79UVprL6I/DVIqW/t5TN3fZWNX2mOvLf2N/P8jgv7IpD8y6Y//4N5Nn2NDl40t6Q14Z0M3zbWa53WI1GqvbPAa0OCtmwbm2isHouiPTPojk/bItHb+gEiev5DNXksm/ZFlbt+1/3IE/ZFpKLo74t0blIbG2lc32PreOjPDXq3+5tbEV0/9e1r+PHuaaK2Bwx+b8d6FUaujIzqozzl193yGrP5aZ23rH0eZ23f7x0Ak/ZGpL1qr29Mf0fpueSCS/sikPzLpDwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADgff0Cjn/iNA==
+   eJzt2VGKwjAUQFH75zadwSUNXdAwH93VUKoQQpq0YvoUz4GHUAr+XBJjTieI9X2uz93XuT5734PZM/trvaM/Uq32evSnQVJpaz+3yfu7bOxKe+y1pb+Z33/0oD8i6Y9I+uMd/A3L59zQZWNLegNe2TQsc83m/hx6KrWXNnjt0ODvsAystZcO9KI/IumPSNojUuv8AT35/4Vo9loi6Y8oa/uu/Zcj6I9IU9LdEXdvkJoKa1/rPrjUq1Z5RKm/WoPPnNr38Rn2NFFaA6cHm3Hvwqy17/aSn3Py7vkMUf2VztrWP46ytu+Ot4Ge9EekMWktb09/9DYO9YGe9Eck/RFJfwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAr+sf8fjhbA==
   </data>
  </layer>
  <layer name="Foreground" width="160" height="160">
   <data encoding="base64" compression="zlib">
-   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
+   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
   </data>
  </layer>
  <layer name="Objects" width="160" height="160">
   <data encoding="base64" compression="zlib">
-   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
+   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
   </data>
  </layer>
  <layer name="Fog" width="160" height="160">
@@ -262,7 +280,7 @@
     <property name="batspawn" value=""/>
    </properties>
   </object>
-  <object name="Bat Spawn 2" x="375" y="76" width="13" height="13">
+  <object name="Bat Spawn 2" x="377" y="77" width="13" height="13">
    <properties>
     <property name="batspawn" value=""/>
    </properties>
@@ -423,7 +441,7 @@
     <property name="batspawn" value=""/>
    </properties>
   </object>
-  <object name="Slimejumper Spawn 2" x="887" y="556" width="13" height="17">
+  <object name="Slimejumper Spawn 2" x="903" y="568" width="13" height="17">
    <properties>
     <property name="slimejumperspawn" value=""/>
    </properties>
@@ -468,12 +486,12 @@
     <property name="ghostspawn" value="1"/>
    </properties>
   </object>
-  <object name="Mud Doll Spawn 2" x="1162" y="444" width="13" height="13">
+  <object name="Mud Doll Spawn 2" x="1175" y="429" width="13" height="13">
    <properties>
     <property name="dollspawn" value=""/>
    </properties>
   </object>
-  <object name="Mud Doll Spawn 3" x="1237" y="447" width="13" height="13">
+  <object name="Mud Doll Spawn 3" x="1224" y="428" width="13" height="13">
    <properties>
     <property name="dollspawn" value=""/>
    </properties>
@@ -568,6 +586,116 @@
     <property name="slimekingspawn" value=""/>
    </properties>
   </object>
+  <object name="Bat Spawn 10" x="182" y="207" width="13" height="13">
+   <properties>
+    <property name="batspawn" value=""/>
+   </properties>
+  </object>
+  <object name="Bat Spawn 11" x="292" y="272" width="13" height="13">
+   <properties>
+    <property name="batspawn" value=""/>
+   </properties>
+  </object>
+  <object name="Lurker Spawn 8" x="194" y="287" width="13" height="13">
+   <properties>
+    <property name="lurkerspawn" value=""/>
+   </properties>
+  </object>
+  <object name="Slimejumper Spawn 4" x="1348" y="53" width="13" height="17">
+   <properties>
+    <property name="slimejumperspawn" value=""/>
+   </properties>
+  </object>
+  <object name="Slimejumper Spawn 5" x="1381" y="86" width="13" height="17">
+   <properties>
+    <property name="slimejumperspawn" value=""/>
+   </properties>
+  </object>
+  <object name="Bat Spawn 12" x="1462" y="88" width="13" height="13">
+   <properties>
+    <property name="batspawn" value=""/>
+   </properties>
+  </object>
+  <object name="Bat Spawn 13" x="1514" y="62" width="13" height="13">
+   <properties>
+    <property name="batspawn" value=""/>
+   </properties>
+  </object>
+  <object name="Bat Spawn 14" x="1539" y="126" width="13" height="13">
+   <properties>
+    <property name="batspawn" value=""/>
+   </properties>
+  </object>
+  <object name="Lurker Spawn 9" x="1556" y="225" width="13" height="13">
+   <properties>
+    <property name="lurkerspawn" value=""/>
+   </properties>
+  </object>
+  <object name="Lurker Spawn 10" x="1478" y="222" width="13" height="13">
+   <properties>
+    <property name="lurkerspawn" value=""/>
+   </properties>
+  </object>
+  <object name="Lurker Spawn 11" x="1526" y="286" width="13" height="13">
+   <properties>
+    <property name="lurkerspawn" value=""/>
+   </properties>
+  </object>
+  <object name="Lurker Spawn 12" x="1540" y="334" width="13" height="13">
+   <properties>
+    <property name="lurkerspawn" value=""/>
+   </properties>
+  </object>
+  <object name="Lurker Spawn 13" x="1460" y="449" width="13" height="13">
+   <properties>
+    <property name="lurkerspawn" value=""/>
+   </properties>
+  </object>
+  <object name="Lurker Spawn 14" x="1518" y="380" width="13" height="13">
+   <properties>
+    <property name="lurkerspawn" value=""/>
+   </properties>
+  </object>
+  <object name="Bat Spawn 15" x="1459" y="356" width="13" height="13">
+   <properties>
+    <property name="batspawn" value=""/>
+   </properties>
+  </object>
+  <object name="Bat Spawn 16" x="1590" y="406" width="13" height="13">
+   <properties>
+    <property name="batspawn" value=""/>
+   </properties>
+  </object>
+  <object name="Bat Spawn 17" x="1519" y="446" width="13" height="13">
+   <properties>
+    <property name="batspawn" value=""/>
+   </properties>
+  </object>
+  <object name="Wooden Statue Spawn 7" x="1735" y="382" width="13" height="13">
+   <properties>
+    <property name="woodenstatuespawn" value=""/>
+   </properties>
+  </object>
+  <object name="Wooden Statue Spawn 9" x="1639" y="444" width="13" height="13">
+   <properties>
+    <property name="woodenstatuespawn" value=""/>
+   </properties>
+  </object>
+  <object name="Wooden Statue Spawn 10" x="1673" y="411" width="13" height="13">
+   <properties>
+    <property name="woodenstatuespawn" value=""/>
+   </properties>
+  </object>
+  <object name="Master Wizard Spawn" x="1672" y="204" width="13" height="13">
+   <properties>
+    <property name="MWspawn" value=""/>
+   </properties>
+  </object>
+  <object name="Druni Spawn" x="1688" y="29" width="13" height="13">
+   <properties>
+    <property name="drunispawn" value=""/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup name="Access" width="160" height="160">
   <object name="Access In 1" x="244" y="146" width="10" height="12">
@@ -575,7 +703,7 @@
     <property name="entrance" value=""/>
    </properties>
   </object>
-  <object name="Access Out 1" x="40" y="268" width="10" height="12">
+  <object name="Access Out 1" x="245" y="124" width="10" height="12">
    <properties>
     <property name="exit" value=""/>
    </properties>
@@ -642,7 +770,7 @@
     <property name="woodblock" value="0"/>
    </properties>
   </object>
-  <object name="Closed Door 2" x="964" y="575" width="10" height="11">
+  <object name="Closed Door 2" x="966" y="576" width="10" height="11">
    <properties>
     <property name="closed" value="-1"/>
     <property name="ghclosedh" value=""/>
@@ -743,7 +871,7 @@
   <object name="Chest Spawn 6" x="678" y="608" width="8" height="10">
    <properties>
     <property name="chest" value="9"/>
-    <property name="greathollowtrigger6spawn" value="Master Key"/>
+    <property name="greathollowtrigger5spawn" value="Great Hollow Boss Key"/>
     <property name="wood" value=""/>
    </properties>
   </object>
@@ -767,9 +895,63 @@
     <property name="wood" value=""/>
    </properties>
   </object>
+  <object name="Platform Spawn 1" x="1513" y="232" width="8" height="10">
+   <properties>
+    <property name="platformspawn" value=""/>
+    <property name="velocityX" value="0"/>
+    <property name="velocityY" value="-0.5"/>
+   </properties>
+  </object>
+  <object name="Platform Spawn 2" x="1494" y="354" width="8" height="10">
+   <properties>
+    <property name="platformspawn" value=""/>
+    <property name="velocityX" value="-0.25"/>
+    <property name="velocityY" value="-0.5"/>
+   </properties>
+  </object>
+  <object name="Platform Spawn 3" x="1506" y="430" width="8" height="10">
+   <properties>
+    <property name="platformspawn" value=""/>
+    <property name="velocityX" value="0.5"/>
+    <property name="velocityY" value="0"/>
+   </properties>
+  </object>
+  <object name="Platform Spawn 4" x="1560" y="406" width="8" height="10">
+   <properties>
+    <property name="platformspawn" value=""/>
+    <property name="velocityX" value="0"/>
+    <property name="velocityY" value="0.5"/>
+   </properties>
+  </object>
+  <object name="Locked Door 3" x="1591" y="352" width="13" height="11">
+   <properties>
+    <property name="ghlockedh" value=""/>
+    <property name="locked" value="2"/>
+   </properties>
+  </object>
+  <object name="Boss Door" x="1685" y="320" width="13" height="11">
+   <properties>
+    <property name="bossdoor" value="0"/>
+    <property name="bossv" value=""/>
+   </properties>
+  </object>
+  <object name="Closed Door 4" x="1687" y="335" width="10" height="11">
+   <properties>
+    <property name="closed" value="2"/>
+    <property name="ghclosedv" value=""/>
+    <property name="greathollowboss" value=""/>
+   </properties>
+  </object>
+  <object name="Closed Door 5" x="1623" y="145" width="10" height="11">
+   <properties>
+    <property name="closed" value="-2"/>
+    <property name="ghclosedv" value=""/>
+    <property name="greathollowboss2" value=""/>
+   </properties>
+  </object>
  </objectgroup>
- <objectgroup name="Triggers" width="160" height="160">
-  <object name="Great Hollow Dialogue Trigger" x="224" y="121" width="48" height="20">
+ <objectgroup name="Triggers" width="160" height="160" opacity="0.94">
+  <object name="Great Hollow Dialogue Trigger" x="225" y="122" width="48" height="20">
    <properties>
     <property name="GHD" value=""/>
    </properties>
@@ -784,9 +966,14 @@
     <property name="GHT2" value=""/>
    </properties>
   </object>
-  <object name="Great Hollow Miniboss Trigger" x="37" y="269" width="36" height="33">
+  <object name="Great Hollow Miniboss Trigger" x="36" y="272" width="36" height="33">
    <properties>
     <property name="GHMT" value=""/>
+   </properties>
+  </object>
+  <object name="Great Hollow Boss Trigger" x="1663" y="271" width="36" height="33">
+   <properties>
+    <property name="GHBT" value=""/>
    </properties>
   </object>
  </objectgroup>
@@ -806,17 +993,27 @@
     <property name="up" value=""/>
    </properties>
   </object>
-  <object name="Downstairs 2" x="1143" y="608" width="9" height="10">
+  <object name="Downstairs 2" x="1141" y="592" width="9" height="10">
    <properties>
     <property name="down" value=""/>
    </properties>
   </object>
-  <object name="Upstairs 3" x="500" y="612" width="11" height="8">
+  <object name="Upstairs 3" x="501" y="594" width="11" height="8">
    <properties>
     <property name="up" value=""/>
    </properties>
   </object>
-  <object name="Downstairs 3" x="1317" y="449" width="9" height="10">
+  <object name="Downstairs 3" x="1317" y="431" width="9" height="10">
+   <properties>
+    <property name="down" value=""/>
+   </properties>
+  </object>
+  <object name="Upstairs 4" x="1058" y="21" width="11" height="8">
+   <properties>
+    <property name="up" value=""/>
+   </properties>
+  </object>
+  <object name="Downstairs 4" x="1301" y="19" width="9" height="10">
    <properties>
     <property name="down" value=""/>
    </properties>
@@ -878,129 +1075,224 @@
     <property name="ghostmarker" value="2"/>
    </properties>
   </object>
-  <object name="Ghost Marker 2" x="1092" y="178" width="10" height="9">
+  <object name="Ghost Marker 13" x="1092" y="178" width="10" height="9">
    <properties>
     <property name="ghostmarker" value="-2"/>
    </properties>
   </object>
-  <object name="Ghost Marker 13" x="1158" y="334" width="9" height="12">
+  <object name="Ghost Marker 14" x="1158" y="334" width="9" height="12">
    <properties>
     <property name="ghostmarker" value="-2"/>
    </properties>
   </object>
-  <object name="Ghost Marker 14" x="1155" y="352" width="9" height="12">
+  <object name="Ghost Marker 15" x="1155" y="352" width="9" height="12">
    <properties>
     <property name="ghostmarker" value="-1"/>
    </properties>
   </object>
-  <object name="Ghost Marker 13" x="1142" y="349" width="9" height="12">
+  <object name="Ghost Marker 16" x="1142" y="349" width="9" height="12">
    <properties>
     <property name="ghostmarker" value="-2"/>
    </properties>
   </object>
-  <object name="Ghost Marker 14" x="1142" y="379" width="9" height="12">
+  <object name="Ghost Marker 17" x="1142" y="379" width="9" height="12">
    <properties>
     <property name="ghostmarker" value="1"/>
    </properties>
   </object>
-  <object name="Ghost Marker 13" x="1155" y="383" width="9" height="12">
+  <object name="Ghost Marker 18" x="1155" y="383" width="9" height="12">
    <properties>
     <property name="ghostmarker" value="-2"/>
    </properties>
   </object>
-  <object name="Ghost Marker 14" x="1157" y="429" width="9" height="12">
+  <object name="Ghost Marker 19" x="1157" y="429" width="9" height="12">
    <properties>
     <property name="ghostmarker" value="1"/>
    </properties>
   </object>
-  <object name="Ghost Marker 14" x="1189" y="429" width="9" height="12">
+  <object name="Ghost Marker 20" x="1189" y="429" width="9" height="12">
    <properties>
     <property name="ghostmarker" value="2"/>
    </properties>
   </object>
-  <object name="Ghost Marker 14" x="1191" y="398" width="9" height="12">
+  <object name="Ghost Marker 21" x="1191" y="398" width="9" height="12">
    <properties>
     <property name="ghostmarker" value="-1"/>
    </properties>
   </object>
-  <object name="Ghost Marker 14" x="1175" y="397" width="9" height="12">
+  <object name="Ghost Marker 22" x="1175" y="397" width="9" height="12">
    <properties>
     <property name="ghostmarker" value="2"/>
    </properties>
   </object>
-  <object name="Ghost Marker 14" x="1177" y="366" width="9" height="12">
+  <object name="Ghost Marker 23" x="1177" y="366" width="9" height="12">
    <properties>
     <property name="ghostmarker" value="1"/>
    </properties>
   </object>
-  <object name="Ghost Marker 14" x="1191" y="363" width="9" height="12">
+  <object name="Ghost Marker 24" x="1191" y="363" width="9" height="12">
    <properties>
     <property name="ghostmarker" value="2"/>
    </properties>
   </object>
-  <object name="Ghost Marker 14" x="1191" y="334" width="9" height="12">
+  <object name="Ghost Marker 25" x="1191" y="334" width="9" height="12">
    <properties>
     <property name="ghostmarker" value="-1"/>
    </properties>
   </object>
-  <object name="Ghost Marker 13" x="1242" y="332" width="9" height="12">
+  <object name="Ghost Marker 26" x="1242" y="332" width="9" height="12">
    <properties>
     <property name="ghostmarker" value="-2"/>
    </properties>
   </object>
-  <object name="Ghost Marker 14" x="1237" y="352" width="9" height="12">
+  <object name="Ghost Marker 27" x="1237" y="352" width="9" height="12">
    <properties>
     <property name="ghostmarker" value="1"/>
    </properties>
   </object>
-  <object name="Ghost Marker 13" x="1253" y="350" width="9" height="12">
+  <object name="Ghost Marker 28" x="1253" y="350" width="9" height="12">
    <properties>
     <property name="ghostmarker" value="-2"/>
    </properties>
   </object>
-  <object name="Ghost Marker 14" x="1253" y="384" width="9" height="12">
+  <object name="Ghost Marker 29" x="1253" y="384" width="9" height="12">
    <properties>
     <property name="ghostmarker" value="-1"/>
    </properties>
   </object>
-  <object name="Ghost Marker 13" x="1240" y="380" width="9" height="12">
+  <object name="Ghost Marker 30" x="1240" y="380" width="9" height="12">
    <properties>
     <property name="ghostmarker" value="-2"/>
    </properties>
   </object>
-  <object name="Ghost Marker 14" x="1238" y="430" width="9" height="12">
+  <object name="Ghost Marker 31" x="1238" y="430" width="9" height="12">
    <properties>
     <property name="ghostmarker" value="-1"/>
    </properties>
   </object>
-  <object name="Ghost Marker 14" x="1207" y="430" width="9" height="12">
+  <object name="Ghost Marker 32" x="1207" y="430" width="9" height="12">
    <properties>
     <property name="ghostmarker" value="2"/>
    </properties>
   </object>
-  <object name="Ghost Marker 14" x="1207" y="398" width="9" height="12">
+  <object name="Ghost Marker 33" x="1207" y="398" width="9" height="12">
    <properties>
     <property name="ghostmarker" value="1"/>
    </properties>
   </object>
-  <object name="Ghost Marker 14" x="1223" y="397" width="9" height="12">
+  <object name="Ghost Marker 34" x="1223" y="397" width="9" height="12">
    <properties>
     <property name="ghostmarker" value="2"/>
    </properties>
   </object>
-  <object name="Ghost Marker 14" x="1223" y="366" width="9" height="12">
+  <object name="Ghost Marker 35" x="1223" y="366" width="9" height="12">
    <properties>
     <property name="ghostmarker" value="-1"/>
    </properties>
   </object>
-  <object name="Ghost Marker 14" x="1207" y="368" width="9" height="12">
+  <object name="Ghost Marker 36" x="1207" y="368" width="9" height="12">
    <properties>
     <property name="ghostmarker" value="2"/>
    </properties>
   </object>
-  <object name="Ghost Marker 14" x="1209" y="335" width="9" height="12">
+  <object name="Ghost Marker 37" x="1209" y="335" width="9" height="12">
    <properties>
     <property name="ghostmarker" value="1"/>
+   </properties>
+  </object>
+  <object name="Platform Marker 1" x="1507" y="285" width="9" height="12">
+   <properties>
+    <property name="platformmarker" value=""/>
+   </properties>
+  </object>
+  <object name="Platform Marker 2" x="1511" y="170" width="9" height="12">
+   <properties>
+    <property name="platformmarker" value=""/>
+   </properties>
+  </object>
+  <object name="Platform Marker 3" x="1459" y="417" width="9" height="12">
+   <properties>
+    <property name="platformmarker" value=""/>
+   </properties>
+  </object>
+  <object name="Platform Marker 4" x="1494" y="349" width="9" height="12">
+   <properties>
+    <property name="platformmarker" value=""/>
+   </properties>
+  </object>
+  <object name="Platform Marker 5" x="1458" y="434" width="9" height="12">
+   <properties>
+    <property name="platformmarker" value=""/>
+   </properties>
+  </object>
+  <object name="Platform Marker 6" x="1543" y="425" width="9" height="12">
+   <properties>
+    <property name="platformmarker" value=""/>
+   </properties>
+  </object>
+  <object name="Platform Marker 7" x="1563" y="351" width="9" height="12">
+   <properties>
+    <property name="platformmarker" value=""/>
+   </properties>
+  </object>
+  <object name="Platform Marker 8" x="1555" y="438" width="9" height="12">
+   <properties>
+    <property name="platformmarker" value=""/>
+   </properties>
+  </object>
+  <object name="Master Wizard Marker 1" x="1637" y="197" width="8" height="7">
+   <properties>
+    <property name="MWmarker" value=""/>
+   </properties>
+  </object>
+  <object name="Master Wizard Marker 2" x="1684" y="226" width="9" height="9">
+   <properties>
+    <property name="MWmarker" value=""/>
+   </properties>
+  </object>
+  <object name="Master Wizard Marker 3" x="1733" y="181" width="10" height="5">
+   <properties>
+    <property name="MWmarker" value=""/>
+   </properties>
+  </object>
+  <object name="Master Wizard Marker 4" x="1733" y="228" width="9" height="7">
+   <properties>
+    <property name="MWmarker" value=""/>
+   </properties>
+  </object>
+  <object name="Master Wizard Marker 5" x="1620" y="261" width="11" height="5">
+   <properties>
+    <property name="MWmarker" value=""/>
+   </properties>
+  </object>
+  <object name="Master Wizard Marker 6" x="1621" y="229" width="9" height="5">
+   <properties>
+    <property name="MWmarker" value=""/>
+   </properties>
+  </object>
+  <object name="Master Wizard Marker 7" x="1734" y="276" width="9" height="7">
+   <properties>
+    <property name="MWmarker" value=""/>
+   </properties>
+  </object>
+  <object name="Master Wizard Marker 8" x="1669" y="293" width="9" height="7">
+   <properties>
+    <property name="MWmarker" value=""/>
+   </properties>
+  </object>
+  <object name="Master Wizard Marker 9" x="1622" y="295" width="8" height="6">
+   <properties>
+    <property name="MWmarker" value=""/>
+   </properties>
+  </object>
+  <object name="Master Wizard Marker 10" x="1716" y="211" width="8" height="8">
+   <properties>
+    <property name="MWmarker" value=""/>
+   </properties>
+  </object>
+  <object name="Master Wizard Marker 11" x="1672" y="254" width="9" height="12">
+   <properties>
+    <property name="MWmarker" value=""/>
    </properties>
   </object>
  </objectgroup>

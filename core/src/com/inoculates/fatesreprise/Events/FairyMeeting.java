@@ -17,6 +17,7 @@ public class FairyMeeting extends Event {
     public FairyMeeting (TiledMap map, GameScreen screen) {
         super(screen, map);
         startEvent();
+        screen.daur.forceState(0);
     }
 
     // Creates and sets the position for the fairy queen.

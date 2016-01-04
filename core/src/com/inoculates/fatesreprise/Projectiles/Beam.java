@@ -21,6 +21,8 @@ public class Beam extends Projectile {
         super(screen, map, atlas, character);
         setSize(10, 10);
         setStart(angle);
+        createAnimations();
+        chooseSprite();
     }
 
     // Sets the position of the beam, depending on the angle of the beam.
@@ -41,7 +43,7 @@ public class Beam extends Projectile {
             tryMove();
     }
 
-    // Overrides super method to prevent collision with terain objects.
+    // Overrides super method to prevent collision with terrain objects.
     protected void checkCollisions() {
         float oldX = getX(), oldY = getY();
 
@@ -124,7 +126,8 @@ public class Beam extends Projectile {
             if (character != owner && !(character instanceof Enemy))
                 for (float step = 0; step < getWidth() - 1; step += layer.getTileWidth() / 16)
                     for (float step2 = 0; step2 < getHeight() - 1; step2 += layer.getTileHeight() / 16)
-                        if (character.getBoundingRectangle().contains(getX() + 1 + step, getY() + 1 + step2)) {
+                        if (character.getBoundingRectangle().contains(getX() + 1 + step, getY() + 1 + step2) &&
+                                isValidTarget(character)) {
                             target = character;
                             effects();
                             return true;
@@ -132,7 +135,6 @@ public class Beam extends Projectile {
         }
         return false;
     }
-
 
     private void tryMove() {
         checkCollisions();

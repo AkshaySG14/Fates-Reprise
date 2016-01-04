@@ -17,6 +17,8 @@ public abstract class LockedDoor extends Interactable {
 
     // Moves the door in a direction to simulate unlocking, then removes the door from the game.
     public void open(int direction) {
+        // Informs the persistent data storage that this door has been unlocked.
+        storage.setUnlocked(doorNumber);
         final LockedDoor door = this;
         final int dir = direction;
         // Uses a for loop to push the door open oer the course of 0.1 seconds.
@@ -33,8 +35,6 @@ public abstract class LockedDoor extends Interactable {
                 screen.interactables.remove(door);
             }
         }, 0.1f);
-        // Informs the persistent data storage that this door has been unlocked.
-        storage.setUnlocked(doorNumber);
     }
 
     // Moves the door in accordance with the direction given.

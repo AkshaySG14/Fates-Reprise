@@ -39,6 +39,16 @@
     <property name="blocked" value=""/>
    </properties>
   </tile>
+  <tile id="15">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </tile>
+  <tile id="16">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </tile>
   <tile id="17">
    <properties>
     <property name="greathollowopen" value=""/>
@@ -172,6 +182,11 @@
    </properties>
   </tile>
   <tile id="64">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </tile>
+  <tile id="65">
    <properties>
     <property name="blocked" value=""/>
    </properties>
@@ -636,6 +651,7 @@
   <tile id="312">
    <properties>
     <property name="blocked" value=""/>
+    <property name="bramble" value=""/>
    </properties>
   </tile>
   <tile id="313">
@@ -863,7 +879,7 @@
  </layer>
  <layer name="Objects" width="160" height="160">
   <data encoding="base64" compression="zlib">
-   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
+   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
   </data>
  </layer>
  <layer name="Fog" width="160" height="160">
@@ -872,7 +888,7 @@
   </data>
  </layer>
  <objectgroup name="Spawns" width="160" height="160">
-  <object name="Main Spawn" x="1364" y="1825" width="7" height="11">
+  <object name="Main Spawn" x="1207" y="1200" width="7" height="11">
    <properties>
     <property name="startmainspawn" value=""/>
    </properties>
@@ -937,12 +953,7 @@
     <property name="dollspawn" value=""/>
    </properties>
   </object>
-  <object name="Enemy Spawn 2" x="1192" y="1665" width="23" height="9">
-   <properties>
-    <property name="dollspawn" value=""/>
-   </properties>
-  </object>
-  <object name="Enemy Spawn 3" x="1174" y="1696" width="23" height="9">
+  <object name="Enemy Spawn 3" x="1161" y="1680" width="23" height="9">
    <properties>
     <property name="dollspawn" value=""/>
    </properties>
@@ -952,7 +963,7 @@
     <property name="beetlespawn" value=""/>
    </properties>
   </object>
-  <object name="Enemy Spawn 5" x="1502" y="1697" width="23" height="9">
+  <object name="Enemy Spawn 5" x="1520" y="1695" width="23" height="9">
    <properties>
     <property name="dollspawn" value=""/>
    </properties>
@@ -992,7 +1003,7 @@
     <property name="slimespawn" value=""/>
    </properties>
   </object>
-  <object name="Enemy Spawn 7" x="1177" y="1786" width="13" height="17">
+  <object name="Enemy Spawn 7" x="1209" y="1768" width="13" height="17">
    <properties>
     <property name="beetlespawn" value=""/>
    </properties>
@@ -1012,17 +1023,7 @@
     <property name="dollspawn" value=""/>
    </properties>
   </object>
-  <object name="Enemy Spawn 7" x="1223" y="1946" width="13" height="17">
-   <properties>
-    <property name="dollspawn" value=""/>
-   </properties>
-  </object>
   <object name="Enemy Spawn 7" x="1171" y="2010" width="13" height="17">
-   <properties>
-    <property name="pantomimespawn" value=""/>
-   </properties>
-  </object>
-  <object name="Enemy Spawn 7" x="1208" y="2045" width="13" height="17">
    <properties>
     <property name="pantomimespawn" value=""/>
    </properties>
@@ -1033,11 +1034,6 @@
    </properties>
   </object>
   <object name="Enemy Spawn 7" x="1243" y="2142" width="13" height="17">
-   <properties>
-    <property name="beetlespawn" value=""/>
-   </properties>
-  </object>
-  <object name="Enemy Spawn 7" x="1213" y="2199" width="13" height="17">
    <properties>
     <property name="beetlespawn" value=""/>
    </properties>
@@ -1087,14 +1083,9 @@
     <property name="pantomimespawn" value=""/>
    </properties>
   </object>
-  <object name="Enemy Spawn 7" x="1362" y="2306" width="13" height="17">
+  <object name="Enemy Spawn 7" x="1366" y="2302" width="13" height="17">
    <properties>
     <property name="pantomimespawn" value=""/>
-   </properties>
-  </object>
-  <object name="Enemy Spawn 7" x="1368" y="2278" width="13" height="17">
-   <properties>
-    <property name="dollspawn" value=""/>
    </properties>
   </object>
   <object name="Enemy Spawn 7" x="1172" y="2321" width="13" height="17">
@@ -1112,12 +1103,12 @@
     <property name="slimespawn" value=""/>
    </properties>
   </object>
-  <object name="Enemy Spawn 7" x="1368" y="2379" width="13" height="17">
+  <object name="Enemy Spawn 7" x="1415" y="2331" width="13" height="17">
    <properties>
     <property name="beetlespawn" value=""/>
    </properties>
   </object>
-  <object name="Enemy Spawn 7" x="1461" y="2329" width="13" height="17">
+  <object name="Enemy Spawn 7" x="1482" y="2328" width="13" height="17">
    <properties>
     <property name="dollspawn" value=""/>
    </properties>
@@ -1466,11 +1457,13 @@
   <object name="Access In 1" x="1347" y="1809" width="12" height="13">
    <properties>
     <property name="entrance" value=""/>
+    <property name="greathollowentrance" value=""/>
    </properties>
   </object>
   <object name="Access Out 1" x="1348" y="1826" width="9" height="11">
    <properties>
     <property name="exit" value=""/>
+    <property name="greathollowexit" value=""/>
    </properties>
   </object>
  </objectgroup>
@@ -1561,7 +1554,7 @@
     <property name="GHO" value=""/>
    </properties>
   </object>
-  <object name="Great Hollow Dialogue Trigger" x="1337" y="1822" width="48" height="20">
+  <object name="Great Hollow Dialogue Trigger" x="1321" y="1791" width="76" height="76">
    <properties>
     <property name="GHE" value=""/>
    </properties>

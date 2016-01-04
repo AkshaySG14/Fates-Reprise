@@ -67,10 +67,10 @@ public class Dialogue {
     private void breakText() {
         String placeHolder = "";
         // If the text when displayed is longer than the dialogue box, proceeds to break it up.
-        if (textValue.length() * 3.5f > background.getWidth()) {
+        if (textValue.length() * 3.75f > background.getWidth()) {
             for (int i = textValue.length(); i > 0; i--)
                 // Finds the space to truncate the string to so that words are not broken up.
-                if (i * 3.5f < background.getWidth() && textValue.charAt(i) == " ".charAt(0)) {
+                if (i * 3.75f < background.getWidth() && textValue.charAt(i) == " ".charAt(0)) {
                     // Truncates the string to that point and adds it to the array position, as decided by the line
                     // integer.
                     for (int x = 0; x <= i; x++)
@@ -103,7 +103,7 @@ public class Dialogue {
 
     // Draws the current line of text and resets the position of the background.
     public void displayText() {
-        background.setPosition(screen.camera.position.x - background.getWidth() / 2, screen.camera.position.y - screen.camera.viewportHeight / 2 + background.getHeight() / 2);
+        background.setPosition(screen.camera.position.x - background.getTrueWidth() / 2, screen.camera.position.y - screen.camera.viewportHeight / 2 + background.getHeight() / 2);
         screen.batch.setShader(fontShader);
         text1.setScale(0.2f);
         // Draws the first line of text, as given by the variable line.

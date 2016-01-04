@@ -18,7 +18,7 @@ public abstract class ClosedDoor extends Interactable {
     public void open(int direction) {
         final ClosedDoor door = this;
         final int dir = direction;
-        // Uses a for loop to push the door open oer the course of 0.1 seconds.
+        // Uses a for loop to push the door open over the course of 0.1 seconds.
         for (float deltaTime = 0; deltaTime <= 0.16; deltaTime += 0.01)
             screen.globalTimer.scheduleTask(new Timer.Task() {
                 @Override
@@ -36,6 +36,7 @@ public abstract class ClosedDoor extends Interactable {
 
     // Spawns the door, then moves the door in a direction to simulate closing.
     public void close(int direction) {
+        screen.interactables.add(this);
         final int dir = direction;
         for (float deltaTime = 0; deltaTime <= 0.16; deltaTime += 0.01)
             screen.globalTimer.scheduleTask(new Timer.Task() {

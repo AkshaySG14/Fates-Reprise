@@ -22,6 +22,8 @@ import com.inoculates.fatesreprise.Screens.GameScreen;
 import com.inoculates.fatesreprise.Spells.WindSickle;
 import com.inoculates.fatesreprise.UI.*;
 import com.inoculates.fatesreprise.UI.Heart;
+import com.inoculates.fatesreprise.Worlds.UnderWorld;
+import com.inoculates.fatesreprise.Worlds.UpperWorld;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -54,15 +56,19 @@ public class Daur extends Character {
     private boolean spellCooldown = false;
     private boolean swimming = false;
     private boolean grounded = true;
+    private boolean onPlatform = false;
+    private boolean dying = false;
 
     // The max possible speed of Daur, the amount of time Daur has to push on a block for it to move, and the amount of
     // time Daur has been shielding.
     private float maxSpeed = 0, blockTime = 0, shieldTime;
     // The jumping velocity of Daur. This is added to the normal velocity so that it appears as though Daur is jumping.
-    private float jumpVelocity = 0;
+    private float jumpVelocity = 0, platformVelX = 0, platformVelY = 0;
 
-    // This screen.globalTimer creates a concurrent thread that is responsible for the slowing effect when Daur swims.
+    // This timer creates a concurrent thread that is responsible for the slowing effect when Daur swims.
     private Timer dragTimer = new Timer();
+    // This timer is used to fill up Daur's hearts.
+    private Timer heartTimer = new Timer();
     // The grass effect that will stick to Daur.
     private Grass grass;
     // The ripple effect that will also stick to Daur.
@@ -144,7 +150,7 @@ public class Daur extends Character {
             sword.draw(batch);
     }
 
-    // Checks for key inputs, collision of enemies, ad checks whether Daur is currently in fog.
+    // Checks for key inputs, collision of enemies, and checks whether Daur is currently in fog.
     protected void update(float deltaTime) {
         processKeys();
         collidesEnemy();
@@ -155,6 +161,7 @@ public class Daur extends Character {
     // collisions, and for any change in condition (like slow).
     private void tryMove() {
         checkCollisions();
+        detectPlatform();
         detectConditions();
     }
 
@@ -177,17 +184,17 @@ public class Daur extends Character {
     // Checks whether Daur's condition has changed depending on its position.
     private void detectConditions() {
         // Checks if Daur is slowed.
-        if (detectSlow()) {
+        if (detectSlow() && grounded) {
             slowed = true;
             setModifier(0.35f, 0.35f);
-        // If currently slowed, but not in a slow cell, removes the slow effect.
+            // If currently slowed, but not in a slow cell, removes the slow effect.
         } else if (slowed) {
             slowed = false;
             resetModifier(0.35f, 0.35f);
         }
 
         // Checks if any grass has been detected (if there is no grass type there is no grass).
-        if (detectGrass() != 4) {
+        if (detectGrass() != 4 && grounded) {
             // Sets the grass type accordingly.
             grass.setType(detectGrass());
             // If previously not on grass, adds the grass screen effect and sets the position. Additionally, sets the
@@ -235,18 +242,17 @@ public class Daur extends Character {
             drown();
 
         // If the Daur is currently in a hole, causes him to fall.
-        if (detectHole() != null && grounded) {
+        if (detectHole() != null && grounded && !onPlatform) {
             // Creates the boolean variable isFalling, to check if Daur is close enough to fall, or only close enough
             // to gravitate.
             boolean isFalling = false;
             // Gets the middle of the hole cell.
             Point holePoint = detectHole();
             // Distance from Daur to the middle of the hole cell.
-            float distanceX = Math.abs(holePoint.x - getX() - getWidth() / 2);
-            float distanceY1 = Math.abs(holePoint.y - getY() - getHeight() / 2);
-            float distanceY2 = Math.abs(holePoint.y - getY());
+            float distanceX = Math.abs(holePoint.x - getCX());
+            float distanceY = Math.abs(holePoint.y - getCY());
             // If Daur is sufficiently close in both the x and y respects, causes him to fall.
-            if (distanceX < getWidth() / 2.25f && distanceY1 < getHeight() / 2.25f) {
+            if (distanceX < getWidth() / 2.25f && distanceY < getHeight() / 2.25f) {
                 fallHole(holePoint);
                 isFalling = true;
             }
@@ -265,9 +271,42 @@ public class Daur extends Character {
         }
     }
 
+    // This detects if Daur is currently on a platform. Should he be, his velocity is modified by the platform's, and
+    // he will not fall down.
+    private void detectPlatform() {
+        // Does not work if in the air.
+        if (!grounded) {
+            platformVelX = 0;
+            platformVelY = 0;
+            onPlatform = false;
+            return;
+        }
+        for (Interactable interactable : screen.interactables)
+            if (interactable instanceof Platform && screen.isInView(interactable)) {
+                Platform platform = (Platform) interactable;
+                // If the vertices of Daur are inside a platform, sets onPlatform to true.
+                if (platform.getBoundingRectangle().contains(getX(), getCY()) ||
+                        platform.getBoundingRectangle().contains(getRX(), getCY()) ||
+                        platform.getBoundingRectangle().contains(getCX(), getY()) ||
+                        platform.getBoundingRectangle().contains(getCX(), getRY() - 5) ||
+                        platform.getBoundingRectangle().contains(getX(), getRY() - 5) ||
+                        platform.getBoundingRectangle().contains(getX(), getY()) ||
+                        platform.getBoundingRectangle().contains(getRX(), getRY() - 5) ||
+                        platform.getBoundingRectangle().contains(getRX(), getY())) {
+                    onPlatform = true;
+                    platformVelX = platform.getVelX();
+                    platformVelY = platform.getVelY();
+                    return;
+                }
+            }
+        platformVelX = 0;
+        platformVelY = 0;
+        onPlatform = false;
+    }
+
     // This is what occurs if Daur were to fall down a hole.
     private void fallHole(Point hole) {
-        // Resets channeling as Daur is dying.
+        // Resets channeling as Daur is falling.
         stopChanneling();
         // If Daur is already falling, no need to make him fall down twice.
         if (state == FALLING)
@@ -279,6 +318,8 @@ public class Daur extends Character {
         // Causes Daur to be motionless and receive no input.
         vel.x = 0;
         vel.y = 0;
+        ace.x = 0;
+        ace.y = 0;
         stun();
 
         // After one second of falling, Daur's health will be reduced, he will flicker to show he has been hurt,
@@ -287,7 +328,6 @@ public class Daur extends Character {
             @Override
             public void run() {
                 loseHealth(1);
-                flickerSprite();
                 setPosition(spawnPoint.x, spawnPoint.y);
                 unStun();
                 setState(IDLE, true);
@@ -304,18 +344,18 @@ public class Daur extends Character {
             return;
         // Else sets the state to drowning.
         setState(DROWNING, true);
-        // Adjusts Daur's new sprite position to the center of the tile to simulate drowning.
-        chooseSprite();
-        setPosition((int) ((getCX() + vel.x * 1.3333) / layer.getTileWidth()) * layer.getTileWidth() + layer.getTileWidth() / 2 -
-                        getWidth() / 2,
-                (int) ((getY() + 2) / layer.getTileHeight()) * layer.getTileHeight() + layer.getTileHeight() / 2 -
-                        getHeight() / 2);
-        // Adds the small splash effect.
-        Splash splash = new Splash(screen, map, screen.daurAtlases.get(3), this);
-        screen.effects.add(splash);
         // Immobilizes and stuns Daur.
         freeze();
         stun();
+        // Adjusts Daur's new sprite position to the center of the tile to simulate drowning.
+        setPosition((int) ((getCX()) / layer.getTileWidth()) * layer.getTileWidth() + layer.getTileWidth() / 2 - getWidth() / 2,
+                (int) ((getY() + 2) / layer.getTileHeight()) * layer.getTileHeight() + layer.getTileHeight() / 2 - getHeight() / 2);
+        chooseSprite();
+        setPosition((int) ((getCX()) / layer.getTileWidth()) * layer.getTileWidth() + layer.getTileWidth() / 2 - getWidth() / 2,
+                (int) ((getY() + 2) / layer.getTileHeight()) * layer.getTileHeight() + layer.getTileHeight() / 2 - getHeight() / 2);
+        // Adds the small splash effect.
+        Splash splash = new Splash(screen, map, screen.daurAtlases.get(3), this);
+        screen.effects.add(splash);
 
         // After 0.75 seconds of falling, Daur's health will be reduced, he will flicker to show he has been hurt,
         // his position will be reset to the spawn point, he will be unstunned, and his state will be set to idle.
@@ -323,7 +363,6 @@ public class Daur extends Character {
             @Override
             public void run() {
                 loseHealth(1);
-                flickerSprite();
                 setPosition(spawnPoint.x, spawnPoint.y);
                 unStun();
                 setState(IDLE, true);
@@ -333,26 +372,30 @@ public class Daur extends Character {
     }
 
     // With every new frame, Daur's position is reset due to the vastly different sizes of his sprites during his falling
-    // animation.
+    // animation. Note that the time is rounded up to ensure that Daur has changed his sprite (as the frame and timer
+    // do not line up perfectly).
     private void resetPosition(final Point hole) {
         screen.globalTimer.scheduleTask(new Timer.Task() {
             @Override
             public void run() {
+                chooseSprite();
                 setPosition(hole.x - getWidth() / 2, hole.y - getHeight() / 2);
             }
         }, 0.000001f);
         screen.globalTimer.scheduleTask(new Timer.Task() {
             @Override
             public void run() {
+                chooseSprite();
                 setPosition(hole.x - getWidth() / 2, hole.y - getHeight() / 2);
             }
-        }, 0.33333333f);
+        }, 0.33333334f);
         screen.globalTimer.scheduleTask(new Timer.Task() {
             @Override
             public void run() {
+                chooseSprite();
                 setPosition(hole.x - getWidth() / 2, hole.y - getHeight() / 2);
             }
-        }, 0.666666666f);
+        }, 0.666666667f);
     }
 
     // This method is responsible for constantly accelerating Daur towards the center of the hole.
@@ -381,7 +424,7 @@ public class Daur extends Character {
             vel.x = Math.signum(vel.x) * maxSpeed;
 
         // Adds velocity to x value.
-        setX(getX() + vel.x);
+        setX(getX() + vel.x + platformVelX);
         // Sets shadow's position accordingly.
         shadow.setPosition(getCX() - shadow.getWidth() / 2, shadow.getY());
 
@@ -392,10 +435,10 @@ public class Daur extends Character {
             collisionX = collidesLeft() || collidesInteractable() || collidesHalfBlockLeft() ||
                     // If Daur is stunned, ensures that he does not go to another cell. This is to prevent the user from
                     // feeling too confused.
-                    (getX() < (storage.cellX - 1) * layer.getTileWidth() * 10 && stun && !swimming);
+                    (getX() < storage.cellX * layer.getTileWidth() * 10 && stun && !swimming);
         else if (vel.x > 0 && grounded)
             collisionX = collidesRight() || collidesInteractable() || collidesHalfBlockRight() ||
-                    (getX() + getWidth() > storage.cellX * layer.getTileWidth() * 10 && stun && !swimming);
+                    (getX() + getWidth() > (storage.cellX + 1) * layer.getTileWidth() * 10 && stun && !swimming);
         else if (!grounded)
             collisionX = collidesShadow();
 
@@ -420,7 +463,7 @@ public class Daur extends Character {
                 vel.y = 0;
             }
             else
-            // If not swimming, Daur's state is set to pushing. However, this does NOT override any other state.
+                // If not swimming, Daur's state is set to pushing. However, this does NOT override any other state.
                 setState(PUSHING, false);
         }
 
@@ -445,17 +488,17 @@ public class Daur extends Character {
             vel.y = Math.signum(vel.y) * maxSpeed;
 
         // Adds velocity and jump velocity to y value.
-        setY(getY() + vel.y + jumpVelocity);
+        setY(getY() + vel.y + jumpVelocity + platformVelY);
         // Sets shadow's position accordingly.
         shadow.setPosition(getCX() - shadow.getWidth() / 2, shadow.getY() + vel.y);
 
         // Detects collision on the y axis.
         if (vel.y < 0 && grounded)
             collisionY = collidesBottom() || collidesInteractable() || collidesHalfBlockBottom() ||
-                    (getY() < (storage.cellY - 1) * layer.getTileHeight() * 10 && stun && !swimming);
+                    (getY() < storage.cellY * layer.getTileHeight() * 10 && stun && !swimming);
         else if (vel.y > 0 && grounded)
             collisionY = collidesTop() || collidesInteractable() || collidesHalfBlockTop() ||
-                    (getY() + getHeight() > storage.cellY * layer.getTileHeight() * 10 - 16 && stun && !swimming);
+                    (getY() + getHeight() > (storage.cellY + 1) * layer.getTileHeight() * 10 - 16 && stun && !swimming);
             // If not on the ground, collision is based on the shadow of Daur.
         else if (!grounded)
             collisionY = collidesShadow();
@@ -517,7 +560,7 @@ public class Daur extends Character {
                         checkLockedDoor(interactable);
                         // If interactable is not a teleporter, collides with the interactable. Also does not collide if
                         // Daur is inside the chest.
-                        if (!(interactable instanceof Teleporter))
+                        if (!(interactable instanceof Teleporter || interactable instanceof Platform))
                             return true;
                     }
         }
@@ -542,11 +585,80 @@ public class Daur extends Character {
     // Checks if the SHADOW of Daur has collides. This is used to determine if Daur has collided while jumping. As he
     // must return to his shadow, his shadow is used to determine collision.
     protected boolean collidesShadow() {
-        for (float x = shadow.getX() - 2; x < shadow.getX() + shadow.getWidth() + 2; x ++)
-            for (float y = shadow.getY() - 1; y < shadow.getY() + shadow.getHeight() + 5; y ++)
-                if (isCellBlocked(x, y) || isCellPost(x + 6, y) || isCellShrub(x + 4, y))
+        for (float x = getX() + 1; x < getX() + getWidth(); x ++)
+            for (float y = shadow.getY() + 1; y < shadow.getY() + shadow.getHeight() + 5; y ++)
+                if (isCellBlocked(x, y) || isCellPost(x + 6, y) || isCellShrub(x + 4, y) || collidesHalfBlock(x, y))
                     return true;
         return (shadow.collidesCharacter() || shadow.collidesInteractable());
+    }
+
+    // Checks if the shadow has collided with any half blocks.
+    private boolean collidesHalfBlock(float x, float y) {
+        // Daur is moving right, checks for right half block collision.
+        if (vel.x > 0 && vel.y == 0) {
+            if (isCellHalfBlockedR(getRX() - 8, y) || isCellHalfBlockedL(shadow.getRX(), y) || isCellHalfBlockedT(x, shadow.getRY() - 4) ||
+                    isCellHalfBlockedB(x, shadow.getY() + 8) || isCellHalfBlockedBR(getRX() - 8, shadow.getY() + 8) ||
+                    isCellHalfBlockedTR(getRX() - 8, shadow.getRY() - 4) || isCellHalfBlockedBL(shadow.getRX(), shadow.getY() + 8) ||
+                    isCellHalfBlockedTL(shadow.getRX(), shadow.getRY() - 4))
+                return true;
+        }
+        // Daur is moving right and up, checks for right or top half block collision.
+        else if (vel.x > 0 && vel.y > 0) {
+            if (isCellHalfBlockedR(getRX() - 8, y) || isCellHalfBlockedL(shadow.getRX(), y) || isCellHalfBlockedT(x, shadow.getRY() - 4) ||
+                    isCellHalfBlockedB(x, shadow.getRY() + 2) || isCellHalfBlockedBR(getRX() - 8, shadow.getRY() + 2) ||
+                    isCellHalfBlockedTR(getRX() - 8, shadow.getRY() - 4) || isCellHalfBlockedBL(shadow.getRX(), shadow.getRY() + 2) ||
+                    isCellHalfBlockedTL(shadow.getRX(), shadow.getRY() - 4))
+                return true;
+        }
+        // Daur is moving right and bottom, checks for right or bottom half block collision.
+        else if (vel.x > 0 && vel.y < 0) {
+            if (isCellHalfBlockedR(getRX() - 8, y) || isCellHalfBlockedL(shadow.getRX(), y) || isCellHalfBlockedT(x, shadow.getY() + 1) ||
+                    isCellHalfBlockedB(x, shadow.getY() + 8) || isCellHalfBlockedBR(getRX() - 8, shadow.getY() + 8) ||
+                    isCellHalfBlockedTR(getRX() - 8, shadow.getY() + 1) || isCellHalfBlockedBL(shadow.getRX(), shadow.getY() + 8) ||
+                    isCellHalfBlockedTL(shadow.getRX(), shadow.getY() + 1))
+                return true;
+        }
+        // Daur is moving left, checks for left half block collision.
+        else if (vel.x < 0 && vel.y == 0) {
+            if (isCellHalfBlockedL(getX() + 8, y) || isCellHalfBlockedR(shadow.getX() - 1, y) || isCellHalfBlockedT(x, shadow.getRY() - 4) ||
+                    isCellHalfBlockedB(x, shadow.getY() + 8) || isCellHalfBlockedBR(shadow.getX() - 1, shadow.getY() + 8) ||
+                    isCellHalfBlockedTR(shadow.getX() - 1, shadow.getRY() - 4) || isCellHalfBlockedBL(getX() + 8, shadow.getY() + 8) ||
+                    isCellHalfBlockedTL(getX() + 8, shadow.getRY() - 4))
+                return true;
+        }
+        // Daur is moving left and up, checks for left and top half block collision.
+        else if (vel.x < 0 && vel.y > 0) {
+            if (isCellHalfBlockedR(shadow.getX() - 1, y) || isCellHalfBlockedL(getX() + 8, y) || isCellHalfBlockedT(x, shadow.getRY() - 4) ||
+                    isCellHalfBlockedB(x, shadow.getRY() + 2)  || isCellHalfBlockedBR(shadow.getX() - 1, shadow.getRY() + 2) ||
+                    isCellHalfBlockedTR(shadow.getX() - 1, shadow.getRY() - 4) || isCellHalfBlockedBL(getX() + 8, shadow.getRY() + 2) ||
+                    isCellHalfBlockedTL(getX() + 8, shadow.getRY() - 4))
+                return true;
+        }
+        // Daur is moving left and down, checks for left and bottom half block collision.
+        else if (vel.x < 0 && vel.y < 0) {
+            if (isCellHalfBlockedR(shadow.getX() - 1, y) || isCellHalfBlockedL(getX() + 8, y) || isCellHalfBlockedT(x, shadow.getY() + 1) ||
+                    isCellHalfBlockedB(x, shadow.getY() + 8)  || isCellHalfBlockedBR(shadow.getX() - 1, shadow.getY() + 8) ||
+                    isCellHalfBlockedTR(shadow.getX() - 1, shadow.getY() + 1) || isCellHalfBlockedBL(getX() + 8, shadow.getY() + 8) ||
+                    isCellHalfBlockedTL(getX() + 8, shadow.getY() + 1))
+                return true;
+        }
+        // Daur is moving up, checks for top half block collision.
+        else if (vel.y > 0 && vel.x == 0) {
+            if (isCellHalfBlockedT(x, shadow.getRY() - 4) || isCellHalfBlockedB(x, shadow.getRY() + 2) || isCellHalfBlockedR(shadow.getRX() - 8, y) ||
+                    isCellHalfBlockedL(getX() + 8, y) || isCellHalfBlockedBR(getRX() - 8, shadow.getRY() + 2) ||
+                    isCellHalfBlockedTR(getRX() - 8, shadow.getRY() - 4) || isCellHalfBlockedBL(getX() + 8, shadow.getRY() + 2) ||
+                    isCellHalfBlockedTL(getX() + 8, shadow.getRY() - 4))
+                return true;
+        }
+        // Daur is moving down, checks for bottom half block collision.
+        else if (vel.y < 0 && vel.x == 0) {
+            if (isCellHalfBlockedB(x, shadow.getY() + 8) || isCellHalfBlockedT(x, shadow.getY() + 1) || isCellHalfBlockedR(shadow.getRX() - 8, y) ||
+                    isCellHalfBlockedL(getX() + 8, y) || isCellHalfBlockedBR(getRX() - 8, shadow.getY() + 8) ||
+                    isCellHalfBlockedTR(getRX() - 8, shadow.getY() + 1) || isCellHalfBlockedBL(getX() + 8, shadow.getY() + 8) ||
+                    isCellHalfBlockedTL(getX() + 8, shadow.getY() + 1))
+                return true;
+        }
+        return false;
     }
 
     // Checks if Daur has collided with a block, and if so, pushes on the block.
@@ -593,6 +705,41 @@ public class Daur extends Character {
                 storage.removeKey();
             }
         }
+        // Checks if the collided interactable is alternatively a BOSS door.
+        if (interactable instanceof BossLockedDoor) {
+            // Same as above.
+            BossLockedDoor door = (BossLockedDoor) interactable;
+            if (facingObject(door) && !door.isUnlocked() && hasBossKey()) {
+                // Opens the door.
+                door.open(dir);
+                // Removes the key based on the dungeon.
+                removeBossKey();
+            }
+        }
+    }
+
+    // Depending on the dungeon, checks if Daur has the boss key.
+    private boolean hasBossKey() {
+        switch (storage.dungeon) {
+            case 0:
+                for (Item item : storage.questItems)
+                    if (item instanceof GreatHollowBossKey)
+                        return true;
+                return false;
+        }
+        return false;
+    }
+
+    // Depending on dungeon removes boss
+    private void removeBossKey() {
+        Item questItem = storage.questItems.get(0);
+        switch (storage.dungeon) {
+            case 0:
+                for (Item item : storage.questItems)
+                    if (item instanceof GreatHollowBossKey)
+                        questItem = item;
+        }
+        storage.questItems.remove(questItem);
     }
 
     // This method consumes the consumables and does the corresponding action.
@@ -620,7 +767,11 @@ public class Daur extends Character {
 
         // Updates the storage, regardless if the coins or health of the Daur has been updated. This is to get rid of
         // unnecessary code.
-        storage.setCoins(storage.coins + coins);
+        // Coins cannot go above 999.
+        if (storage.coins + coins < 999)
+            storage.setCoins(storage.coins + coins);
+        else
+            storage.setCoins(999);
         storage.health = health;
         // Also updates the heart UI if need be.
         updateHearts();
@@ -631,11 +782,49 @@ public class Daur extends Character {
     // This adds a heart piece to Daur's list. If Daur has all four pieces, adds to his max health.
     public void addHeartPiece() {
         screen.storage.incHeartPiece();
+        // If Daur has all four pieces, adds to Daur's max health, and fills all his empty hearts up.
         if (screen.storage.heartPieces > 3) {
             screen.storage.fillHeart();
-            Heart heart = new Heart(screen, screen.daurAtlases.get(1), blueBar, screen.storage.maxHealth / 2);
+            Heart heart = new Heart(screen, screen.daurAtlases.get(1), blueBar, screen.storage.maxHealth / 2 - 1);
             hearts.add(heart);
+            screen.UIS.add(heart);
+            fillHearts(6);
+            updateHearts();
         }
+    }
+
+    // This creates an entirely new heart, as well as healing Daur to full.
+    public void incrementMaxHealth() {
+        storage.incMaxHealth();
+        Heart heart = new Heart(screen, screen.daurAtlases.get(1), blueBar, screen.storage.maxHealth / 2 - 1);
+        hearts.add(heart);
+        screen.UIS.add(heart);
+        fillHearts(storage.maxHealth);
+        updateHearts();
+    }
+
+    // Fills the hearts of Daur, with a time-based stagger in between to the amount specified.
+    private void fillHearts(int amount) {
+        // For every health lost, increments health in an interval of 0.1.
+        for (int i = 1; i <= amount; i++)
+            heartTimer.scheduleTask(new Timer.Task() {
+                @Override
+                public void run() {
+                    // If already filled, no need to fill it any further.
+                    if (health == storage.maxHealth) {
+                        heartTimer.clear();
+                        return;
+                    }
+                    // Else increments health.
+                    health ++;
+                    // Checks if the number exceeds the max health.
+                    if (health > storage.maxHealth)
+                        health = storage.maxHealth;
+                    // Updates health accordingly.
+                    storage.setHealth(health);
+                    updateHearts();
+                }
+            }, 0.2f * i);
     }
 
     // This large method is used to move Daur by a constant rate as opposed to short bursts. Also checks to see if Daur
@@ -663,16 +852,16 @@ public class Daur extends Character {
             if (vel.x != 0 && Math.signum(vel.x) == dir && pX)
                 vel.x = (1.5f + Math.abs(vel.x)) * Math.signum(dir);
 
-            // If swimming, engages the swim method to properly move Daur. This is to ensure that Daur swims with drag,
-            // and does not swim with a constant velocity.
+                // If swimming, engages the swim method to properly move Daur. This is to ensure that Daur swims with drag,
+                // and does not swim with a constant velocity.
             else if (swimming) {
                 // Swims in the top-right direction.
                 if (Gdx.input.isKeyPressed(storage.moveUp))
                     swim(4);
-                // Swims in the bottom-right direction.
+                    // Swims in the bottom-right direction.
                 else if (Gdx.input.isKeyPressed(storage.moveDown))
                     swim(5);
-                // Else swims in simply the left direction.
+                    // Else swims in simply the left direction.
                 else swim(0);
             }
             // Else if NOT swimming, simply allows Daur to move at a constant negative velocity.
@@ -756,7 +945,8 @@ public class Daur extends Character {
 
         // If the Daur's velocity is not completely zero, moves him accordingly, and checks for any portals he may have
         // stepped through while doing so.
-        if (vel.x != 0 || vel.y != 0 || jumpVelocity != 0) {
+        if ((vel.x != 0 || vel.y != 0 || ace.x != 0 || ace.y != 0 || jumpVelocity != 0 || platformVelX != 0 ||
+                platformVelY != 0) && state != FALLING && state != DROWNING) {
             tryMove();
             // Only checks for teleportation if grounded.
             if (grounded) {
@@ -766,6 +956,9 @@ public class Daur extends Character {
                 collidesConsumable();
             }
             checkTriggers();
+            // If on platform but immobile, sets state to Idle anyway.
+            if (vel.x == 0 && vel.y == 0 && onPlatform)
+                setState(IDLE, false);
         }
         // Else sets his state to idle.
         else
@@ -780,7 +973,7 @@ public class Daur extends Character {
             // Increments the line if Daur is currently engaged in dialogue.
             if (screen.currentTextBox != null)
                 screen.currentTextBox.incrementLine();
-            // Else if Daur is NOT engaged in dialogue, checks to see whether he passes the conditions to do so.
+                // Else if Daur is NOT engaged in dialogue, checks to see whether he passes the conditions to do so.
             else if (!stun)
                 checkEvents();
 
@@ -906,11 +1099,11 @@ public class Daur extends Character {
         if (shielding)
             // If Daur is not holding the shield button, but is shielding, stops shielding and resets the spell cooldown.
             if (!(Gdx.input.isKeyPressed(storage.slotOne) && storage.item1 instanceof ShieldItem) &&
-                !(Gdx.input.isKeyPressed(storage.slotTwo) && storage.item2 instanceof ShieldItem) &&
-                !(Gdx.input.isKeyPressed(storage.slotThree) && storage.item3 instanceof ShieldItem)) {
+                    !(Gdx.input.isKeyPressed(storage.slotTwo) && storage.item2 instanceof ShieldItem) &&
+                    !(Gdx.input.isKeyPressed(storage.slotThree) && storage.item3 instanceof ShieldItem)) {
                 shielding = false;
                 screen.effects.remove(shield);
-                coolDown();
+                coolDown(1);
                 setState(IDLE, true);
             }
     }
@@ -921,7 +1114,9 @@ public class Daur extends Character {
         if (shielding) {
             shielding = false;
             screen.effects.remove(shield);
-            coolDown();
+            coolDown(1);
+            if (state == CASTING)
+                setState(IDLE, true);
         }
     }
 
@@ -939,7 +1134,8 @@ public class Daur extends Character {
         SVY(0);
         // Removes shadow.
         screen.effects.remove(shadow);
-        // Checks to see if Daur is in any new tile.
+        // Checks to see if Daur is in any new tile or a platform.
+        detectPlatform();
         detectConditions();
     }
 
@@ -1027,7 +1223,7 @@ public class Daur extends Character {
             anim = drowning;
         if (state == ITEMAQ)
             anim = itemAQ;
-        if (state == KNOCKOUT)
+        if (state == KNOCKOUT || state == DEAD)
             anim = knockout;
 
         // Sets the frame of Daur depending on how much time has passed since Daur has received a new animation.
@@ -1039,13 +1235,96 @@ public class Daur extends Character {
     // Kills and removes the Daur instance from the game for a short time. Also stuns Daur to ensure the player does not
     // move him while he is dead.
     public void death() {
-        if (state == DEAD)
+        if (dying)
             return;
-        setState(DEAD, true);
-        stun = true;
-        vel.x = 0;
-        vel.y = 0;
+        // Forces idle state and then stuns/freezes Daur.
+        forceState(IDLE);
+        stun();
+        freeze();
+        // Makes Daur face down.
+        setDirection(-2);
+        // Sets dying to true.
+        dying = true;
+        // Dying animation.
+        selfDestruct();
+        // Removes the UI from the rendering list temporarily.
+        screen.UIS.removeValue(blueBar, false);
+        screen.UIS.removeValue(blueBar.bar, false);
+        for (Heart heart : hearts)
+            screen.UIS.removeValue(heart, false);
+        // Causes defeat mask to fade in.
+        screen.defeatMask(true);
+        // Changes Daur's current frame to the death frame.
+        screen.globalTimer.scheduleTask(new Timer.Task() {
+            @Override
+            public void run() {
+                setState(DEAD, true);
+                chooseSprite();
+            }
+        }, 1.25f);
+        // Sets the screen to the death screen.
+        screen.globalTimer.scheduleTask(new Timer.Task() {
+            @Override
+            public void run() {
+                screen.defeat();
+                screen.defeatMask(false);
+            }
+        }, 1.75f);
+    }
+
+    // Same as the bosses methods.
+    private void selfDestruct() {
+        for (float time = 0.1f; time <= 2; time += 0.2f)
+            screen.globalTimer.scheduleTask(new Timer.Task() {
+                @Override
+                public void run() {
+                    destructing = true;
+                }
+            }, time);
+        for (float time = 0.2f; time <= 2; time += 0.2f)
+            screen.globalTimer.scheduleTask(new Timer.Task() {
+                @Override
+                public void run() {
+                    destructing = false;
+                }
+            }, time);
+    }
+
+    // Respawns Daur by putting him in the most recent respawn point
+    public void respawn() {
+        // Sets state to IDLE, and faces up.
+        forceState(IDLE);
+        setDirection(2);
+        // Readds the UI to the rendering list.
+        screen.UIS.add(blueBar.bar);
+        screen.UIS.add(blueBar);
+        for (Heart heart : hearts)
+            screen.UIS.add(heart);
+        // Resets all triggers and sets dying to false.
         resetEvents();
+        // Resets all objects in the current world.
+        if (screen.getWorld(map) instanceof UpperWorld)
+            screen.setTileMap(0);
+        else if (screen.getWorld(map) instanceof UnderWorld)
+            screen.setTileMap(1);
+        else
+            screen.setTileMap(2);
+        dying = false;
+        // Restores six hearts, and moves self to the respawn point.
+        health = 6;
+        storage.setHealth(health);
+        updateHearts();
+        setPosition(respawnPoint.x, respawnPoint.y);
+        screen.setCameraFast(2);
+        // Transitions screen. After one second, unstuns Daur.
+        screen.transition(Color.BLACK);
+        screen.globalTimer.scheduleTask(new Timer.Task() {
+            @Override
+            public void run() {
+                unStun();
+                destructing = false;
+            }
+        }, 0.25f);
     }
 
     // Updates the time based on how much time has passed since the game has been previously updated.
@@ -1068,7 +1347,7 @@ public class Daur extends Character {
             if (shieldTime > 3) {
                 shielding = false;
                 screen.effects.remove(shield);
-                coolDown();
+                coolDown(1);
                 setState(IDLE, true);
             }
         }
@@ -1092,7 +1371,7 @@ public class Daur extends Character {
     // If the Daur's current state is ANY of the following, the new state will not be set as the current one.
     protected boolean overrideCheck() {
         return (state == ATTACKING || state == SWIMMING || state == FALLING || state == DROWNING || state == ITEMAQ ||
-                state == CASTING || state == KNOCKOUT || state == JUMPING || state == JUMPATTACKING);
+                state == CASTING || state == KNOCKOUT || state == DEAD || state == JUMPING || state == JUMPATTACKING);
     }
 
     // Overrides the current state if necessary based on a matter of priorities.
@@ -1121,6 +1400,12 @@ public class Daur extends Character {
         spawnPoint = new Point((int) x, (int) y);
     }
 
+    // Sets the respawn point for Daur.
+    public void setRespawnPoint() {
+        respawnPoint = new Point((int) getX(), (int) getY());
+        storage.setRespawnPoint(respawnPoint.x, respawnPoint.y);
+    }
+
     // Sets whether Daur is transitioning.
     public void setTransitioning(boolean transitioning) {
         this.transitioning = transitioning;
@@ -1128,8 +1413,8 @@ public class Daur extends Character {
 
     //Subtracts health from Daur.
     public void loseHealth(int h) {
-        // If Daur is invulnerable, he cannot lose health so the method returns.
-        if (invulnerability)
+        // If Daur is invulnerable or dying or transitioning, he cannot lose health so the method returns.
+        if (invulnerability || dying || transitioning)
             return;
         // Otherwise, subtract the health by the damage, which is first mitigated by the armor.
         health -= (h - armor);
@@ -1137,8 +1422,9 @@ public class Daur extends Character {
         updateHearts();
         // Sets Daur's state to invulnerable for now.
         invulnerability = true;
-        // Flickers the sprite to indicate to the user Daur is hurt.
-        flickerSprite();
+        // Flickers the sprite to indicate to the user Daur is hurt if health is greater than 0.
+        if (health > 0)
+            flickerSprite();
         // Sets Daur to a vulnerable status after one second.
         screen.globalTimer.scheduleTask(new Timer.Task() {
             @Override
@@ -1194,7 +1480,7 @@ public class Daur extends Character {
     // This is the method responsible for hurting Daur should he stray too close to an enemy.
     private void collidesEnemy() {
         // As usual, if Daur is invulnerable, nothing occurs. If in the air, the same result is achieved.
-        if (invulnerability || !grounded)
+        if (invulnerability || !grounded || transitioning)
             return;
 
         // Gets every character in the current screen. Note that this does NOT use the same iterator that draws Daur. This
@@ -1217,8 +1503,8 @@ public class Daur extends Character {
 
     // Causes damage to Daur, as well as jettisoning him away from the enemy.
     public void damageCollision(Sprite sprite) {
-        // If invulnerable or falling returns the method to prevent any damage.
-        if (invulnerability || state == FALLING || state == DROWNING)
+        // If invulnerable or falling or drowning or dying returns the method to prevent any damage.
+        if (invulnerability || state == FALLING || state == DROWNING || dying)
             return;
         // If the damage collision was a result of a projectile, does not get hurt.
         if (sprite instanceof Projectile && !grounded)
@@ -1290,6 +1576,9 @@ public class Daur extends Character {
 
     // Checks for every type of interactable dialogue.
     private void checkEvents() {
+        // Breaks channeling immediately.
+        stopChanneling();
+        // Checks all interactable dialogue.
         checkTalk();
         checkSign();
         checkBooks();
@@ -1310,21 +1599,37 @@ public class Daur extends Character {
         else
             world = screen.world3;
 
-        // Iterates over every trigger.
-        for (int i = 0; i < world.getTriggerSize(); i++)
-            // Gets every point in the Daur sprite from left to right.
-            for (float x = getX(); x <= getX() + getWidth(); x++) {
-                float y;
-                // If the trigger is to Daur's bottom, set's Daur's y point as his bottom-most point.
-                if (world.getTrigger(i).getRectangle().getY() < getY())
-                    y = getY();
-                    // Otherwise sets Daur's y point as his top-most point.
-                else
-                    y = getHeight();
-                // If any trigger contains Daur's x point and y point, launches the trigger.
-                if (world.getTrigger(i).getRectangle().contains(x, y))
-                    world.trigger(world.getTrigger(i));
-            }
+        // Iterates over every trigger. Note that the method is different for if Daur is grounded or not.
+        if (grounded)
+            for (int i = 0; i < world.getTriggerSize(); i++)
+                // Gets every point in the Daur sprite from left to right.
+                for (float x = getX(); x <= getX() + getWidth(); x++) {
+                    float y;
+                    // If the trigger is to Daur's bottom, set's Daur's y point as his bottom-most point.
+                    if (world.getTrigger(i).getRectangle().getY() < getY())
+                        y = getY();
+                        // Otherwise sets Daur's y point as his top-most point.
+                    else
+                        y = getHeight();
+                    // If any trigger contains Daur's x point and y point, launches the trigger.
+                    if (world.getTrigger(i).getRectangle().contains(x, y))
+                        world.trigger(world.getTrigger(i));
+                }
+        else
+            for (int i = 0; i < world.getTriggerSize(); i++)
+                // Gets every point in the Daur sprite from left to right.
+                for (float x = shadow.getX(); x <= shadow.getX() + shadow.getWidth(); x++) {
+                    float y;
+                    // If the trigger is to Daur's bottom, set's Daur's y point as his bottom-most point.
+                    if (world.getTrigger(i).getRectangle().getY() < getY())
+                        y = shadow.getY();
+                        // Otherwise sets Daur's y point as his top-most point.
+                    else
+                        y = shadow.getHeight();
+                    // If any trigger contains Daur's x point and y point, launches the trigger.
+                    if (world.getTrigger(i).getRectangle().contains(x, y))
+                        world.trigger(world.getTrigger(i));
+                }
     }
 
     // Checks if Daur is currently in any portal, and transports him if so.
@@ -1339,7 +1644,7 @@ public class Daur extends Character {
                     // If the portal is to Daur's bottom, set's Daur's y point as his bottom-most point.
                     if (screen.world1.getPortal(i, true).getY() < getY())
                         y = getY();
-                    // Otherwise sets Daur's y point as his top-most point.
+                        // Otherwise sets Daur's y point as his top-most point.
                     else
                         y = getHeight();
                     // If any portal contains Daur's x point and y point, transports him.
@@ -1354,6 +1659,7 @@ public class Daur extends Character {
                         setY(screen.world3.getPortal(i, false).getY());
                         // Sets the new respawn point to that same portal's position.
                         respawnPoint = new Point((int) getX(), (int) getY());
+                        storage.setRespawnPoint(respawnPoint.x, respawnPoint.y);
 
                         // Resets all events.
                         resetEvents();
@@ -1380,6 +1686,7 @@ public class Daur extends Character {
                         setX(screen.world1.getPortal(i, false).getX());
                         setY(screen.world1.getPortal(i, false).getY());
                         respawnPoint = new Point((int) getX(), (int) getY());
+                        storage.setRespawnPoint(respawnPoint.x, respawnPoint.y);
 
                         resetEvents();
                         screen.transition(Color.BLACK);
@@ -1400,6 +1707,7 @@ public class Daur extends Character {
                         setX((int) (screen.world2.getAccess(i, false).getX() / layer.getTileWidth()) * layer.getTileWidth());
                         setY((int) (screen.world2.getAccess(i, false).getY() / layer.getTileHeight()) * layer.getTileHeight());
                         respawnPoint = new Point((int) getX(), (int) getY());
+                        storage.setRespawnPoint(respawnPoint.x, respawnPoint.y);
 
                         resetEvents();
                         screen.transition(Color.BLACK);
@@ -1408,6 +1716,7 @@ public class Daur extends Character {
 
         if (screen.map == screen.world2.getMap()) {
             // Checks for exits IN ADDITION to stairs.
+            // Checks for exits first.
             for (int i = 0; i < screen.world2.getAccessSize(); i++)
                 for (float x = getX(); x <= getX() + getWidth(); x++)
                     if (screen.world2.getAccess(i, true).contains(x, getY())) {
@@ -1417,6 +1726,7 @@ public class Daur extends Character {
                         setX((int) (screen.world1.getAccess(i, false).getX() / layer.getTileWidth()) * layer.getTileWidth());
                         setY((int) (screen.world1.getAccess(i, false).getY() / layer.getTileHeight()) * layer.getTileHeight());
                         respawnPoint = new Point((int) getX(), (int) getY());
+                        storage.setRespawnPoint(respawnPoint.x, respawnPoint.y);
 
                         resetEvents();
                         screen.transition(Color.BLACK);
@@ -1428,22 +1738,22 @@ public class Daur extends Character {
                 for (float x = getX(); x <= getX() + getWidth(); x++)
                     if (screen.world2.getStairs(i, true).contains(x, getCY())) {
                         setX((int) (screen.world2.getStairs(i, false).getX() / layer.getTileWidth()) * layer.getTileWidth());
-                        setY((int) (screen.world2.getStairs(i, false).getY() / layer.getTileHeight()) * layer.getTileHeight());
-                        respawnPoint = new Point((int) getX(), (int) getY());
+                        setY((int) (screen.world2.getStairs(i, false).getY() / layer.getTileHeight()) * layer.getTileHeight() - layer.getTileHeight());
 
                         screen.transition(Color.BLACK);
                         screen.setCameraFast(0);
+                        storage.setLevel(1);
                     }
             // Same but for downstairs.
             for (int i = 0; i < screen.world2.getStairsSize(); i++)
                 for (float x = getX(); x <= getX() + getWidth(); x++)
                     if (screen.world2.getStairs(i, false).contains(x, getCY())) {
                         setX((int) (screen.world2.getStairs(i, true).getX() / layer.getTileWidth()) * layer.getTileWidth());
-                        setY((int) (screen.world2.getStairs(i, true).getY() / layer.getTileHeight()) * layer.getTileHeight());
-                        respawnPoint = new Point((int) getX(), (int) getY());
+                        setY((int) (screen.world2.getStairs(i, true).getY() / layer.getTileHeight()) * layer.getTileHeight() - layer.getTileHeight());
 
                         screen.transition(Color.BLACK);
                         screen.setCameraFast(0);
+                        storage.setLevel(-1);
                     }
 
         }
@@ -1461,7 +1771,6 @@ public class Daur extends Character {
                                 layer.getTileWidth() + layer.getTileWidth() / 2 - getWidth() / 2);
                         setY((int) (screen.world2.getTeleporter(i, false).getY() / layer.getTileHeight()) *
                                 layer.getTileHeight() - 24);
-                        respawnPoint = new Point((int) getX(), (int) getY());
 
                         screen.transition(Color.WHITE);
                         screen.setCameraFast(0);
@@ -1473,7 +1782,6 @@ public class Daur extends Character {
                                 layer.getTileWidth() + layer.getTileWidth() / 2 - getWidth() / 2);
                         setY((int) (screen.world2.getTeleporter(i, true).getY() / layer.getTileHeight()) *
                                 layer.getTileHeight() - 24);
-                        respawnPoint = new Point((int) getX(), (int) getY());
 
                         screen.transition(Color.WHITE);
                         screen.setCameraFast(0);
@@ -1564,6 +1872,10 @@ public class Daur extends Character {
             // Checks if the character is the fairy queen.
             if (character instanceof FairyQueen && facingObject(character) && inRange(character))
                 event = new FairyEvent(map, screen, storage);
+
+            // Checks if the character is the first sage.
+            if (character instanceof Druni && facingObject(character) && inRange(character))
+                event = new DruniMeeting(map, screen, (Druni) character);
         }
 
         // Checks if Daur is trying to talk to a character over the counter.
@@ -1753,7 +2065,7 @@ public class Daur extends Character {
                 }
 
         // Launches the keyhole event based on the value of the keyhole rectangle map object.
-        if (value != -1 && dir == UP)
+        if (value != -1 && dir == UP) {
             switch (value) {
                 // Great Hollow Keyhole. Launches Great Hollow Opening event.
                 case 0:
@@ -1762,15 +2074,19 @@ public class Daur extends Character {
                             // Removes key and starts event.
                             keyHoleEvent = new GreatHollowOpening(screen.map, screen, screen.storage);
                             storage.questItems.remove(item);
-                            // Advances story.
+                            // Advances story; sets main quest to 2.
                             storage.setMainQuestStage();
                             return;
                         }
                     break;
             }
+        }
     }
 
     private void castSpell(Item item) {
+        // If not on the ground, returns.
+        if (!grounded)
+            return;
         // Checks what spell is being used based on the item. In this instance, Daur is casting concussive shot.
         if (item instanceof ConcussiveShotItem)
             // Launches the appropriate method.
@@ -1781,6 +2097,11 @@ public class Daur extends Character {
             windSickles();
         else if (item instanceof ZephyrsWispItem)
             jump();
+        // Note that if the item is a minor health potion, returns to avoid setting state to casting.
+        else if (item instanceof MinorHealthPotionItem) {
+            restoreHealth();
+            return;
+        }
         else
             return;
 
@@ -1801,6 +2122,8 @@ public class Daur extends Character {
         // Otherwise state is set to jump attacking.
         else
             setState(JUMPATTACKING, true);
+        // Breaks all channeling.
+        stopChanneling();
         // Creates the actual sword itself on the screen.
         spawnSword();
         // Informs the game Daur is attacking.
@@ -1851,7 +2174,7 @@ public class Daur extends Character {
         vel.x = 0;
         vel.y = 0;
         stun();
-        coolDown();
+        coolDown(1.2f);
 
         com.inoculates.fatesreprise.Spells.ConcussiveShot cShot = null;
         // Sets the concussive shot's direction depending on Daur's direction.
@@ -1888,7 +2211,7 @@ public class Daur extends Character {
         vel.x = 0;
         vel.y = 0;
         stun();
-        coolDown();
+        coolDown(1.75f);
 
         WindSickle sickle = new WindSickle(screen, map, screen.daurAtlases.get(4), this, dir, true);
         screen.spells.add(sickle);
@@ -1910,8 +2233,10 @@ public class Daur extends Character {
         // If already in the air, cannot go in the air again.
         if (!grounded)
             return;
+        // Breaks channeling.
+        stopChanneling();
         // Starts cooldown.
-        coolDown();
+        coolDown(0.2f);
         // Sets state to jumping.
         setState(JUMPING, true);
         // Sets grounded to false to avoid any collisions with enemies or holes.
@@ -1923,15 +2248,28 @@ public class Daur extends Character {
         screen.effects.add(shadow);
     }
 
-    // Sets the cooldown, and then resets it after 1.4 seconds.
-    private void coolDown() {
+    // Restores six health (three hearts).
+    private void restoreHealth() {
+        // Increases health by six and updates accordingly.
+        fillHearts(6);
+        // Removes the potion from the game, as it is consumed.
+        if (storage.item1 instanceof MinorHealthPotionItem)
+            storage.setItem1(null);
+        if (storage.item2 instanceof MinorHealthPotionItem)
+            storage.setItem2(null);
+        if (storage.item3 instanceof MinorHealthPotionItem)
+            storage.setItem3(null);
+    }
+
+    // Sets the cooldown, and then resets it after a given amount of seconds.
+    private void coolDown(final float delay) {
         spellCooldown = true;
         screen.globalTimer.scheduleTask(new Timer.Task() {
             @Override
             public void run() {
                 refresh();
             }
-        }, 1.4f);
+        }, delay);
     }
 
     // This method is purely for the purpose of running concurrent threads (Timer).
@@ -1949,7 +2287,7 @@ public class Daur extends Character {
 
     // Overrides super method to prevent unstunning while knocked out.
     public void unStun() {
-        if (state != KNOCKOUT)
+        if (state != KNOCKOUT && !dying)
             stun = false;
     }
 
@@ -1983,6 +2321,14 @@ public class Daur extends Character {
         // Checks if Daur is within a close distance from the character.
         return ((dX < getWidth() && isLeft && inBoundsY) || (dX2 < getWidth() && isRight && inBoundsY) || (dY < getHeight() &&
                 isDown && inBoundsX) || (dY2 < getHeight() && isUp && inBoundsX));
+    }
+
+    public boolean isGrounded() {
+        return grounded;
+    }
+
+    public boolean isDead() {
+        return dying;
     }
 
     private void resetPressed() {

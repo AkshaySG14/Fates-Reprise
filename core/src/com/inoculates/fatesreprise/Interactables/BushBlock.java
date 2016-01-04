@@ -173,5 +173,6 @@ public class BushBlock extends Interactable {
 
     protected void chooseSprite() {
         setRegion(atlas.findRegion("bushblock"));
+        setSize(getRegionWidth(), getRegionHeight());
     }
 }
