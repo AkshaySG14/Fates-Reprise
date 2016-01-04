@@ -42,6 +42,7 @@ public class BushAmbush extends Event {
                 screen.daur.stun();
                 // Freezes Daur.
                 screen.daur.freeze();
+                screen.daur.forceState(0);
                 screen.pauseScreen();
                 break;
         // Breaks dialogue and initiates the fight.

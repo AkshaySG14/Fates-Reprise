@@ -46,8 +46,9 @@ public class ShopEvent extends Event {
             case 0:
                 // Creates the shop dialogue and then stuns Daur, as well as setting his animation to idle.
                 createShop();
-                screen.daur.stun();
                 screen.daur.forceState(0);
+                screen.daur.freeze();
+                screen.daur.stun();
                 break;
             // After the player presses exit in the shop window.
             case 1:

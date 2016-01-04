@@ -82,6 +82,7 @@ public class ChestEvent extends Event {
                 Dialogue dialogue = new Dialogue(screen, message, this);
                 screen.setText(dialogue, dialogue.getBackground());
                 screen.daur.stun();
+                screen.daur.freeze();
                 screen.freeze();
                 break;
             case 1:

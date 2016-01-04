@@ -48,6 +48,7 @@ public class FairyEvent extends Event {
                             this);
                     screen.setText(dialogue, dialogue.getBackground());
                     screen.daur.forceState(0);
+                    screen.daur.freeze();
                     screen.daur.stun();
                     screen.pauseScreen();
                     break;
@@ -60,6 +61,7 @@ public class FairyEvent extends Event {
                             this);
                     screen.setText(dialogue, dialogue.getBackground());
                     screen.daur.forceState(0);
+                    screen.daur.freeze();
                     screen.daur.stun();
                     break;
                 case 3:
@@ -81,6 +83,7 @@ public class FairyEvent extends Event {
                                 this);
                         screen.setText(dialogue, dialogue.getBackground());
                         screen.daur.forceState(0);
+                        screen.daur.freeze();
                         screen.daur.stun();
                         screen.pauseScreen();
                         break;
@@ -101,6 +104,7 @@ public class FairyEvent extends Event {
                                 this);
                         screen.setText(dialogue, dialogue.getBackground());
                         screen.daur.forceState(0);
+                        screen.daur.freeze();
                         screen.daur.stun();
                         screen.pauseScreen();
                         break;
@@ -116,6 +120,7 @@ public class FairyEvent extends Event {
                                 this);
                         screen.setText(dialogue, dialogue.getBackground());
                         screen.daur.forceState(0);
+                        screen.daur.freeze();
                         screen.daur.stun();
                         break;
                     case 3:
@@ -136,6 +141,7 @@ public class FairyEvent extends Event {
                                 this);
                         screen.setText(dialogue, dialogue.getBackground());
                         screen.daur.forceState(0);
+                        screen.daur.freeze();
                         screen.daur.stun();
                         screen.pauseScreen();
                         break;

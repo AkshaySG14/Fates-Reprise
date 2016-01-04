@@ -88,6 +88,7 @@ public class ItemAcquisitionEvents extends Event {
             case 0:
                 Dialogue dialogue = new Dialogue(screen, message, this);
                 screen.setText(dialogue, dialogue.getBackground());
+                screen.daur.freeze();
                 screen.daur.stun();
                 screen.freeze();
                 break;

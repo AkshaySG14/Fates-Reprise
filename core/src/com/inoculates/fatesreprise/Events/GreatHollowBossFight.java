@@ -25,6 +25,7 @@ public class GreatHollowBossFight extends Event {
         screen.daur.setDirection(2);
         screen.daur.stun();
         screen.daur.freeze();
+        screen.daur.forceState(0);
         screen.freeze();
         screen.globalTimer.scheduleTask(new Timer.Task() {
             @Override

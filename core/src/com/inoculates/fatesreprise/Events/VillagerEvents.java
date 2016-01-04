@@ -390,10 +390,11 @@ public class VillagerEvents extends Event {
             case 0:
                 Dialogue dialogue = new Dialogue(screen, message, this);
                 screen.setText(dialogue, dialogue.getBackground());
+                screen.daur.forceState(0);
+                screen.daur.freeze();
                 screen.daur.stun();
                 character.stun();
                 character.setFrozen(true);
-                screen.daur.forceState(0);
                 break;
             case 1:
                 screen.setText(null, null);

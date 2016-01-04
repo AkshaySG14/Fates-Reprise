@@ -58,6 +58,7 @@ public class BookEvents extends Event {
                 screen.setText(dialogue, dialogue.getBackground());
                 // Stuns Daur and forces an idle state.
                 screen.daur.stun();
+                screen.daur.freeze();
                 screen.daur.forceState(0);
                 break;
             case 1:
