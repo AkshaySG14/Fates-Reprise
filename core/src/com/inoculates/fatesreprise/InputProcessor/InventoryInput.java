@@ -60,17 +60,19 @@ public class InventoryInput implements InputProcessor {
             screen.mask.fadeIn(0.5f);
             // Unpauses the game itself.
             screen.unPauseGame();
-            screen.globalTimer.scheduleTask(new Timer.Task() {
-                @Override
-                public void run() {
-                    screen.unFreeze();
-                }
-            }, 0.5f);
+            screen.unFreeze();
+            // Plays a sound indicating the user has returned to the game.
+            storage.sounds.get("click7").play(1.0f);
+            // Sets the volume of the music to be normal.
+            storage.setVolume(0.75f);
         }
 
         // Goes to the secondary pause screen.
-        if (x == storage.secondary)
+        if (x == storage.secondary) {
             pScreen.changeScreen();
+            // Plays a sound accordingly.
+            storage.sounds.get("click9").play(1.0f);
+        }
 
         return true;
     }
@@ -148,6 +150,8 @@ public class InventoryInput implements InputProcessor {
             }
             pScreen.setCurrentItem();
         }
+        // Plays a sound to acknowledge the user has swapped an item out.
+        storage.sounds.get("click2").play(1.0f);
     }
 
 }

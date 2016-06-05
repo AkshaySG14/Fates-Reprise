@@ -52,6 +52,11 @@ public class DefeatScreen implements Screen {
         screen.mask.setPosition(0, 0);
         Gdx.input.setInputProcessor(inputProcessor);
 
+        // Plays the defeat music.
+        storage.music.get("gameover").play();
+        storage.music.get("gameover").setVolume(0.75f);
+        storage.music.get("gameover").setLooping(true);
+
         // Creates all relevant text.
         createText();
     }
@@ -168,10 +173,14 @@ public class DefeatScreen implements Screen {
             cursorPos = 0;
         else
             cursorPos ++;
+        // Plays the sound that indicates the player moved the cursor.
+        storage.sounds.get("click1").play(1.0f);
     }
 
     // Executes the decision based on the cursor position.
     public void executeDecision() {
+        // Plays the sound that indicates the player pressed a button.
+        storage.sounds.get("click3").play(1.0f);
         switch (cursorPos) {
             case 0:
                 continueGame();
@@ -183,6 +192,8 @@ public class DefeatScreen implements Screen {
                 saveAndQuit();
                 break;
         }
+        // Stops the music playing currently.
+        storage.music.get("gameover").stop();
     }
 
     // Continues the game WITHOUT saving.

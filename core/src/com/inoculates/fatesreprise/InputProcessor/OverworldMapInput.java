@@ -63,6 +63,10 @@ public class OverworldMapInput implements InputProcessor {
                     screen.unFreeze();
                 }
             }, 0.5f);
+            // Plays a sound accordingly.
+            storage.sounds.get("click7").play(1.0f);
+            // Sets the volume of the music to be normal.
+            storage.setVolume(0.75f);
             return true;
         }
         return false;

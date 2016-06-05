@@ -24,12 +24,14 @@ public abstract class Enemy extends Character {
     protected Animation idle, run, fall, drown;
 
     protected int health;
-    protected boolean invulnerability = false, fallingHole = false, slowed = false, grounded = true;
+    protected boolean invulnerability = false, fallingHole = false, slowed = false, grounded = true, stuncooldown = false;
 
     protected Grass grass;
     protected Ripple ripple;
 
     protected int cellX, cellY;
+    protected boolean falling = false, drowning = false, wadeCooldown = false, grassCooldown = false;
+    private int wadeNum;
     private float maxSpeed;
 
     // Constructor if the enemy has armor.
@@ -66,8 +68,44 @@ public abstract class Enemy extends Character {
             if (state != FALLING && state != DROWNING)
                 update(deltaTime);
         }
-        if ((vel.x != 0 || vel.y != 0 || ace.x != 0 || ace.y != 0) && canMove() && state != FALLING && state != DROWNING)
+        if ((vel.x != 0 || vel.y != 0 || ace.x != 0 || ace.y != 0) && canMove() && state != FALLING && state != DROWNING) {
             tryMove();
+            // If the enemy is moving and on shallow water plays the wading sound. This is a constant alternation between two
+            // sounds.
+            if ((vel.x != 0 || vel.y != 0) && screen.effects.contains(ripple) && !wadeCooldown && grounded) {
+                wadeCooldown = true;
+                screen.globalTimer.scheduleTask(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        wadeCooldown = false;
+                    }
+                }, 0.35f);
+
+                switch (wadeNum) {
+                    case 0:
+                        storage.sounds.get("wade1").play(2.0f);
+                        wadeNum = 1;
+                        break;
+                    case 1:
+                        storage.sounds.get("wade2").play(2.0f);
+                        wadeNum = 0;
+                        break;
+                }
+            }
+
+            // Same but for the grass sound.
+            if ((vel.x != 0 || vel.y != 0) && screen.effects.contains(grass) && !grassCooldown) {
+                grassCooldown = true;
+                screen.globalTimer.scheduleTask(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        grassCooldown = false;
+                    }
+                }, 0.25f);
+                storage.sounds.get("grasswalk").play(1.0f);
+            }
+
+        }
 
         createAnimations();
         chooseSprite();
@@ -156,8 +194,23 @@ public abstract class Enemy extends Character {
                 }
             }, 0.6f);
 
-            if (health == 0)
+            if (health == 0) {
                 death();
+                // Plays death sound.
+                storage.sounds.get("death2").play(1.0f);
+            }
+            else {
+                // Plays hurt sound.
+                int random = (int) (Math.random() * 2);
+                switch (random) {
+                    case 0:
+                        storage.sounds.get("hurt1").play(1.0f);
+                        break;
+                    case 1:
+                        storage.sounds.get("hurt2").play(1.0f);
+                        break;
+                }
+            }
         }
     }
 
@@ -185,7 +238,7 @@ public abstract class Enemy extends Character {
     // Note the lack of lose health.
     public void stunCollision(Sprite sprite, float time) {
         // Enemy cannot be stunned if invulnerable or transparent.
-        if (transparent || isDead())
+        if (transparent || isDead() || stuncooldown)
             return;
 
         float angle = (float) Math.atan2(getY() - sprite.getY(), getX() - sprite.getX());
@@ -206,9 +259,23 @@ public abstract class Enemy extends Character {
             }
         }, time);
         screen.globalTimer.start();
+
+        // Plays the stun collision sound.
+        screen.storage.sounds.get("bounce").play(1.0f);
+        // Sets stun cooldown to be true so that the enemy is not stunned overmuch.
+        stuncooldown = true;
+        screen.globalTimer.scheduleTask(new Timer.Task() {
+            @Override
+            public void run() {
+                stuncooldown = false;
+            }
+        }, 0.1f);
     }
 
     protected void flickerSprite() {
+        // Returns if falling to ensure the sprite does NOT change color.
+        if (state == FALLING)
+            return;
         inverted = true;
         screen.globalTimer.scheduleTask(new Timer.Task() {
             @Override
@@ -219,6 +286,8 @@ public abstract class Enemy extends Character {
         screen.globalTimer.scheduleTask(new Timer.Task() {
             @Override
             public void run() {
+                if (state == FALLING)
+                    return;
                 inverted = true;
             }
         }, 0.4f);
@@ -239,6 +308,9 @@ public abstract class Enemy extends Character {
         screen.globalTimer.scheduleTask(new Timer.Task() {
             @Override
             public void run() {
+                // Returns if falling or drowning, as a fall or a drown has a separate kill method.
+                if (state == FALLING || state == DROWNING)
+                    return;
                 // Checks if this enemy a part of a triggering event.
                 screen.checkClear(enemy);
                 // Has a random chance of creating a consumable.
@@ -291,15 +363,18 @@ public abstract class Enemy extends Character {
     }
 
     // This is what occurs if an enemy were to fall down a hole..
-    private void fallHole(Point hole) {
-        // If the enemy is already falling, no need to make him fall down twice.
-        if (state == FALLING)
+    protected void fallHole(Point hole) {
+        // If the enemy is already falling, no need to make him fall down twice. Also, flying creatures cannot fall.
+        if (falling || !grounded)
             return;
         // Sets the state to falling for the animation.
         setState(FALLING, true);
+        falling = true;
         // Makes enemy invulnerable and transparent to prevent any damage or stun while falling.
         invulnerability = true;
         transparent = true;
+        // Ensures the enemy is not inverted when falling.
+        inverted = false;
         // Causes the enemy to be motionless and receive no input.
         freeze();
         stun();
@@ -307,7 +382,15 @@ public abstract class Enemy extends Character {
         ace.y = 0;
         // This method adjusts the position of enemy's sprite to emulate the enemy falling down the center of the hole.
         setPosition(hole.x - getWidth() / 2, hole.y - getHeight() / 2);
-        resetPosition(hole);
+        // Constantly resets position over a short period.
+        final Point fallHole = hole;
+        for (float i = 0; i < 1; i += 0.01f)
+            screen.globalTimer.scheduleTask(new Timer.Task() {
+                @Override
+                public void run() {
+                    resetPosition(fallHole);
+                }
+            }, i);
 
         // After one second of falling, the enemy will be removed from the game.
         final Enemy enemy = this;
@@ -320,13 +403,17 @@ public abstract class Enemy extends Character {
                 removeSelf();
             }
         }, 1);
+
+        // Plays falling sound.
+        storage.sounds.get("fall1").play(1.0f);
     }
 
     // Same as Daur's method, except removes self from the game.
     private void drown() {
-        if (state == DROWNING)
+        if (drowning)
             return;
         setState(DROWNING, true);
+        drowning = true;
         // Causes the enemy to be motionless and receive no input.
         freeze();
         stun();
@@ -353,29 +440,16 @@ public abstract class Enemy extends Character {
                 removeSelf();
             }
         }, 0.75f);
+
+        // Plays drowning sound.
+        storage.sounds.get("drown").play(1.0f);
     }
 
     // With every new frame, the enemy's position is reset due to the difference in frame sizes of the falling
     // animation.
-    private void resetPosition(final Point hole) {
-        screen.globalTimer.scheduleTask(new Timer.Task() {
-            @Override
-            public void run() {
-                setPosition(hole.x - getWidth() / 2, hole.y - getHeight() / 2);
-            }
-        }, 0.05f);
-        screen.globalTimer.scheduleTask(new Timer.Task() {
-            @Override
-            public void run() {
-                setPosition(hole.x - getWidth() / 2, hole.y - getHeight() / 2);
-            }
-        }, 0.33333333f);
-        screen.globalTimer.scheduleTask(new Timer.Task() {
-            @Override
-            public void run() {
-                setPosition(hole.x - getWidth() / 2, hole.y - getHeight() / 2);
-            }
-        }, 0.666666666f);
+    protected void resetPosition(final Point hole) {
+        chooseSprite();
+        setPosition(hole.x - getWidth() / 2, hole.y - getHeight() / 2);
     }
 
     // This method creates the disappearing effect for the death effect. Note that it  sets the transparency in 0.1
@@ -727,7 +801,7 @@ public abstract class Enemy extends Character {
 
     // Overrides the method to prevent unstunning while falling or drowning.
     public void unStun() {
-        if (state != FALLING && state != DROWNING)
+        if (!falling && !drowning)
             stun = false;
     }
 

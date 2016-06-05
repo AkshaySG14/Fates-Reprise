@@ -73,26 +73,66 @@ public class UpperWorld extends World {
             }
     }
 
+    // Adds each cell to the fwin and fwout array lists.
     protected void setShaderTransitions() {
         Vector2 vec;
+        // For Faron In (i.e. applies the Faron Woods shader).
         vec = new Vector2(7, 4);
-        shaderCells.put("fwin1", vec);
-        vec = new Vector2(7, 5);
-        shaderCells.put("fwout1", vec);
+        shaderCells.get("fwin").add(vec);
         vec = new Vector2(9, 4);
-        shaderCells.put("fwin2", vec);
-        vec = new Vector2(9, 5);
-        shaderCells.put("fwout2", vec);
+        shaderCells.get("fwin").add(vec);
         vec = new Vector2(8, 4);
-        shaderCells.put("fwin3", vec);
+        shaderCells.get("fwin").add(vec);
         vec = new Vector2(9, 3);
-        shaderCells.put("fwin4", vec);
+        shaderCells.get("fwin").add(vec);
         vec = new Vector2(8, 1);
-        shaderCells.put("fwin5", vec);
+        shaderCells.get("fwin").add(vec);
         vec = new Vector2(7, 0);
-        shaderCells.put("fwin6", vec);
+        shaderCells.get("fwin").add(vec);
         vec = new Vector2(7, 2);
-        shaderCells.put("fwin7", vec);
+        shaderCells.get("fwin").add(vec);
+        // For Faron Out (i.e. removes the Faron Woods shader).
+        vec = new Vector2(7, 5);
+        shaderCells.get("fwout").add(vec);
+        vec = new Vector2(9, 5);
+        shaderCells.get("fwout").add(vec);
+    }
+
+    // Plays music if Daur enters a specific cell (and no music is playing previously). This method simply adds the cells
+    // to the arraylist.
+    protected void setMusicCells() {
+        Vector2 vec;
+        // For the overworld.
+        vec = new Vector2(7, 8);
+        musicCells.get("overworldtheme").add(vec);
+        vec = new Vector2(7, 7);
+        musicCells.get("overworldtheme").add(vec);
+        // Uses a for loop for the bottom three cells.
+        for (int x = 7; x <= 9; x ++) {
+            vec = new Vector2(x, 5);
+            musicCells.get("overworldtheme").add(vec);
+        }
+        // For Carthell Village. Uses a for loop to go in a 5x4 rectangle to add the cells.
+        for (int y = 6; y <= 9; y ++)
+            for (int x = 8; x <= 12; x ++) {
+                vec = new Vector2(x, y);
+                musicCells.get("carthellvillage").add(vec);
+            }
+        // Adds the last cell, at the bottom.
+        vec = new Vector2(7, 6);
+        musicCells.get("carthellvillage").add(vec);
+        // For the Faron Woods. Uses a for loop similarly to Carthell Village.
+        for (int y = 0; y <= 4; y ++)
+            for (int x = 7; x <= 9; x ++) {
+                // Ignore the bottom right cell.
+                if (x == 9 && y == 0)
+                    continue;
+                vec = new Vector2(x, y);
+                musicCells.get("faronwoods").add(vec);
+            }
+        // Add the fairy fountain area as well.
+        vec = new Vector2(10, 3);
+        musicCells.get("faronwoods").add(vec);
     }
 
     protected void createCharacters() {

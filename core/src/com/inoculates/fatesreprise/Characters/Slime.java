@@ -119,6 +119,8 @@ public class Slime extends Enemy {
                 resetCharge();
             }
         }, 0.7f);
+        // Plays a charge sound.
+        storage.sounds.get("effect6").play(1.0f);
     }
 
     // Resets the charge to make the slime resume normal status.
@@ -210,7 +212,7 @@ public class Slime extends Enemy {
     }
 
     protected boolean priorities(int cState) {
-        return state == DEAD;
+        return (state == DEAD && cState != FALLING && cState != DROWNING) || state == FALLING || state == DROWNING;
     }
 
     protected void chooseSprite()

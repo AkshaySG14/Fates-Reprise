@@ -19,6 +19,8 @@ public class ItemAcquisitionEvents extends Event {
         this.item = item;
         starter = event;
         startEvent();
+        // Plays music for acquiring an item.
+        screen.storage.sounds.get("powerup3").play(1.0f);
     }
 
     protected void startEvent() {

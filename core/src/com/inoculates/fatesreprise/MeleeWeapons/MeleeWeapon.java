@@ -239,6 +239,9 @@ public abstract class MeleeWeapon extends AdvSprite {
             }
             // Creates a consumable.
             createConsumable(collideX + layer.getTileWidth() / 2, collideY + layer.getTileHeight() / 2);
+
+            // Plays the bush cut sound.
+            screen.storage.sounds.get("bushcut1").play(1.0f);
         }
     }
 

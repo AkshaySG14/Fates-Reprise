@@ -53,9 +53,15 @@ public class SlimeKing extends Enemy {
                     spawning = false;
                     screen.effects.remove(shadow);
                     // Makes the screen shake.
-                    screen.shakeScreen(8, 0.05f);
+                    screen.shakeScreen(8, 0.05f, false);
                     // Knocks Daur out shortly.
                     screen.daur.knockOut();
+                    // Plays the large bounce sound.
+                    storage.sounds.get("bigbounce").play(1.0f);
+                    // Starts the miniboss music.
+                    screen.storage.music.get("minibossmusic").play();
+                    screen.storage.music.get("minibossmusic").setVolume(0.75f);
+                    screen.storage.music.get("minibossmusic").setLooping(true);
                 }
             }, 0.8f);
     }
@@ -68,7 +74,8 @@ public class SlimeKing extends Enemy {
             checkTime = 0;
             checkCharge();
         }
-        if (spawnTime > 10) {
+        // Spawns a slime every 8 cycles.
+        if (spawnTime > 8) {
             spawnTime = 0;
             spawnSlime();
         }
@@ -89,6 +96,8 @@ public class SlimeKing extends Enemy {
         // Starts off with a low initial speed.
         vel.x = (float) Math.cos(angle) * 0.5f;
         vel.y = (float) Math.sin(angle) * 0.5f;
+        // Plays the charge sound.
+        storage.sounds.get("charge").play(1.0f);
         // Speeds up after 0.15 and 0.3 seconds.
         screen.globalTimer.scheduleTask(new Timer.Task() {
             @Override
@@ -121,6 +130,8 @@ public class SlimeKing extends Enemy {
         // backwards from impact.
         vel.x *= -0.5f;
         vel.y = vel.y * -0.65f + 2;
+        // Plays the large bounce sound.
+        storage.sounds.get("bigbounce").play(1.0f);
         // After 0.6 seconds, completes the bounce by resetting the slime's velocity, sets bouncing to false, and
         // removes the shadow from the rendering list
         screen.globalTimer.scheduleTask(new Timer.Task() {
@@ -154,6 +165,8 @@ public class SlimeKing extends Enemy {
                 screen.characters2.add(slime);
                 // Creates a shadow for the slime.
                 slimeShadow.setPosition(screen.daur.getX() + 3 - shadow.getWidth() / 2, screen.daur.getY());
+                // Plays the fall sound.
+                storage.sounds.get("throw").play(1.0f);
                 screen.effects.add(slimeShadow);
             }
         }, 0.05f);
@@ -165,6 +178,8 @@ public class SlimeKing extends Enemy {
                 slime.freeze();
                 screen.effects.remove(slimeShadow);
                 slime.setSpawning(false);
+                // Plays the landing sound.
+                storage.sounds.get("landing").play(1.0f);
             }
         }, 0.9f);
     }
@@ -230,6 +245,27 @@ public class SlimeKing extends Enemy {
         loseHealth(dmg);
     }
 
+    // Overrides method to play different hurt sound.
+    public void loseHealth(int h) {
+        if (!invulnerability) {
+            health -= (h - armor);
+            invulnerability = true;
+            flickerSprite();
+            screen.globalTimer.scheduleTask(new Timer.Task() {
+                @Override
+                public void run() {
+                    invulnerability = false;
+                    inverted = false;
+                }
+            }, 0.6f);
+
+            if (health == 0)
+                death();
+            else
+                storage.sounds.get("bosshurt").play(0.75f);
+            }
+        }
+
     // Overrides death animation and also creates the chest that bestows Zephyr's Wisp.
     protected void death() {
         freeze();
@@ -241,34 +277,40 @@ public class SlimeKing extends Enemy {
         setState(DEAD, true);
         // Makes the King Slime slightly transparent.
         setAlpha(0.5f);
-        // After one second performs the death animation.
+        // Plays death sound.
+        storage.sounds.get("bossdeath").play(1.0f);
+        // After two seconds performs the death animation.
         screen.globalTimer.scheduleTask(new Timer.Task() {
             @Override
             public void run() {
                 selfDestruct();
             }
-        }, 1);
-        // Clears self away after three seconds.
+        }, 2);
+        // Clears self away after four seconds.
         screen.globalTimer.scheduleTask(new Timer.Task() {
             @Override
             public void run() {
                 // Checks if this enemy a part of a triggering event.
                 screen.checkClear(enemy);
+                // Plays explosion sound.
+                storage.sounds.get("boom1").play(1.0f);
                 // Removes self from game.
                 removeSelf();
             }
-        }, 3);
+        }, 4);
     }
 
     // Note that all this method does is blink invert and revert the King Slime to create a different death animation.
     private void selfDestruct() {
         for (float time = 0.1f; time <= 2; time += 0.2f)
             screen.globalTimer.scheduleTask(new Timer.Task() {
-            @Override
-            public void run() {
-                destructing = true;
-            }
-        }, time);
+                @Override
+                public void run() {
+                    destructing = true;
+                    // Mini explosion sound.
+                    storage.sounds.get("bossminiexplosion").play(1.0f);
+                }
+            }, time);
         for (float time = 0.2f; time <= 2; time += 0.2f)
             screen.globalTimer.scheduleTask(new Timer.Task() {
                 @Override

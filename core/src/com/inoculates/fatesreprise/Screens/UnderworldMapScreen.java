@@ -167,6 +167,8 @@ public class UnderworldMapScreen implements Screen {
                 level1.setColor(Color.WHITE);
                 break;
         }
+        // Plays the sound that indicates the player moved the floor.
+        storage.sounds.get("click1").play(1.0f);
     }
 
     // Creates the bitmapfont that displays the name of the location in the grid.

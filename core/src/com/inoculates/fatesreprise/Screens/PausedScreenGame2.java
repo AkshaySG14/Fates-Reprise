@@ -295,6 +295,8 @@ public class PausedScreenGame2 implements Screen {
             numY = 2;
         // Sets the new current item, as the position of the cursor has moved.
         setCurrentItem();
+        // Plays the sound that indicates the player moved the cursor.
+        storage.sounds.get("click1").play(1.0f);
     }
 
     private void moveOutOfGrid(int sign, boolean up) {
@@ -463,6 +465,8 @@ public class PausedScreenGame2 implements Screen {
                     position = 8;
                     break;
             }
+        // Plays the sound that indicates the player moved the cursor.
+        storage.sounds.get("click1").play(1.0f);
     }
 
     // Creates the bitmapfont that displays the item name.
@@ -601,6 +605,8 @@ public class PausedScreenGame2 implements Screen {
                     screen.unFreeze();
                 }
             }, 0.4f);
+            // Plays a sound accordingly.
+            storage.sounds.get("click6").play(1.0f);
         }
         // Button is quit game. Simply quits the game,
         if (position == 9) {
@@ -614,6 +620,8 @@ public class PausedScreenGame2 implements Screen {
                     Gdx.app.exit();
                 }
             }, 0.4f);
+            // Plays a sound accordingly.
+            storage.sounds.get("click5").play(1.0f);
         }
     }
 

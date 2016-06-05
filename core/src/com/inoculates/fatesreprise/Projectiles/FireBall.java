@@ -62,6 +62,9 @@ public class FireBall extends Projectile {
 
     // When a fireball hits either a terrain object or Daur.
     public void explode() {
+        // Returns if already exploding to avoid redundancy.
+        if (exploding)
+            return;
         // Explodes the terrain object, should it exist.
         explodeTile();
         final Projectile projectile = this;
@@ -101,6 +104,8 @@ public class FireBall extends Projectile {
         }, 1);
         exploding = true;
         animationTime = 0;
+        // Plays the explosion sound.
+        screen.storage.sounds.get("effect2").play(1.0f);
     }
 
     protected void effects() {

@@ -92,6 +92,8 @@ public abstract class Chest extends Interactable {
         ChestEvent event = new ChestEvent(map, screen, this);
         // Informs the game save data that this chest has been opened.
         storage.setChest(chestNumber);
+        // Plays the chest open sound.
+        storage.sounds.get("chestopen").play(1.0f);
     }
 
     // Returns the item the chest contains for the chest event.

@@ -106,6 +106,8 @@ public class MudShot extends Projectile {
 
     // Same as the fireball.
     public void explode() {
+        if (exploding)
+            return;
         explodeTile();
         final Projectile projectile = this;
         vel.x = 0;
@@ -143,6 +145,8 @@ public class MudShot extends Projectile {
         }, 1);
         exploding = true;
         animationTime = 0;
+        // Plays the explode sound.
+        screen.storage.sounds.get("explode1").play(0.5f);
     }
 
     protected void effects() {

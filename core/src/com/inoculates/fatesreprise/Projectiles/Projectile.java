@@ -209,6 +209,12 @@ public abstract class Projectile extends AdvSprite {
             vel.x = 0;
         }
 
+        if (checkOutOfBounds()) {
+            explode();
+            setX(oldX);
+            vel.x = 0;
+        }
+
         setY(getY() + vel.y);
 
         if (vel.y < 0) {
@@ -223,6 +229,12 @@ public abstract class Projectile extends AdvSprite {
         }
 
         if (collidesCharacter()) {
+            explode();
+            setY(oldY);
+            vel.y = 0;
+        }
+
+        if (checkOutOfBounds()) {
             explode();
             setY(oldY);
             vel.y = 0;

@@ -59,17 +59,19 @@ public class InventoryInput2 implements InputProcessor {
             screen.mask.fadeIn(0.5f);
             // Unpauses the game itself.
             screen.unPauseGame();
-            screen.globalTimer.scheduleTask(new Timer.Task() {
-                @Override
-                public void run() {
-                    screen.unFreeze();
-                }
-            }, 0.5f);
+            screen.unFreeze();
+            // Plays a sound indicating the user has returned to the game.
+            storage.sounds.get("click7").play(1.0f);
+            // Sets the volume of the music to be normal.
+            storage.setVolume(0.75f);
         }
 
         // Changes screen back to first screen.
-        if (x == storage.secondary)
+        if (x == storage.secondary) {
             pScreen.changeScreen();
+            // Plays a sound accordingly.
+            storage.sounds.get("click9").play(1.0f);
+        }
 
         return true;
     }

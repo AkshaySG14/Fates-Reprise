@@ -6,7 +6,7 @@ import com.badlogic.gdx.utils.Timer;
 import com.inoculates.fatesreprise.Screens.GameScreen;
 import com.inoculates.fatesreprise.Storage.Storage;
 
-// These are boss doors doors that Daur opens with boss keys..
+// These are boss doors doors that Daur opens with boss keys.
 public abstract class BossLockedDoor extends Interactable {
     public BossLockedDoor(GameScreen screen, TiledMap map, TextureAtlas atlas, Storage storage) {
         super(screen, map, atlas, storage);
@@ -32,6 +32,10 @@ public abstract class BossLockedDoor extends Interactable {
         }, 0.1f);
         // Informs the persistent data storage that this door has been unlocked.
         storage.setBossUnlocked();
+        // Plays the unlocked sound.
+        screen.storage.sounds.get("unlock").play(1.0f);
+        // Plays the door open sound.
+        storage.sounds.get("dooropen").play(1.0f);
     }
 
     // Moves the door in accordance with the direction given.

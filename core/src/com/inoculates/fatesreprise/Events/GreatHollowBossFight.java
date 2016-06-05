@@ -33,6 +33,8 @@ public class GreatHollowBossFight extends Event {
                 message();
             }
         }, 0.1f);
+        // Stops dungeon music.
+        screen.storage.stopMusic();
     }
 
     protected void message() {
@@ -54,15 +56,17 @@ public class GreatHollowBossFight extends Event {
                             // Stuns and then phases the Master Wizard.
                             MW.stun();
                             MW.phase(true);
+                            // Plays phase in sound.
+                            screen.storage.sounds.get("mysterious").play(1.0f);
                         }
-                        // After one second creates the dialogue.
-                        screen.globalTimer.scheduleTask(new Timer.Task() {
-                            @Override
-                            public void run() {
-                                createDialogue();
-                            }
-                        }, 1);
                     }
+                // After one second creates the dialogue.
+                screen.globalTimer.scheduleTask(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        createDialogue();
+                    }
+                }, 1);
                 break;
             case 1:
                 // Phases the Master Wizard Out.
@@ -76,6 +80,10 @@ public class GreatHollowBossFight extends Event {
                         MW.unStun();
                         screen.unFreeze();
                         screen.unPauseGame();
+                        // Starts the boss music.
+                        screen.storage.music.get("bossmusic").play();
+                        screen.storage.music.get("bossmusic").setVolume(0.75f);
+                        screen.storage.music.get("bossmusic").setLooping(true);
                     }
                 }, 1);
         }

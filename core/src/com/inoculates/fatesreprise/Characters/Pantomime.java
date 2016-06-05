@@ -216,8 +216,23 @@ public class Pantomime extends Enemy {
                 }
             }, 0.6f);
 
-            if (health == 0)
+            if (health == 0) {
                 death();
+                // Plays death sound.
+                storage.sounds.get("death2").play(1.0f);
+            }
+            else {
+                // Plays hurt sound.
+                int random = (int) (Math.random() * 2);
+                switch (random) {
+                    case 0:
+                        storage.sounds.get("hurt1").play(1.0f);
+                        break;
+                    case 1:
+                        storage.sounds.get("hurt2").play(1.0f);
+                        break;
+                }
+            }
         }
     }
 
@@ -275,7 +290,7 @@ public class Pantomime extends Enemy {
     }
 
     protected boolean priorities(int cState) {
-        return state == DEAD;
+        return (state == DEAD && cState != FALLING && cState != DROWNING) || state == FALLING || state == DROWNING;
     }
 
     protected void chooseSprite()

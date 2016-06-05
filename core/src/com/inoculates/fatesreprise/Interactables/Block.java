@@ -65,6 +65,9 @@ public abstract class Block extends Interactable {
         if (triggered)
             screen.checkClear(this);
 
+        // Plays the block move sound.
+        storage.sounds.get("shake").play(1.0f);
+
         // Moves in accordance with the direction of Daur.
         switch (direction) {
             // Slowly moves the block over to the tile on the right.

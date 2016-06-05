@@ -34,6 +34,14 @@ public class FairyMeeting extends Event {
                     fairy.setPosition(x - fairy.getWidth() / 2, y - fairy.getHeight() / 2);
                     screen.characters1.add(fairy);
                     fairy.fade(true);
+                    // Plays fade in sound.
+                    screen.storage.sounds.get("fairyappear").stop();
+                    screen.storage.sounds.get("fairyappear").play(1.0f);
+                    // Starts playing the fairy fountain music.
+                    screen.storage.stopMusic();
+                    screen.storage.music.get("fairyfountainmusic").play();
+                    screen.storage.music.get("fairyfountainmusic").setVolume(0.75f);
+                    screen.storage.music.get("fairyfountainmusic").setLooping(true);
                 }
             }
     }
@@ -41,11 +49,19 @@ public class FairyMeeting extends Event {
     // Makes the fairy queen fade out and then removes her.
     protected void message() {
         fairy.fade(false);
+        // Plays fade out sound.
+        screen.storage.sounds.get("fairyappear").stop();
+        screen.storage.sounds.get("fairyappear").play(1.0f);
         screen.globalTimer.scheduleTask(new Timer.Task() {
             @Override
             public void run() {
                 screen.characters1.remove(fairy);
             }
         }, 1);
+        // Starts playing the Faron Woods music again.
+        screen.storage.stopMusic();
+        screen.storage.music.get("forestmusic").play();
+        screen.storage.music.get("forestmusic").setVolume(0.75f);
+        screen.storage.music.get("forestmusic").setLooping(true);
     }
 }

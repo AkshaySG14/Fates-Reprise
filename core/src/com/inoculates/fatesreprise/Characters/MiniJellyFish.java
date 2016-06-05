@@ -88,6 +88,8 @@ public class MiniJellyFish extends Enemy {
                 SVY(-1.5f);
                 break;
         }
+        // Plays the movement sound.
+        screen.storage.sounds.get("effect8").play(0.1f);
         setState(RUNNING, false);
         screen.globalTimer.scheduleTask(new Timer.Task() {
             @Override
@@ -131,9 +133,8 @@ public class MiniJellyFish extends Enemy {
         return false;
     }
 
-    protected boolean priorities(int cState)
-    {
-        return state == DEAD;
+    protected boolean priorities(int cState) {
+        return (state == DEAD && cState != FALLING && cState != DROWNING) || state == FALLING || state == DROWNING;
     }
 
     protected void chooseSprite()

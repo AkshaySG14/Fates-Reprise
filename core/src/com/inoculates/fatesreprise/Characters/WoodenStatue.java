@@ -13,7 +13,7 @@ public class WoodenStatue extends Enemy {
     float moveTime = 0;
     float checkTime = 0;
 
-    boolean following = false;
+    boolean following = false, soundCooldown = false;
 
     public WoodenStatue(GameScreen screen, TiledMap map, TextureAtlas atlas) {
         super(screen, map, atlas, 4, 0);
@@ -79,7 +79,17 @@ public class WoodenStatue extends Enemy {
             else
                 dir = DOWN;
         }
-
+        // Plays a sound to indicate following. Only plays every 0.5 seconds..
+        if (!soundCooldown) {
+            screen.storage.sounds.get("boom3").play(2.0f);
+            soundCooldown = true;
+            screen.globalTimer.scheduleTask(new Timer.Task() {
+                @Override
+                public void run() {
+                    soundCooldown = false;
+                }
+            }, 0.5f);
+        }
     }
 
     // Sets following false, and sets state back to normal.
@@ -111,7 +121,7 @@ public class WoodenStatue extends Enemy {
 
     // Overridden for the same reason as the above method.
     public void stunCollision(Sprite sprite, float time) {
-        if (invulnerability || transparent || isDead())
+        if (invulnerability || transparent || isDead() || stuncooldown)
             return;
 
         stun();
@@ -123,6 +133,17 @@ public class WoodenStatue extends Enemy {
                 unStun();
             }
         }, time);
+
+        // Plays the stun collision sound.
+        screen.storage.sounds.get("bounce").play(1.0f);
+        // Sets stun cooldown to be true so that the enemy is not stunned overmuch.
+        stuncooldown = true;
+        screen.globalTimer.scheduleTask(new Timer.Task() {
+            @Override
+            public void run() {
+                stuncooldown = false;
+            }
+        }, 0.1f);
     }
 
     protected void updateTime(float deltaTime) {
@@ -147,7 +168,7 @@ public class WoodenStatue extends Enemy {
     }
 
     protected boolean priorities(int cState) {
-        return state == DEAD;
+        return (state == DEAD && cState != FALLING && cState != DROWNING) || state == FALLING || state == DROWNING;
     }
 
     protected void chooseSprite()

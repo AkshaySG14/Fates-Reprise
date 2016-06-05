@@ -36,21 +36,44 @@ public class GreatHollowOpening extends Event {
                 // Freezes Daur.
                 screen.daur.freeze();
                 screen.pauseScreen();
+                // Plays key sound.
+                screen.storage.sounds.get("unlock").play(2.0f);
+                // Stops music for dramatic effect.
+                storage.stopMusic();
                 // After 0.75 seconds begins to shake screen.
-                // Shakes the screen.
                 screen.globalTimer.scheduleTask(new Timer.Task() {
                     @Override
                     public void run() {
-                        screen.shakeScreen(12, 0.1f);
+                        screen.shakeScreen(12, 0.1f, true);
                     }
                 }, 0.75f);
+                // After 1.95 seconds opens the door.
                 screen.globalTimer.scheduleTask(new Timer.Task() {
                     @Override
                     public void run() {
                         // Opens the Great Hollow.
                         openGreatHollow();
+                        // Plays dungeon open sound.
+                        screen.storage.sounds.get("dungeonopen").play(1.0f);
                     }
                 }, 1.95f);
+                // After two seconds, plays the success sound.
+                screen.globalTimer.scheduleTask(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        screen.storage.sounds.get("powerup4").play(2.0f);
+                    }
+                }, 2);
+                // After 2.1 seconds, plays the forest music again.
+                screen.globalTimer.scheduleTask(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        screen.storage.music.get("forestmusic").play();
+                        screen.storage.music.get("forestmusic").setVolume(0.75f);
+                        screen.storage.music.get("forestmusic").setLooping(true);
+                    }
+                }, 2.1f);
+
                 break;
             case 1:
                 screen.daur.unStun();

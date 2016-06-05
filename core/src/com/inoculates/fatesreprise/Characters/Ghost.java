@@ -8,6 +8,7 @@ import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.utils.Timer;
 import com.inoculates.fatesreprise.Screens.GameScreen;
 
 // The ghost enemy. This enemy essentially circles around a structure, and will harm the player should he stray too close.
@@ -18,6 +19,7 @@ public class Ghost extends Enemy {
             FR2 = atlas.findRegion("ghostR2"), FL1 = atlas.findRegion("ghostL1"), FL2 = atlas.findRegion("ghostL2");
 
     int movementDirection;
+    boolean soundCooldown = false;
 
     public Ghost(GameScreen screen, TiledMap map, TextureAtlas atlas, int initialDirection) {
         super(screen, map, atlas, 2);
@@ -65,7 +67,19 @@ public class Ghost extends Enemy {
         if (vel.x == 0 && vel. y == 0)
             setState(IDLE, false);
         // Checks to see whether the ghost is in a new marker.
-        checkMarker();    }
+        checkMarker();
+        // Constantly plays electricity sound.
+        if (!soundCooldown) {
+            storage.sounds.get("zap1").play(0.1f);
+            soundCooldown = true;
+            screen.globalTimer.scheduleTask(new Timer.Task() {
+                @Override
+                public void run() {
+                    soundCooldown = false;
+                }
+            }, 0.25f);
+        }
+    }
 
     protected void updateTime(float deltaTime) {
         if (!frozen && state != IDLE)

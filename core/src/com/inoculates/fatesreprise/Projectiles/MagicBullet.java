@@ -8,11 +8,12 @@ import com.inoculates.fatesreprise.Characters.Character;
 import com.inoculates.fatesreprise.Characters.Enemy;
 import com.inoculates.fatesreprise.Screens.GameScreen;
 
-// This is an extremely fast moving projectile that's intent is to hit Daur.
+// This is an extremely fast moving projectile thats intent is to hit Daur.
 public class MagicBullet extends Projectile {
     Character target;
     private Animation animate;
     private TextureAtlas.AtlasRegion proj1 = atlas.findRegion("magicbullet1"), proj2 = atlas.findRegion("magicbullet2");
+    boolean exploding = false;
 
     // Sets size and the angle of the Magic Bullet.
     public MagicBullet(GameScreen screen, TiledMap map, TextureAtlas atlas, Character character, float angle) {
@@ -44,9 +45,13 @@ public class MagicBullet extends Projectile {
     }
 
     public void explode() {
+        if (exploding)
+            return;
         final Projectile projectile = this;
         vel.x = 0;
         vel.y = 0;
+        // Plays explode sound.
+        screen.storage.sounds.get("boom3").play(1.5f);
         // Fades the Magic Bullet out before removing it.
         screen.globalTimer.scheduleTask(new Timer.Task() {
             @Override
@@ -73,6 +78,7 @@ public class MagicBullet extends Projectile {
                     screen.projectiles.remove(projectile);
             }
         }, 0.5f);
+        exploding = true;
         animationTime = 0;
     }
 

@@ -13,6 +13,7 @@ import com.inoculates.fatesreprise.Consumables.Copper;
 import com.inoculates.fatesreprise.Consumables.Heart;
 import com.inoculates.fatesreprise.Effects.BushDestroy;
 import com.inoculates.fatesreprise.Interactables.Interactable;
+import com.inoculates.fatesreprise.Interactables.Platform;
 import com.inoculates.fatesreprise.Screens.GameScreen;
 import com.inoculates.fatesreprise.Characters.Character;
 import com.inoculates.fatesreprise.Worlds.World;
@@ -176,7 +177,8 @@ public abstract class Spell extends AdvSprite {
         for (Interactable interactable : screen.interactables) {
             for (float step = 0; step < getWidth() - 2; step += layer.getTileWidth() / 16)
                 for (float step2 = 0; step2 < getHeight() - 5; step2 += layer.getTileHeight() / 16)
-                    if (interactable.getBoundingRectangle().contains(getX() + 1 + step, getY() + 1 + step2))
+                    if (interactable.getBoundingRectangle().contains(getX() + 1 + step, getY() + 1 + step2) &&
+                            !(interactable instanceof Platform))
                         return true;
         }
         return false;
@@ -227,6 +229,9 @@ public abstract class Spell extends AdvSprite {
             }
             // Creates a consumable.
             createConsumable(collideX + layer.getTileWidth() / 2, collideY + layer.getTileHeight() / 2);
+
+            // Plays the bush cut sound.
+            screen.storage.sounds.get("bushcut1").play(1.0f);
         }
     }
 

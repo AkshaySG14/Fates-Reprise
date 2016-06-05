@@ -32,6 +32,8 @@ public abstract class ClosedDoor extends Interactable {
                 screen.interactables.remove(door);
             }
         }, 0.1f);
+        // Plays the door open sound.
+        storage.sounds.get("dooropen").play(1.0f);
     }
 
     // Spawns the door, then moves the door in a direction to simulate closing.
@@ -45,6 +47,8 @@ public abstract class ClosedDoor extends Interactable {
                     displaceDoor(dir);
                 }
             }, deltaTime);
+        // Plays the door close sound.
+        storage.sounds.get("doorslam1").play(1.0f);
     }
 
     // Moves the door in accordance with the direction given.

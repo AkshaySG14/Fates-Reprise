@@ -17,6 +17,8 @@ public class StartingEvent extends Event {
     public StartingEvent(TiledMap map, GameScreen screen) {
         super(screen, map);
         startEvent();
+        // Stops the overworld theme, which will automatically play.
+        screen.storage.music.get("overworldtheme").stop();
     }
 
     protected void startEvent() {
@@ -30,22 +32,23 @@ public class StartingEvent extends Event {
                 // Creates and spawn the messenger in the proper place.
                 if (object.getProperties().containsKey("msgspawn")) {
                     messenger = new Messenger(screen, map, screen.characterAtlases.get(0));
+                    // Plays the fade sound.
+                    screen.storage.sounds.get("mysterious").play(1.0f);
                     messenger.fade(true);
                     messenger.setPosition(x - messenger.getWidth() / 2, y - messenger.getHeight() / 2);
                     screen.characters1.add(messenger);
                 }
             }
 
-        // Sets the direciton of Daur to up and freezes the screen.
+        // Sets the direction of Daur to up and freezes the screen.
         screen.daur.setDirection(2);
         screen.freeze();
-
         screen.globalTimer.scheduleTask(new Timer.Task() {
             @Override
             public void run() {
                 message();
             }
-        }, 1);
+        }, 2);
     }
 
     protected void message() {
@@ -86,6 +89,8 @@ public class StartingEvent extends Event {
             case 5:
                 // Ends the event by fading the messenger and unfreezing the screen, as well as Daur.
                 messenger.fade(false);
+                // Plays the fade sound.
+                screen.storage.sounds.get("mysterious").play(1.0f);
                 screen.setText(null, null);
                 screen.globalTimer.scheduleTask(new Timer.Task() {
                     @Override
@@ -95,6 +100,10 @@ public class StartingEvent extends Event {
                         screen.unFreeze();
                         screen.unPauseGame();
                         screen.characters1.remove(messenger);
+                        // Starts the overworld theme.
+                        screen.storage.music.get("overworldtheme").play();
+                        screen.storage.music.get("overworldtheme").setLooping(true);
+                        screen.storage.music.get("overworldtheme").setVolume(0.75f);
                     }
                 }, 1);
         }

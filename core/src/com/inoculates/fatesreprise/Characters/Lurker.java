@@ -2,6 +2,7 @@
 package com.inoculates.fatesreprise.Characters;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.utils.Timer;
@@ -102,9 +103,17 @@ public class Lurker extends Enemy {
 
     // Launches a unstoppable beam at Daur.
     private void shoot() {
-        // Cannot shoot if dead.
-        if (isDead())
+        // Cannot shoot if dead or not in the same cell as Daur.
+        if (isDead() || cellX - 1 != storage.cellX || cellY - 1 != storage.cellY) {
+            // Starts dematerialization after 0.5 seconds.
+            screen.globalTimer.scheduleTask(new Timer.Task() {
+                @Override
+                public void run() {
+                    dematerialize();
+                }
+            }, 0.5f);
             return;
+        }
         // Sets state accordingly.
         setState(SHOOTING, true);
         // Sets the angle of the shot to the angle between the lurker and Daur..
@@ -120,6 +129,8 @@ public class Lurker extends Enemy {
                 dematerialize();
             }
         }, 0.5f);
+        // Plays the shooting sound.
+        storage.sounds.get("launch3").play(1.0f);
     }
 
     // Opposite of the materialization method.
@@ -182,6 +193,10 @@ public class Lurker extends Enemy {
     }
 
     protected void tryMove() {
+
+    }
+
+    public void stunCollision(Sprite sprite, float time) {
 
     }
 

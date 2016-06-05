@@ -42,16 +42,22 @@ public class ShopInput implements InputProcessor {
             return true;
 
         // Moves the cursor in the shop window.
-        if (x == storage.moveDown || x == storage.moveUp)
+        if (x == storage.moveDown || x == storage.moveUp) {
             checkShopMovement(x);
+            // Plays the sound that indicates the player moved the cursor.
+            storage.sounds.get("click1").play(1.0f);
+        }
 
-        // If the user hits the talk button, purchases the item.
+        // If the user hits the talk button, attempts to purchases the item.
         if (x == storage.talk)
             buyItem();
 
         // If the user hits the pause button, goes back to the normal screen.
-        if (x == storage.pause)
+        if (x == storage.pause) {
             shop.destroy();
+            // Plays a sound indicating the user has returned to the game.
+            storage.sounds.get("click7").play(1.0f);
+        }
 
         return true;
     }
@@ -91,8 +97,13 @@ public class ShopInput implements InputProcessor {
                             shop.getShopEvent());
                 }
             }, 0.01f);
+            // Plays the sound that indicates the player pressed a button.
+            storage.sounds.get("click3").play(1.0f);
             shop.end();
         }
+        // Causes error sound.
+        else
+            storage.sounds.get("error").play(1.0f);
     }
 
     // If the user has an item of the same type, returns true. Else, returns false.

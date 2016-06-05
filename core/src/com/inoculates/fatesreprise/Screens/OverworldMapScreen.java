@@ -161,6 +161,9 @@ public class OverworldMapScreen implements Screen {
 
         if (numY > 15)
             numY = 15;
+
+        // Plays the sound that indicates the player moved the cursor.
+        storage.sounds.get("click1").play(1.0f);
     }
 
     // Creates the bitmapfont that displays the name of the location in the grid.

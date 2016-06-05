@@ -93,6 +93,8 @@ public class Doll extends Enemy {
         screen.projectiles.add(shot);
         // Sets the cooldown to true, to avoid shooting too many balls in too short a time.
         cooldown = true;
+        // Plays the shooting sound.
+        storage.sounds.get("launch2").play(1.0f);
         // After 0.5 seconds of being stunned, the doll will move again. After 2 seconds, the doll will be able to shoot
         // again.
         screen.globalTimer.scheduleTask(new Timer.Task() {
@@ -196,9 +198,8 @@ public class Doll extends Enemy {
         return (state == SHOOTING || state == DEAD);
     }
 
-    protected boolean priorities(int cState)
-    {
-        return state == DEAD;
+    protected boolean priorities(int cState) {
+        return (state == DEAD && cState != FALLING && cState != DROWNING) || state == FALLING || state == DROWNING;
     }
 
     protected void chooseSprite()

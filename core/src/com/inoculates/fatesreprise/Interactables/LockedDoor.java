@@ -35,6 +35,10 @@ public abstract class LockedDoor extends Interactable {
                 screen.interactables.remove(door);
             }
         }, 0.1f);
+        // Plays the unlocked sound.
+        screen.storage.sounds.get("unlock").play(1.0f);
+        // Plays the door open sound.
+        storage.sounds.get("dooropen").play(1.0f);
     }
 
     // Moves the door in accordance with the direction given.

@@ -55,6 +55,12 @@ public class Beam extends Projectile {
             vel.x = 0;
         }
 
+        if (checkOutOfBounds()) {
+            explode();
+            setX(oldX);
+            vel.x = 0;
+        }
+
         setY(getY() + vel.y);
 
         if (collidesCharacter()) {
@@ -62,6 +68,13 @@ public class Beam extends Projectile {
             setY(oldY);
             vel.y = 0;
         }
+
+        if (checkOutOfBounds()) {
+            explode();
+            setY(oldY);
+            vel.y = 0;
+        }
+
     }
 
     protected void chooseSprite() {
@@ -76,6 +89,8 @@ public class Beam extends Projectile {
 
     // When a beam hits Daur.
     public void explode() {
+        if (exploding)
+            return;
         final Projectile projectile = this;
         vel.x = 0;
         vel.y = 0;
@@ -130,6 +145,8 @@ public class Beam extends Projectile {
                                 isValidTarget(character)) {
                             target = character;
                             effects();
+                            // Plays the explosion sound.
+                            screen.storage.sounds.get("effect3").play(1.0f);
                             return true;
                         }
         }

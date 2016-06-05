@@ -4,6 +4,7 @@ package com.inoculates.fatesreprise.Screens;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -38,6 +39,18 @@ public class BeginningScreen implements Screen {
         storage = new Storage();
         inputProcessor = new BeginningInput(storage, this);
         transition(true);
+        // Sets an oncompletionlistener, so that the title screen music plays the looping version once played.
+        storage.music.get("titlescreenmusic").setOnCompletionListener(new Music.OnCompletionListener() {
+            @Override
+            public void onCompletion(Music music) {
+                storage.music.get("titlescreenmusicloop").play();
+                storage.music.get("titlescreenmusicloop").setVolume(0.75f);
+                storage.music.get("titlescreenmusicloop").setLooping(true);
+            }
+        });
+        // Plays the titlescreen music.
+        storage.music.get("titlescreenmusic").play();
+        storage.music.get("titlescreenmusic").setVolume(0.75f);
     }
 
     // Slowly fades the screen/text in/out.
@@ -49,11 +62,11 @@ public class BeginningScreen implements Screen {
             public void run() {
                 transitioning = false;
             }
-        }, 1);
+        }, 2);
         // Fades in the screen and text.
         if (in)
-            for (float time = 0; time <= 1; time += 0.1f) {
-                final float alpha = time;
+            for (float time = 0; time <= 2; time += 0.05f) {
+                final float alpha = time / 2;
                 timer.scheduleTask(new Timer.Task() {
                     @Override
                     public void run() {
@@ -70,7 +83,7 @@ public class BeginningScreen implements Screen {
             }
         // Fades out the screen and text.
         else
-            for (float time = 0; time <= 1; time += 0.1f) {
+            for (float time = 0; time <= 1; time += 0.05f) {
                 final float alpha = 1 - time;
                 timer.scheduleTask(new Timer.Task() {
                     @Override
@@ -100,6 +113,15 @@ public class BeginningScreen implements Screen {
 
         // Creates all relevant text.
         createText();
+        // Sets all images to transparent first (background, texts).
+        beginning.setAlpha(0);
+        mainDisplay.setColor(0, 0, 0, 0);
+        display1.setColor(display1.getColor().r, display1.getColor().g,
+                display1.getColor().b, 0);
+        display2.setColor(display2.getColor().r, display2.getColor().g,
+                display2.getColor().b, 0);
+        display3.setColor(display3.getColor().r, display3.getColor().g,
+                display3.getColor().b, 0);
     }
 
 	@Override
@@ -207,6 +229,8 @@ public class BeginningScreen implements Screen {
             cursorPos = 2;
         else
             cursorPos --;
+        // Plays the sound that indicates the player moved the cursor.
+        storage.sounds.get("click1").play(1.0f);
     }
 
     // Moves the cursor down by one, assuming it is not at the bottom already.
@@ -216,10 +240,14 @@ public class BeginningScreen implements Screen {
             cursorPos = 0;
         else
             cursorPos ++;
+        // Plays the sound that indicates the player moved the cursor.
+        storage.sounds.get("click1").play(1.0f);
     }
 
     // Executes the decision based on the cursor position.
     public void executeDecision() {
+        // Plays the sound that indicates the player pressed a button.
+        storage.sounds.get("click3").play(1.0f);
         switch (cursorPos) {
             case 0:
                 newGame();
@@ -231,6 +259,9 @@ public class BeginningScreen implements Screen {
                 quitGame();
                 break;
         }
+        // Stops the title screen music.
+        storage.music.get("titlescreenmusic").stop();
+        storage.music.get("titlescreenmusicloop").stop();
     }
 
     // Creates a fresh, new game.

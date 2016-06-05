@@ -141,6 +141,8 @@ public class ConcussiveShot extends Spell {
         }, 1);
         exploding = true;
         animationTime = 0;
+        // Plays the explode sound.
+        screen.storage.sounds.get("zap3").play(1.0f);
     }
 
     // Stuns the target if it is an enemy and is not invulnerable (due to injury, death, or natural invulnerability).

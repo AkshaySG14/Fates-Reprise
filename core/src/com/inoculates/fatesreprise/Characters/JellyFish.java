@@ -12,7 +12,7 @@ import com.inoculates.fatesreprise.Screens.GameScreen;
 // JellyFish class that launches electricity at Daur. If killed, splits into two smaller versions of itself that merely
 // move around.
 public class JellyFish extends Enemy {
-    boolean cooldown = true;
+    boolean cooldown = true, notDrawn = true;
     TextureAtlas.AtlasRegion FD1 = atlas.findRegion("spitterD1"), FD2 = atlas.findRegion("spitterD2"),
             FD3 = atlas.findRegion("spitterD3"), FD4 = atlas.findRegion("spitterD4"),
             FM1 = atlas.findRegion("spitterM1"), FM2 = atlas.findRegion("spitterM2"),
@@ -23,17 +23,9 @@ public class JellyFish extends Enemy {
     public JellyFish(GameScreen screen, TiledMap map, TextureAtlas atlas) {
         super(screen, map, atlas, 2);
         setState(RUNNING, false);
-        preMove();
         grounded = false;
         createAnimations();
         chooseSprite();
-        // Resets cooldown after five seconds.
-        screen.globalTimer.scheduleTask(new Timer.Task() {
-            @Override
-            public void run() {
-                cooldown = false;
-            }
-        }, 5);
     }
 
     // The Jellyfish is extremely similar to the mud doll, except that it it may shoot Daur at any time, under
@@ -44,6 +36,12 @@ public class JellyFish extends Enemy {
         if (moveTime > 3) {
             preMove();
             moveTime = 0;
+        }
+        // If this is the first time updating, set cooldown to false. Otherwise ignore. This is to prevent the jellyfish
+        // from discharging too early.
+        if (notDrawn) {
+            cooldown = false;
+            notDrawn = false;
         }
         // Continually adjusts the angle of the Jellyfish.
         setAngle();
@@ -79,6 +77,8 @@ public class JellyFish extends Enemy {
                 cooldown = false;
             }
         }, 5);
+        // Plays the shooting sound.
+        screen.storage.sounds.get("jellyfishattack2").play(1.0f);
     }
 
     // Sets the state to running and then after 1.15 seconds begins movement. This is to mimic the movement of an actual
@@ -137,6 +137,8 @@ public class JellyFish extends Enemy {
                 break;
         }
         setState(RUNNING, false);
+        // Plays the movement sound.
+        screen.storage.sounds.get("effect8").play(0.75f);
         // Stops moving after 0.35 seconds. This is to help simulate the movement of the Jellyfish.
         screen.globalTimer.scheduleTask(new Timer.Task() {
             @Override
@@ -205,6 +207,8 @@ public class JellyFish extends Enemy {
                     screen.characters3.add(mJfish1);
                     screen.characters3.add(mJfish2);
                 }
+                // Plays the fission sound.
+                screen.storage.sounds.get("jellyfishattack1").play(1.0f);
                 // Removes self as well.
                 screen.checkClear(enemy);
                 createConsumable();
@@ -217,9 +221,8 @@ public class JellyFish extends Enemy {
         return false;
     }
 
-    protected boolean priorities(int cState)
-    {
-        return state == DEAD;
+    protected boolean priorities(int cState) {
+        return (state == DEAD && cState != FALLING && cState != DROWNING) || state == FALLING || state == DROWNING;
     }
 
     protected void chooseSprite()

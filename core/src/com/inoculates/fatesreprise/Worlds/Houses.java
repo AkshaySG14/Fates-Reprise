@@ -168,14 +168,49 @@ public class Houses extends World {
     // shader transition will occur at cell 0x, 13y.
     protected void setShaderTransitions() {
         Vector2 vec;
+        // For Faron Woods in (i.e. Faron Woods shader is applied).
         vec = new Vector2(3, 0);
-        shaderCells.put("fwin1", vec);
+        shaderCells.get("fwin").add(vec);
         vec = new Vector2(2, 1);
-        shaderCells.put("fwin2", vec);
+        shaderCells.get("fwin").add(vec);
         vec = new Vector2(2, 1);
-        shaderCells.put("fwin3", vec);
+        shaderCells.get("fwin").add(vec);
         vec = new Vector2(0, 0);
-        shaderCells.put("fwin4", vec);
+        shaderCells.get("fwin").add(vec);
+    }
+
+    // Plays music if Daur enters a specific cell (and no music is playing previously). This method simply adds the cells
+    // to the arraylist.
+    protected void setMusicCells() {
+        Vector2 vec;
+        // For the house music. Note the exception of cell 9, 10, 11, and 12. These are the shops and the mayor's office.
+        for (int i = 0; i < 16; i ++) {
+            if (i == 9 || i == 10 || i == 11 || i == 12)
+                continue;
+            vec = new Vector2(i, 15);
+            musicCells.get("house").add(vec);
+        }
+        for (int i = 0; i < 3; i ++) {
+            vec = new Vector2(i, 14);
+            musicCells.get("house").add(vec);
+        }
+        // For the shops.
+        for (int i = 9; i <= 11; i ++) {
+            vec = new Vector2(i, 15);
+            musicCells.get("shop").add(vec);
+        }
+        // For the mayor's office.
+        vec = new Vector2(12, 15);
+        musicCells.get("mayor").add(vec);
+        // For cave music. This includes the bush areas.
+        for (int i = 0; i < 4; i ++) {
+            vec = new Vector2(i, 0);
+            musicCells.get("cave").add(vec);
+        }
+        for (int i = 0; i < 5; i ++) {
+            vec = new Vector2(i, 1);
+            musicCells.get("cave").add(vec);
+        }
     }
 
     // Gets the portal based on the integer given.
@@ -184,13 +219,6 @@ public class Houses extends World {
             return portalsIn.get(p);
         else
             return portalsOut.get(p);
-    }
-
-    // Checks if the cell has a certain shader transition inside of it, and applies it if it does.
-    protected void checkShaderTransition() {
-        Vector2 cells = new Vector2(cellX, cellY);
-        if (shaderCells.get("fwin1").equals(cells) || shaderCells.get("fwin2").equals(cells))
-            screen.setCurrentMapShader(new ShaderProgram(Gdx.files.internal("Shaders/faron.vert"), Gdx.files.internal("Shaders/faron.frag")));
     }
 
     public int getPortalSize() {

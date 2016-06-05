@@ -1,5 +1,6 @@
 package com.inoculates.fatesreprise.Spells;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -19,18 +20,24 @@ public class WindSickle extends Spell {
 
     boolean exploding = false;
     int direction;
+    long sickleSFX;
+    boolean first;
 
     public WindSickle(GameScreen screen, TiledMap map, TextureAtlas atlas, Character character, int direction, boolean first) {
         super(screen, map, atlas, character);
         createAnimations();
         chooseSprite();
         this.direction = direction;
+        this.first = first;
         // Sets position/direction based on the direction launched. Also two sickles spawn, each with a different position/
         // direction.
         if (first)
             setStartOne();
         else
             setStartTwo();
+        sickleSFX = screen.storage.sounds.get("sickle").loop(0.5f);
+        // Removes the sound after two seconds to prevent infinite looping.
+        final GameScreen tScreen = screen;
     }
 
     // Creates the primary/first wind sickle.
@@ -211,6 +218,8 @@ public class WindSickle extends Spell {
             }
             // Creates a consumable.
             createConsumable(cX * 16 + layer.getTileWidth() / 2, cY * 16 + layer.getTileHeight() / 2);
+            // Plays the bush cut sound.
+            screen.storage.sounds.get("bushcut2").play(1.0f);
         }
     }
 
@@ -223,6 +232,9 @@ public class WindSickle extends Spell {
         death.setPosition(getX() + getWidth() / 2, getY() + getHeight() / 2);
         // Removes self from rendering list and adds the death effect.
         screen.effects.add(death);
+        // Ends the sickle sound effect.
+        screen.storage.sounds.get("sickle").stop(sickleSFX);
+        screen.storage.sounds.get("zap2").play(1.0f);
         final Spell spell = this;
         screen.globalTimer.scheduleTask(new Timer.Task() {
             @Override
@@ -262,6 +274,9 @@ public class WindSickle extends Spell {
             collisionY = collidesTop() || collidesInteractable();
 
         if (collisionY)
+            die();
+
+        if (checkOutOfBounds())
             die();
 
         collidesCharacter();

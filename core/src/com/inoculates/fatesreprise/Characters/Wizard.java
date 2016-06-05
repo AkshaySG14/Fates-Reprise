@@ -139,6 +139,8 @@ public class Wizard extends Enemy {
                 // Launches the fireball using this angle, and adds it to the rendering list.
                 FireBall ball = new FireBall(screen, map, screen.daurAtlases.get(5), character, angle);
                 screen.projectiles.add(ball);
+                // Plays the launch sound.
+                screen.storage.sounds.get("launch5").play(1.0f);
             }
         }, 0.8f);
         screen.globalTimer.scheduleTask(new Timer.Task() {
@@ -150,6 +152,8 @@ public class Wizard extends Enemy {
                 setState(IDLE, true);
             }
         }, 1.2f);
+        // Plays the appearance sound.
+        screen.storage.sounds.get("pulse").play(1.0f);
     }
 
     // Depending on the boolean in, phases the wizard in and out.
@@ -305,9 +309,8 @@ public class Wizard extends Enemy {
         return (state == CASTING || state == DEAD);
     }
     //Overrides the current state if necessary.
-    protected boolean priorities(int cState)
-    {
-        return state == DEAD;
+    protected boolean priorities(int cState) {
+        return (state == DEAD && cState != FALLING && cState != DROWNING) || state == FALLING || state == DROWNING;
     }
 
     //This method periodically sets the frame of the pixelknight dependent on both the state and the animationTime.

@@ -3,6 +3,7 @@ package com.inoculates.fatesreprise.Effects;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.utils.Timer;
 import com.inoculates.fatesreprise.Characters.Character;
 import com.inoculates.fatesreprise.Characters.Enemy;
 import com.inoculates.fatesreprise.Projectiles.MagicSphere;
@@ -54,9 +55,8 @@ public class Shield extends Effect {
                     for (float y = character.getY(); y < character.getY() + character.getHeight(); y ++) {
                         // Uses the distance formula to determine whether the enemy is inside the shield (is less than
                         // one radius away from the center of the shield).
-                        if (Math.sqrt(Math.pow(cX - x, 2) + Math.pow(cY - y, 2)) < RADIUS) {
+                        if (Math.sqrt(Math.pow(cX - x, 2) + Math.pow(cY - y, 2)) < RADIUS)
                             ((Enemy) character).stunCollision(this, 0.1f);
-                        }
                     }
             }
 

@@ -184,6 +184,8 @@ public class GameScreen implements Screen {
         world2.setQuestEvents();
         world3.setQuestEvents();
         transition(Color.BLACK);
+        // Plays the proper music.
+        getWorld(storage.map).checkMusicTransition();
     }
 
     // Sets the input processor and updates the mask.
@@ -632,7 +634,8 @@ public class GameScreen implements Screen {
         world2.cleanRenewables();
         world3.cleanRenewables();
 
-        // Renews the refreshable instances that were just destroyed, depending on the current world.
+        // Renews the refreshable instances that were just destroyed, depending on the current world. Also checks for
+        // music transitions.
         if (world == 0) {
             map = world1.getMap();
             world1.createRenewables();
@@ -694,16 +697,6 @@ public class GameScreen implements Screen {
         world3 = new Houses(storage, camera, new TmxMapLoader().load("TileMaps/Houses.tmx", params), this);
     }
 
-    // Instantly pans the camera.
-    public void setCameraFast(int world) {
-        if (world == 0)
-            world1.setCameraInstantly();
-        if (world == 1)
-            world2.setCameraInstantly();
-        if (world == 2)
-            world3.setCameraInstantly();
-    }
-
     public void pauseGame() {
         // Gets the time when the timer is stopped.
         timerDelay = TimeUtils.nanosToMillis(TimeUtils.nanoTime());
@@ -726,7 +719,7 @@ public class GameScreen implements Screen {
             game.setScreen(screen);
         }
         // For the dungeon map.
-        if (getWorld(map) instanceof UnderWorld) {
+        else if (getWorld(map) instanceof UnderWorld) {
             UnderworldMapScreen screen = new UnderworldMapScreen(game, storage, this);
             game.setScreen(screen);
         }
@@ -770,7 +763,7 @@ public class GameScreen implements Screen {
     }
 
     // Shakes the screen by moving the camera back and forth.
-    public void shakeScreen(final float displacement, float time) {
+    public void shakeScreen(final float displacement, float time, boolean sound) {
         // Shakes to the right.
         globalTimer.scheduleTask(new Timer.Task() {
             @Override
@@ -795,7 +788,17 @@ public class GameScreen implements Screen {
                     camera.position.set(camera.position.x + displacement, camera.position.y, 0);
                 }
             }, i);
-
+        // Creates a loop to create remor sounds. Notice the interval is much longer than the previous two loops. This
+        // only occurs if the sound boolean is true.
+        if (sound)
+            for (float i = time * 2; i <= time * 9; i += time * 3)
+                globalTimer.scheduleTask(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        // Plays tremor sound.
+                        storage.sounds.get("tremor2").play(1.0f);
+                    }
+                }, i);
         // Moves back to the original position.
         globalTimer.scheduleTask(new Timer.Task() {
             @Override
@@ -832,7 +835,7 @@ public class GameScreen implements Screen {
                 for (UI ui : UIS)
                     ui.renewPosition();
             }
-        }, 0.25f);
+        }, 0.4f);
     }
 
     // Relays check clears to all short term memory classes.

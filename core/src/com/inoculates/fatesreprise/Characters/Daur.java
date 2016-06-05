@@ -2,6 +2,7 @@
 package com.inoculates.fatesreprise.Characters;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.maps.MapObject;
@@ -42,9 +43,12 @@ public class Daur extends Character {
     // on something. This is to ensure that regardless of whatever direction the player is moving Daur in, he will remain
     // pushing in the same direction.
     int collisionDir;
+    // The number which determines which wade sound will be played.
+    int wadeNum = 0;
 
-    // Whether Daur is currently invulnerable (cannot be harmed). Also whether Daur is shielding.
-    public boolean invulnerability = false, shielding = false;
+    // Whether Daur is currently invulnerable (cannot be harmed). Also whether Daur is shielding and a cooldown period
+    // for the wade sound of Daur.
+    public boolean invulnerability = false, shielding = false, wadeCooldown = false, grassCooldown = false;
 
     // Whether Daur is slowed, on grass, in dialogue, displaying his wounded animation (flashing colors), falling down
     // a hole, attacking, his spell's on cooldown, and swimming.
@@ -81,6 +85,8 @@ public class Daur extends Character {
     private Block moveBlock;
     // Daur's sword, that appears when swung.
     private BasicSword sword;
+    // Shield channeling sound.
+    private Sound shieldSFX;
     // The array list that represents the heart UI elemnt shown to the user.
     private ArrayList<Heart> hearts = new ArrayList<Heart>();
     // The respawn point of the Daur (if he dies), and the spawn point (if he falls down a hole and must be spawned).
@@ -129,6 +135,7 @@ public class Daur extends Character {
         grass = new Grass(screen, map, screen.daurAtlases.get(3), this);
         ripple = new Ripple(screen, map, screen.daurAtlases.get(3), this);
         shadow = new Shadow(screen, map, screen.miscAtlases.get(1), this, getX(), getY(), 1);
+        shieldSFX = storage.sounds.get("zap1");
 
         // Creates UI bar for the user to see the various UI elements.
         blueBar = new BlueBarUI(screen, screen.daurAtlases.get(1));
@@ -311,26 +318,38 @@ public class Daur extends Character {
         // If Daur is already falling, no need to make him fall down twice.
         if (state == FALLING)
             return;
+        // Sets invulnerability and transparency to true to avoid collisions.
+        invulnerability = true;
         // Sets the state to falling for the animation.
         setState(FALLING, true);
         // This method adjusts the position of Daur's sprite to emulate Daur falling down the center of the hole.
-        resetPosition(hole);
+        // Uses a time loop to ensure a constant repositioning.
+        final Point fallHole = hole;
+        for (float i = 0; i < 0.9; i += 0.01f)
+            screen.globalTimer.scheduleTask(new Timer.Task() {
+                @Override
+                public void run() {
+                    resetPosition(fallHole);
+                }
+            }, i);
         // Causes Daur to be motionless and receive no input.
-        vel.x = 0;
-        vel.y = 0;
         ace.x = 0;
         ace.y = 0;
         stun();
-
+        freeze();
+        // Plays the falling sound.
+        storage.sounds.get("fall2").play(1.0f);
         // After one second of falling, Daur's health will be reduced, he will flicker to show he has been hurt,
         // his position will be reset to the spawn point, he will be unstunned, and his state will be set to idle.
         screen.globalTimer.scheduleTask(new Timer.Task() {
             @Override
             public void run() {
-                loseHealth(1);
+                invulnerability = false;
                 setPosition(spawnPoint.x, spawnPoint.y);
-                unStun();
                 setState(IDLE, true);
+                freeze();
+                unStun();
+                loseHealth(1);
             }
         }, 1);
     }
@@ -356,7 +375,8 @@ public class Daur extends Character {
         // Adds the small splash effect.
         Splash splash = new Splash(screen, map, screen.daurAtlases.get(3), this);
         screen.effects.add(splash);
-
+        // Plays the drowning sound.
+        storage.sounds.get("drown").play(1.0f);
         // After 0.75 seconds of falling, Daur's health will be reduced, he will flicker to show he has been hurt,
         // his position will be reset to the spawn point, he will be unstunned, and his state will be set to idle.
         screen.globalTimer.scheduleTask(new Timer.Task() {
@@ -375,27 +395,8 @@ public class Daur extends Character {
     // animation. Note that the time is rounded up to ensure that Daur has changed his sprite (as the frame and timer
     // do not line up perfectly).
     private void resetPosition(final Point hole) {
-        screen.globalTimer.scheduleTask(new Timer.Task() {
-            @Override
-            public void run() {
-                chooseSprite();
-                setPosition(hole.x - getWidth() / 2, hole.y - getHeight() / 2);
-            }
-        }, 0.000001f);
-        screen.globalTimer.scheduleTask(new Timer.Task() {
-            @Override
-            public void run() {
-                chooseSprite();
-                setPosition(hole.x - getWidth() / 2, hole.y - getHeight() / 2);
-            }
-        }, 0.33333334f);
-        screen.globalTimer.scheduleTask(new Timer.Task() {
-            @Override
-            public void run() {
-                chooseSprite();
-                setPosition(hole.x - getWidth() / 2, hole.y - getHeight() / 2);
-            }
-        }, 0.666666667f);
+        chooseSprite();
+        setPosition(hole.x - getWidth() / 2, hole.y - getHeight() / 2);
     }
 
     // This method is responsible for constantly accelerating Daur towards the center of the hole.
@@ -415,6 +416,41 @@ public class Daur extends Character {
         float oldX = getX(), oldY = getY(), oldSY = shadow.getY();
         // The boolean for collisions.
         boolean collisionX = false, collisionY = false;
+
+        // If Daur is moving and on shallow water plays the wading sound. This is a constant alternation between two
+        // sounds.
+        if ((vel.x != 0 || vel.y != 0) && screen.effects.contains(ripple) && !wadeCooldown) {
+            wadeCooldown = true;
+            screen.globalTimer.scheduleTask(new Timer.Task() {
+                @Override
+                public void run() {
+                    wadeCooldown = false;
+                }
+            }, 0.35f);
+
+            switch (wadeNum) {
+                case 0:
+                    storage.sounds.get("wade1").play(2.0f);
+                    wadeNum = 1;
+                    break;
+                case 1:
+                    storage.sounds.get("wade2").play(2.0f);
+                    wadeNum = 0;
+                    break;
+            }
+        }
+
+        // Same but for the grass sound.
+        if ((vel.x != 0 || vel.y != 0) && screen.effects.contains(grass) && !grassCooldown) {
+            grassCooldown = true;
+            screen.globalTimer.scheduleTask(new Timer.Task() {
+                @Override
+                public void run() {
+                    grassCooldown = false;
+                }
+            }, 0.25f);
+            storage.sounds.get("grasswalk").play(1.0f);
+        }
 
         // Accelerates Daur accordingly.
         vel.x += ace.x;
@@ -461,6 +497,8 @@ public class Daur extends Character {
                 unStun();
                 setY(oldY);
                 vel.y = 0;
+                // Stops playing the swim sound to prevent too many sounds playing.
+                storage.sounds.get("swim").stop();
             }
             else
                 // If not swimming, Daur's state is set to pushing. However, this does NOT override any other state.
@@ -478,6 +516,8 @@ public class Daur extends Character {
                 unStun();
                 setY(oldY);
                 vel.y = 0;
+                // Stops playing the swim sound to prevent too many sounds playing.
+                storage.sounds.get("swim").stop();
             }
         }
 
@@ -518,6 +558,8 @@ public class Daur extends Character {
                 unStun();
                 setX(oldX);
                 vel.x = 0;
+                // Stops playing the swim sound to prevent too many sounds playing.
+                storage.sounds.get("swim").stop();
             }
             else
                 setState(PUSHING, false);
@@ -530,6 +572,8 @@ public class Daur extends Character {
                 unStun();
                 setX(oldX);
                 vel.x = 0;
+                // Stops playing the swim sound to prevent too many sounds playing.
+                storage.sounds.get("swim").stop();
             }
         }
 
@@ -757,12 +801,29 @@ public class Daur extends Character {
             coins = 20;
         if (consumable instanceof Diamond)
             coins = 50;
+        // If a coin is acquired plays a coin sound.
+        if (coins != 0) {
+            int random = (int) (Math.random() * 3);
+            switch (random) {
+                case 0:
+                    storage.sounds.get("coin1").play(1.0f);
+                    break;
+                case 1:
+                    storage.sounds.get("coin2").play(1.0f);
+                    break;
+                case 2:
+                    storage.sounds.get("coin3").play(1.0f);
+                    break;
+            }
+        }
         // A heart simply gives one full heart (2 health).
         if (consumable instanceof com.inoculates.fatesreprise.Consumables.Heart) {
             health += 2;
             // If the health of Daur is greater than the total health, sets his health to the total health.
             if (health > hearts.size() * 2)
                 health = hearts.size() * 2;
+            // Plays sound of a heart acquired.
+            storage.sounds.get("heart").play(1.0f);
         }
 
         // Updates the storage, regardless if the coins or health of the Daur has been updated. This is to get rid of
@@ -823,6 +884,8 @@ public class Daur extends Character {
                     // Updates health accordingly.
                     storage.setHealth(health);
                     updateHearts();
+                    // Plays the refill sound.
+                    storage.sounds.get("refill").play(1.0f);
                 }
             }, 0.2f * i);
     }
@@ -847,7 +910,7 @@ public class Daur extends Character {
             if (state != JUMPING && state != PUSHING)
                 setState(RUNNING, false);
 
-            // This unused code only applies if Daur is on a platform. Essentially adds the platform's velocity to
+            // This only applies if Daur is on a platform. Essentially adds the platform's velocity to
             // Daur's own to ensure that he is moving in a proper fashion when on a platform.
             if (vel.x != 0 && Math.signum(vel.x) == dir && pX)
                 vel.x = (1.5f + Math.abs(vel.x)) * Math.signum(dir);
@@ -889,9 +952,11 @@ public class Daur extends Character {
                 else if (Gdx.input.isKeyPressed(storage.moveDown))
                     swim(7);
                 else swim(1);
-            } else
+            }
+            else
                 SVX(0.75f);
-        } else if (!stun && !pX && !swimming && ace.x == 0 && ace.y == 0)
+        }
+        else if (!stun && !pX && !swimming && ace.x == 0 && ace.y == 0)
             vel.x = 0;
 
         // Same but for the up direction.
@@ -914,7 +979,8 @@ public class Daur extends Character {
                 else if (Gdx.input.isKeyPressed(storage.moveRight))
                     swim(5);
                 else swim(2);
-            } else
+            }
+            else
                 SVY(0.75f);
         }
 
@@ -938,9 +1004,11 @@ public class Daur extends Character {
                 else if (Gdx.input.isKeyPressed(storage.moveRight))
                     swim(7);
                 else swim(3);
-            } else
+            }
+            else
                 SVY(-0.75f);
-        } else if (!stun && !pY && !swimming)
+        }
+        else if (!stun && !pY && !swimming)
             vel.y = 0;
 
         // If the Daur's velocity is not completely zero, moves him accordingly, and checks for any portals he may have
@@ -1029,6 +1097,8 @@ public class Daur extends Character {
         }
         // Stuns the Daur so he CANNOT move while in the midst of swimming.
         stun();
+        // Plays the sound that indicates the player is swimming.
+        storage.sounds.get("swim").play(1.0f);
         // Creates the drag screen.globalTimer and launches the drag screen.globalTimer so that Daur is incrementally slowed until he stops.
         for (int i = 0; i < 4; i++)
             dragTimer.scheduleTask(new Timer.Task() {
@@ -1105,6 +1175,8 @@ public class Daur extends Character {
                 screen.effects.remove(shield);
                 coolDown(1);
                 setState(IDLE, true);
+                // Halts the shield sound.
+                shieldSFX.stop();
             }
     }
 
@@ -1114,14 +1186,17 @@ public class Daur extends Character {
         if (shielding) {
             shielding = false;
             screen.effects.remove(shield);
-            coolDown(1);
-            if (state == CASTING)
-                setState(IDLE, true);
+            // Halts the shield sound.
+            shieldSFX.stop();
         }
+        // Regardless of spell used, cools down and resets state.
+        coolDown(1);
+        if (state == CASTING)
+            setState(IDLE, true);
     }
 
     // Ends the jump of Daur.
-    private void endJump() {
+    public void endJump() {
         // If not jumping, return.
         if (state != JUMPING && state != JUMPATTACKING)
             return;
@@ -1134,12 +1209,18 @@ public class Daur extends Character {
         SVY(0);
         // Removes shadow.
         screen.effects.remove(shadow);
-        // Checks to see if Daur is in any new tile or a platform.
+        // Checks to see if Daur is now on a platform.
         detectPlatform();
+        // Plays the landed sound if on solid ground, else the drown sound.
+        if (detectShallowWater())
+            storage.sounds.get("drown").play(1.0f);
+        else if (detectHole() == null || onPlatform)
+            storage.sounds.get("landing").play(1.0f);
+        // Checks to see if Daur is in any new tile.
         detectConditions();
     }
 
-    // Resets all events. This occurs if Daur dies or exits a portal.
+    // Resets all events. This occurs if Daur dies or exits a portal. Note: Also rechecks for music transitions.
     private void resetEvents() {
         storage.FDstorage.resetEvents();
     }
@@ -1241,6 +1322,8 @@ public class Daur extends Character {
         forceState(IDLE);
         stun();
         freeze();
+        stopChanneling();
+        swimming = false;
         // Makes Daur face down.
         setDirection(-2);
         // Sets dying to true.
@@ -1254,12 +1337,18 @@ public class Daur extends Character {
             screen.UIS.removeValue(heart, false);
         // Causes defeat mask to fade in.
         screen.defeatMask(true);
+        // Stops the current music.
+        storage.stopMusic();
+        // Plays defeat noise.
+        storage.sounds.get("defeat1").play();
         // Changes Daur's current frame to the death frame.
         screen.globalTimer.scheduleTask(new Timer.Task() {
             @Override
             public void run() {
                 setState(DEAD, true);
                 chooseSprite();
+                storage.sounds.get("defeat1").stop();
+                storage.sounds.get("defeat3").play();
             }
         }, 1.25f);
         // Sets the screen to the death screen.
@@ -1269,18 +1358,19 @@ public class Daur extends Character {
                 screen.defeat();
                 screen.defeatMask(false);
             }
-        }, 1.75f);
+        }, 2);
     }
 
     // Same as the bosses methods.
     private void selfDestruct() {
-        for (float time = 0.1f; time <= 2; time += 0.2f)
+        for (float time = 0.1f; time <= 2; time += 0.2f) {
             screen.globalTimer.scheduleTask(new Timer.Task() {
                 @Override
                 public void run() {
                     destructing = true;
                 }
             }, time);
+        }
         for (float time = 0.2f; time <= 2; time += 0.2f)
             screen.globalTimer.scheduleTask(new Timer.Task() {
                 @Override
@@ -1309,15 +1399,24 @@ public class Daur extends Character {
             screen.setTileMap(1);
         else
             screen.setTileMap(2);
+        // Sets dying to false.
         dying = false;
         // Restores six hearts, and moves self to the respawn point.
         health = 6;
         storage.setHealth(health);
         updateHearts();
         setPosition(respawnPoint.x, respawnPoint.y);
-        screen.setCameraFast(2);
+        // Instantly zooms in on Daur.
+        screen.getWorld(map).setCameraInstantly();
         // Transitions screen. After one second, unstuns Daur.
         screen.transition(Color.BLACK);
+        // Ensures the proper music is playing.
+        screen.getWorld(map).checkMusicTransition();
+        // Detects conditions to prevent sound when moving.
+        detectConditions();
+        // Clears the shaders on the screen and sets a new one if needed.
+        screen.setCurrentMapShader(null);
+        screen.getWorld(map).checkShaderTransition();
         screen.globalTimer.scheduleTask(new Timer.Task() {
             @Override
             public void run() {
@@ -1349,6 +1448,8 @@ public class Daur extends Character {
                 screen.effects.remove(shield);
                 coolDown(1);
                 setState(IDLE, true);
+                // Halts the shielding sound.
+                shieldSFX.stop();
             }
         }
         else
@@ -1432,14 +1533,20 @@ public class Daur extends Character {
                 invulnerability = false;
             }
         }, 1);
-
         // If Daur has no more health, kills him.
-        if (health == 0)
+        if (health == 0) {
             death();
+        }
+        else
+            // Plays the hurt sound for Daur.
+            storage.sounds.get("daurhurt").play(1.0f);
     }
 
     // This makes the sprite flicker from inverted to normal over a period of one second.
     private void flickerSprite() {
+        // If falling returns to prevent recoloring.
+        if (state == FALLING)
+            return;
         // Sets the sprite to inverted. This informs the game screen to draw the sprite with inverted colors.
         inverted = true;
         // Reverts the sprite 0.2 seconds later.
@@ -1453,6 +1560,8 @@ public class Daur extends Character {
         screen.globalTimer.scheduleTask(new Timer.Task() {
             @Override
             public void run() {
+                if (state == FALLING)
+                    return;
                 inverted = true;
             }
         }, 0.4f);
@@ -1466,6 +1575,8 @@ public class Daur extends Character {
         screen.globalTimer.scheduleTask(new Timer.Task() {
             @Override
             public void run() {
+                if (state == FALLING)
+                    return;
                 inverted = true;
             }
         }, 0.8f);
@@ -1666,7 +1777,17 @@ public class Daur extends Character {
                         // Sets the mask to black to allow for a transition.
                         screen.transition(Color.BLACK);
                         // Sets the camera position quickly.
-                        screen.setCameraFast(2);
+                        screen.getWorld(map).setCameraInstantly();
+                        // Plays the enter/exit sound.
+                        storage.sounds.get("enterstairs").play(1.0f);
+                        // Makes the player vulnerable and stunned, in case he wasn't before.
+                        unStun();
+                        invulnerability = false;
+                        inverted = false;
+                        // Stops channeling.
+                        stopChanneling();
+                        // Checks for a music transition.
+                        screen.getWorld(map).checkMusicTransition();
                     }
                 }
 
@@ -1690,7 +1811,17 @@ public class Daur extends Character {
 
                         resetEvents();
                         screen.transition(Color.BLACK);
-                        screen.setCameraFast(0);
+                        screen.getWorld(map).setCameraInstantly();
+                        // Plays the enter/exit sound.
+                        storage.sounds.get("enterstairs").play(1.0f);
+                        // Makes the player vulnerable and stunned, in case he wasn't before.
+                        unStun();
+                        invulnerability = false;
+                        inverted = false;
+                        // Stops channeling.
+                        stopChanneling();
+                        // Checks for a music transition.
+                        screen.getWorld(map).checkMusicTransition();
                     }
                 }
     }
@@ -1711,7 +1842,17 @@ public class Daur extends Character {
 
                         resetEvents();
                         screen.transition(Color.BLACK);
-                        screen.setCameraFast(1);
+                        screen.getWorld(map).setCameraInstantly();
+                        // Plays the enter/exit sound.
+                        storage.sounds.get("enterstairs").play(1.0f);
+                        // Makes the player vulnerable and stunned, in case he wasn't before.
+                        unStun();
+                        invulnerability = false;
+                        inverted = false;
+                        // Stops channeling.
+                        stopChanneling();
+                        // Checks for a music transition.
+                        screen.getWorld(map).checkMusicTransition();
                     }
 
         if (screen.map == screen.world2.getMap()) {
@@ -1730,7 +1871,17 @@ public class Daur extends Character {
 
                         resetEvents();
                         screen.transition(Color.BLACK);
-                        screen.setCameraFast(0);
+                        screen.getWorld(map).setCameraInstantly();
+                        // Plays the enter/exit sound.
+                        storage.sounds.get("enterstairs").play(1.0f);
+                        // Makes the player vulnerable and stunned, in case he wasn't before.
+                        unStun();
+                        invulnerability = false;
+                        inverted = false;
+                        // Stops channeling.
+                        stopChanneling();
+                        // Checks for a music transition.
+                        screen.getWorld(map).checkMusicTransition();
                     }
             // Note that this stairs portion is only for intra-world purposes. Specifically, this chunk of code refers
             // to Daur going upstairs.
@@ -1741,8 +1892,18 @@ public class Daur extends Character {
                         setY((int) (screen.world2.getStairs(i, false).getY() / layer.getTileHeight()) * layer.getTileHeight() - layer.getTileHeight());
 
                         screen.transition(Color.BLACK);
-                        screen.setCameraFast(0);
+                        screen.getWorld(map).setCameraInstantly();
                         storage.setLevel(1);
+                        // Plays the enter/exit sound.
+                        storage.sounds.get("enterstairs").play(1.0f);
+                        // Makes the player vulnerable and stunned, in case he wasn't before.
+                        unStun();
+                        invulnerability = false;
+                        inverted = false;
+                        // Stops channeling.
+                        stopChanneling();
+                        // Checks for a music transition.
+                        screen.getWorld(map).checkMusicTransition();
                     }
             // Same but for downstairs.
             for (int i = 0; i < screen.world2.getStairsSize(); i++)
@@ -1752,8 +1913,18 @@ public class Daur extends Character {
                         setY((int) (screen.world2.getStairs(i, true).getY() / layer.getTileHeight()) * layer.getTileHeight() - layer.getTileHeight());
 
                         screen.transition(Color.BLACK);
-                        screen.setCameraFast(0);
+                        screen.getWorld(map).setCameraInstantly();
                         storage.setLevel(-1);
+                        // Plays the enter/exit sound.
+                        storage.sounds.get("enterstairs").play(1.0f);
+                        // Makes the player vulnerable and stunned, in case he wasn't before.
+                        unStun();
+                        invulnerability = false;
+                        inverted = false;
+                        // Stops channeling.
+                        stopChanneling();
+                        // Checks for a music transition.
+                        screen.getWorld(map).checkMusicTransition();
                     }
 
         }
@@ -1773,7 +1944,17 @@ public class Daur extends Character {
                                 layer.getTileHeight() - 24);
 
                         screen.transition(Color.WHITE);
-                        screen.setCameraFast(0);
+                        screen.getWorld(map).setCameraInstantly();
+                        // Plays the teleporter sound.
+                        storage.sounds.get("teleport").play(1.0f);
+                        // Makes the player vulnerable and stunned, in case he wasn't before.
+                        unStun();
+                        invulnerability = false;
+                        inverted = false;
+                        // Stops channeling.
+                        stopChanneling();
+                        // Checks for a music transition.
+                        screen.getWorld(map).checkMusicTransition();
                     }
                     // For Teleporter Twos.
                     if (screen.world2.getTeleporter(i, false).contains(x, getCY())) {
@@ -1784,7 +1965,17 @@ public class Daur extends Character {
                                 layer.getTileHeight() - 24);
 
                         screen.transition(Color.WHITE);
-                        screen.setCameraFast(0);
+                        screen.getWorld(map).setCameraInstantly();
+                        // Plays the teleporter sound.
+                        storage.sounds.get("teleport").play(1.0f);
+                        // Makes the player vulnerable and stunned, in case he wasn't before.
+                        unStun();
+                        invulnerability = false;
+                        inverted = false;
+                        // Stops channeling.
+                        stopChanneling();
+                        // Checks for a music transition.
+                        screen.getWorld(map).checkMusicTransition();
                     }
                 }
         }
@@ -2021,9 +2212,6 @@ public class Daur extends Character {
         // If the user has used a sword item.
         if (item instanceof BasicSwordItem && !attacking)
             swordAttack();
-        // Makes sure Daur cannot cast spells during cooldown.
-        if (spellCooldown)
-            return;
         // If the user has cast a spell.
         castSpell(item);
     }
@@ -2084,8 +2272,8 @@ public class Daur extends Character {
     }
 
     private void castSpell(Item item) {
-        // If not on the ground, returns.
-        if (!grounded)
+        // If not on the ground, cooling down, or channeling already, returns.
+        if (!grounded || spellCooldown || state == CASTING)
             return;
         // Checks what spell is being used based on the item. In this instance, Daur is casting concussive shot.
         if (item instanceof ConcussiveShotItem)
@@ -2111,6 +2299,22 @@ public class Daur extends Character {
 
     // Method responsible for the sword attack for Daur.
     private void swordAttack() {
+        // Plays a random sword slash sound.
+        int random = (int) (Math.random() * 4);
+        switch (random) {
+            case 0:
+                storage.sounds.get("swordslash1").play(1.0f);
+                break;
+            case 1:
+                storage.sounds.get("swordslash2").play(1.0f);
+                break;
+            case 2:
+                storage.sounds.get("swordslash3").play(1.0f);
+                break;
+            case 3:
+                storage.sounds.get("swordslash4").play(1.0f);
+                break;
+        }
         // Sets Daur's state to attacking if grounded.
         if (grounded) {
             setState(ATTACKING, true);
@@ -2188,6 +2392,8 @@ public class Daur extends Character {
             cShot = new com.inoculates.fatesreprise.Spells.ConcussiveShot(screen, map, screen.daurAtlases.get(4), this, 3);
         // Offsets the concussive shot by a certain amount depending also on direction.
         cShot.setInitialPosition(dir);
+        // Plays the launch sound.
+        screen.storage.sounds.get("launch1").play(1.0f);
 
         // Unstuns Daur after 0.5 seconds.
         screen.globalTimer.scheduleTask(new Timer.Task() {
@@ -2204,6 +2410,8 @@ public class Daur extends Character {
         shielding = true;
         shield = new Shield(screen, map, screen.daurAtlases.get(3), this);
         screen.effects.add(shield);
+        // Starts the shield loop.
+        shieldSFX.loop(0.2f);
     }
 
     // Launches two wind sickles which converge on one point, slicing anything in their paths.
@@ -2248,6 +2456,8 @@ public class Daur extends Character {
         grounded = false;
         // Sets Daur's velocity upwards and acceleration downwards so it appears as though he is jumping.
         jumpVelocity = 2;
+        // Plays the jump sound.
+        storage.sounds.get("jump").play(1.0f);
         // Adds the shadow below Daur, so that it appears as though he is in the air.
         shadow.setPosition(getCX() - shadow.getWidth() / 2, getY());
         screen.effects.add(shadow);
@@ -2290,9 +2500,9 @@ public class Daur extends Character {
         return false;
     }
 
-    // Overrides super method to prevent unstunning while knocked out.
+    // Overrides super method to prevent unstunning while knocked out, dying, or falling.
     public void unStun() {
-        if (state != KNOCKOUT && !dying)
+        if (state != KNOCKOUT && state != FALLING && !dying)
             stun = false;
     }
 

@@ -1,6 +1,7 @@
 package com.inoculates.fatesreprise.Worlds;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
@@ -39,9 +40,10 @@ public abstract class World {
     protected ArrayList<RectangleMapObject> fogIn = new ArrayList<RectangleMapObject>();
     protected ArrayList<RectangleMapObject> fogOut = new ArrayList<RectangleMapObject>();
     // Cells of the map, as well as the cells that specifically cause another shader to be used. These are both expressed
-    // as hashmaps.
+    // as hashmaps. Note that the second utilizes a arraylist of vectors, which are used for the application of shaders.
     protected Map<String, ArrayList<TiledMapTileLayer.Cell>> cells = new HashMap<String, ArrayList<TiledMapTileLayer.Cell>>();
-    protected Map<String, Vector2> shaderCells = new HashMap<String, Vector2>();
+    protected Map<String, ArrayList<Vector2>> shaderCells = new HashMap<String, ArrayList<Vector2>>();
+    protected Map<String, ArrayList<Vector2>> musicCells = new HashMap<String, ArrayList<Vector2>>();
 
     // These are the events that are responsible for the triggers.
     private FairyMeeting fMeeting;
@@ -54,7 +56,9 @@ public abstract class World {
         layer = (TiledMapTileLayer) map.getLayers().get(0);
 
         setFog();
+        createMapArrays();
         setShaderTransitions();
+        setMusicCells();
         setTriggers();
         createCellMap();
     }
@@ -431,7 +435,9 @@ public abstract class World {
             storage.FDstorage.closeDoor2();
         // If the player has stepped on the Great Hollow miniboss trigger, closes the trigger door and creates the
         // miniboss: the Slime King. Also resets Daur's spawn point.
-        if (trigger.getProperties().containsKey("GHMT") && storage.mainQuestStage < 3 && !storage.FDstorage.GHMT) {
+        if (trigger.getProperties().containsKey("GHMT") && storage.mainQuestStage < 3 && !storage.FDstorage.GHMT &&
+                screen.daur.isGrounded()) {
+            screen.daur.endJump();
             storage.FDstorage.closeDoor3();
             storage.FDstorage.createMiniboss();
             // Sets Daur's new spawn point.
@@ -439,7 +445,9 @@ public abstract class World {
                     - screen.daur.getWidth() / 2, trigger.getRectangle().getY() + trigger.getRectangle().getHeight() / 2
                     - screen.daur.getHeight() / 2);
         }
-        if (trigger.getProperties().containsKey("GHBT") && storage.mainQuestStage < 4 && !storage.FDstorage.GHBT) {
+        // Same but for the boss of the Great Hollow Dungeon.
+        if (trigger.getProperties().containsKey("GHBT") && storage.mainQuestStage < 4 && !storage.FDstorage.GHBT
+                && screen.daur.isGrounded()) {
             storage.FDstorage.closeDoor4();
             storage.FDstorage.startBossFight();
             screen.daur.setSpawnPoint(trigger.getRectangle().getX() + trigger.getRectangle().getWidth() / 2
@@ -448,8 +456,16 @@ public abstract class World {
         }
     }
 
-    // Creates four new array lists, one for each type of bush.
     private void createCellMap() {
+
+    }
+
+    // Creates the map array lists for the shader hashmap.
+    private void createMapArrays() {
+        // Create the two shader hashmap array lists.
+        shaderCells.put("fwin", new ArrayList<Vector2>());
+        shaderCells.put("fwout", new ArrayList<Vector2>());
+        // Creates eight new array lists, one for each type of bush/grass.
         cells.put("Spring Bush", new ArrayList<TiledMapTileLayer.Cell>());
         cells.put("Summer Bush", new ArrayList<TiledMapTileLayer.Cell>());
         cells.put("Fall Bush", new ArrayList<TiledMapTileLayer.Cell>());
@@ -459,12 +475,21 @@ public abstract class World {
         cells.put("Summer Grass", new ArrayList<TiledMapTileLayer.Cell>());
         cells.put("Fall Grass", new ArrayList<TiledMapTileLayer.Cell>());
         cells.put("Winter Grass", new ArrayList<TiledMapTileLayer.Cell>());
+        // Creates the array lists for the different soundtracks.
+        musicCells.put("overworldtheme", new ArrayList<Vector2>());
+        musicCells.put("carthellvillage", new ArrayList<Vector2>());
+        musicCells.put("house", new ArrayList<Vector2>());
+        musicCells.put("shop", new ArrayList<Vector2>());
+        musicCells.put("mayor", new ArrayList<Vector2>());
+        musicCells.put("faronwoods", new ArrayList<Vector2>());
+        musicCells.put("cave", new ArrayList<Vector2>());
+        musicCells.put("greathollow", new ArrayList<Vector2>());
     }
 
     // If the player is beyond a certain point (the boundaries of a cell), the camera will pan over to the new cell.
     public void checkCameraChange() {
-        // Does NOT work if Daur is flying for whatever reason.
-        if (!screen.daur.isGrounded())
+        // Does NOT work if Daur is flying or stunned.
+        if (!screen.daur.isGrounded() || screen.daur.isStunned())
             return;
         if (screen.daur.getX() + screen.daur.getWidth() / 2 > layer.getTileWidth() * 10 * (cellX + 1)) {
             cellX++;
@@ -562,10 +587,11 @@ public abstract class World {
             }
         }
         // Resets the position of the mask, informs the program which cell the player resides in, checks if a shader
-        // transition is needed, and sets Daur's new spawn point (if the player should fall down a hole).
+        // or music transition is needed, and sets Daur's new spawn point (if the player should fall down a hole).
         screen.mask.setPosition(camera.position.x - camera.viewportWidth / 2, camera.position.y - camera.viewportHeight / 2);
         storage.setCells(cellX, cellY);
         checkShaderTransition();
+        checkMusicTransition();
         setSpawnPoint(onXAxis, plus);
 
         // After 0.1 seconds, unfreezes the screen to allow for movement again.
@@ -602,15 +628,101 @@ public abstract class World {
 
     // Checks whether a shader should be used to draw the map and the renewables. This is based on the dictionary shader
     // cells. If the shader cell indicates a certain transition should be made, it will be made.
-    protected void checkShaderTransition() {
+    public void checkShaderTransition() {
+        // Gets the current cells (X and Y component) in a vector.
         Vector2 cells = new Vector2(cellX, cellY);
-        if (shaderCells.get("fwin1").equals(cells) || shaderCells.get("fwin2").equals(cells) ||
-                shaderCells.get("fwin3").equals(cells) || shaderCells.get("fwin4").equals(cells) ||
-                shaderCells.get("fwin5").equals(cells) || shaderCells.get("fwin6").equals(cells) ||
-                shaderCells.get("fwin7").equals(cells))
-            screen.setCurrentMapShader(new ShaderProgram(Gdx.files.internal("Shaders/faron.vert"), Gdx.files.internal("Shaders/faron.frag")));
-        else if (shaderCells.get("fwout1").equals(cells) || shaderCells.get("fwout2").equals(cells))
-            screen.setCurrentMapShader(null);
+        // Goes through each vector in the fwin hashmap cells to find a match.
+        for (Vector2 shadercells : shaderCells.get("fwin"))
+            if (shadercells.equals(cells))
+                // If a match is found, apply shader accordingly.
+                screen.setCurrentMapShader(new ShaderProgram(Gdx.files.internal("Shaders/faron.vert"),
+                        Gdx.files.internal("Shaders/faron.frag")));
+        // Goes through each vector in the fwout hashmap cells to find a match.
+        for (Vector2 shadercells : shaderCells.get("fwout"))
+            if (shadercells.equals(cells))
+                // If a match is found, remove shader accordingly.
+                screen.setCurrentMapShader(null);
+    }
+
+    // Checks whether a certain soundtrack should be played, depending on the cell. This is used to play the overworld
+    // music and others as well.
+    public void checkMusicTransition() {
+        // Gets the current cells (X and Y component) in a vector.
+        Vector2 cells = new Vector2(cellX, cellY);
+        // Goes through each vector in the fwin hashmap cells to find a match.
+        for (Vector2 musicCell : musicCells.get("overworldtheme"))
+            // Plays only if not already playing.
+            if (musicCell.equals(cells) && !storage.music.get("overworldtheme").isPlaying()) {
+                // If a match is found, plays the music accordingly. First stops the music.
+                storage.stopMusic();
+                storage.music.get("overworldtheme").play();
+                storage.music.get("overworldtheme").setVolume(0.75f);
+                storage.music.get("overworldtheme").setLooping(true);
+            }
+        for (Vector2 musicCell : musicCells.get("carthellvillage"))
+            if (musicCell.equals(cells) && !storage.music.get("carthellvillagemusic").isPlaying()) {
+                // If a match is found, plays the music accordingly. First stops the music.
+                storage.stopMusic();
+                storage.music.get("carthellvillagemusic").play();
+                storage.music.get("carthellvillagemusic").setVolume(0.75f);
+                storage.music.get("carthellvillagemusic").setLooping(true);
+            }
+        for (Vector2 musicCell : musicCells.get("house"))
+            if (musicCell.equals(cells) && !storage.music.get("housemusic").isPlaying()) {
+                // If a match is found, plays the music accordingly. First stops the music.
+                storage.stopMusic();
+                storage.music.get("housemusic").play();
+                storage.music.get("housemusic").setVolume(0.75f);
+                storage.music.get("housemusic").setLooping(true);
+            }
+        for (Vector2 musicCell : musicCells.get("shop"))
+            if (musicCell.equals(cells) && !storage.music.get("shopmusic").isPlaying()) {
+                // If a match is found, plays the music accordingly. First stops the music.
+                storage.stopMusic();
+                storage.music.get("shopmusic").play();
+                storage.music.get("shopmusic").setVolume(0.75f);
+                storage.music.get("shopmusic").setLooping(true);
+            }
+        for (Vector2 musicCell : musicCells.get("mayor"))
+            if (musicCell.equals(cells) && !storage.music.get("strangemusic").isPlaying()) {
+                // If a match is found, plays the music accordingly. First stops the music.
+                storage.stopMusic();
+                storage.music.get("strangemusic").play();
+                storage.music.get("strangemusic").setVolume(0.75f);
+                storage.music.get("strangemusic").setLooping(true);
+            }
+        for (Vector2 musicCell : musicCells.get("faronwoods"))
+            if (musicCell.equals(cells) && !storage.music.get("forestmusic").isPlaying()) {
+                // If a match is found, plays the music accordingly. First stops the music.
+                storage.stopMusic();
+                storage.music.get("forestmusic").play();
+                storage.music.get("forestmusic").setVolume(0.75f);
+                // Sets an oncompletionlistener, so that the forest music plays the looping version once played.
+                storage.music.get("forestmusic").setOnCompletionListener(new Music.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(Music music) {
+                        storage.music.get("forestmusicloop").play();
+                        storage.music.get("forestmusicloop").setVolume(0.75f);
+                        storage.music.get("forestmusicloop").setLooping(true);
+                    }
+                });
+            }
+        for (Vector2 musicCell : musicCells.get("cave"))
+            if (musicCell.equals(cells) && !storage.music.get("cavemusic").isPlaying()) {
+                // If a match is found, plays the music accordingly. First stops the music.
+                storage.stopMusic();
+                storage.music.get("cavemusic").play();
+                storage.music.get("cavemusic").setVolume(0.75f);
+                storage.music.get("cavemusic").setLooping(true);
+            }
+        for (Vector2 musicCell : musicCells.get("greathollow"))
+            if (musicCell.equals(cells) && !storage.music.get("greathollowmusic").isPlaying()) {
+                // If a match is found, plays the music accordingly. First stops the music.
+                storage.stopMusic();
+                storage.music.get("greathollowmusic").play();
+                storage.music.get("greathollowmusic").setVolume(0.75f);
+                storage.music.get("greathollowmusic").setLooping(true);
+            }
     }
 
     // Gets all of the triggers in the world.
@@ -728,5 +840,5 @@ public abstract class World {
 
     abstract void setShaderTransitions();
 
-    abstract void setQuestEvents();
+    abstract void setMusicCells();
 }

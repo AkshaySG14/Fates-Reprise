@@ -56,9 +56,13 @@ public class Splinter extends Projectile {
 
     // When a splinter hits Daur or a terrain object.
     public void explode() {
+        if (exploding)
+            return;
         final Projectile projectile = this;
         vel.x = 0;
         vel.y = 0;
+        // Plays the explosion sound.
+        screen.storage.sounds.get("explode5").play(1.0f);
         // Fades the splinter out before removing it.
         screen.globalTimer.scheduleTask(new Timer.Task() {
             @Override

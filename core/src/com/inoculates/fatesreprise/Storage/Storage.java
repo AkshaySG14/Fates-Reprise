@@ -3,13 +3,15 @@ package com.inoculates.fatesreprise.Storage;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.inoculates.fatesreprise.Items.*;
 import com.inoculates.fatesreprise.Screens.GameScreen;
 
 import java.lang.reflect.Constructor;
-import java.util.ArrayList;
+import java.util.*;
 
 // This is the storage class that carries persistent data throughout games.
 public class Storage {
@@ -63,6 +65,10 @@ public class Storage {
     public boolean[] lockedDoors;
     // Which areas Daur has explored in the Overworld.
     public boolean[][] explored;
+    // The hashmap of sounds that are played throughout the game.
+    public java.util.Map<String, Sound> sounds;
+    // The hashmap of music that is played throughout the game.
+    public java.util.Map<String, Music> music;
 
     // Items Daur has as well as quest items.
     public ArrayList<Item> items = new ArrayList<Item>();
@@ -180,7 +186,7 @@ public class Storage {
         slotOne = Input.Keys.J;
         slotTwo = Input.Keys.K;
         slotThree = Input.Keys.L;
-        pause = Input.Keys.ESCAPE;
+        pause = Input.Keys.Z;
         secondary = Input.Keys.X;
         // Daur starts with zero coins.
         coins = 0;
@@ -237,6 +243,149 @@ public class Storage {
         for (int x = 0; x < 16; x ++)
             for (int y = 0; y < 16; y ++)
                 explored[x][y] = false;
+        // The hashmap of sounds.
+        sounds = new HashMap<String, Sound>();
+        // Adds all the sounds to the hashmap for easy reference.
+        sounds.put("bigboom", Gdx.audio.newSound(Gdx.files.internal("Sounds/bigboom.wav")));
+        sounds.put("bigbounce", Gdx.audio.newSound(Gdx.files.internal("Sounds/bigbounce.wav")));
+        sounds.put("bigeffect", Gdx.audio.newSound(Gdx.files.internal("Sounds/bigeffect.wav")));
+        sounds.put("boom1", Gdx.audio.newSound(Gdx.files.internal("Sounds/boom1.wav")));
+        sounds.put("boom2", Gdx.audio.newSound(Gdx.files.internal("Sounds/boom2.wav")));
+        sounds.put("boom3", Gdx.audio.newSound(Gdx.files.internal("Sounds/boom3.wav")));
+        sounds.put("bossdeath", Gdx.audio.newSound(Gdx.files.internal("Sounds/bossdeath.wav")));
+        sounds.put("bosshurt", Gdx.audio.newSound(Gdx.files.internal("Sounds/bosshurt.wav")));
+        sounds.put("bossminiexplosion", Gdx.audio.newSound(Gdx.files.internal("Sounds/bossminiexplosion.wav")));
+        sounds.put("bounce", Gdx.audio.newSound(Gdx.files.internal("Sounds/bounce.wav")));
+        sounds.put("bushcut1", Gdx.audio.newSound(Gdx.files.internal("Sounds/bushcut1.wav")));
+        sounds.put("bushcut2", Gdx.audio.newSound(Gdx.files.internal("Sounds/bushcut2.wav")));
+        sounds.put("charge", Gdx.audio.newSound(Gdx.files.internal("Sounds/charge.wav")));
+        sounds.put("chargeup", Gdx.audio.newSound(Gdx.files.internal("Sounds/chargeup.wav")));
+        sounds.put("chestappear", Gdx.audio.newSound(Gdx.files.internal("Sounds/chestappear.wav")));
+        sounds.put("chestopen", Gdx.audio.newSound(Gdx.files.internal("Sounds/chestopen.wav")));
+        sounds.put("click1", Gdx.audio.newSound(Gdx.files.internal("Sounds/click1.wav")));
+        sounds.put("click2", Gdx.audio.newSound(Gdx.files.internal("Sounds/click2.wav")));
+        sounds.put("click3", Gdx.audio.newSound(Gdx.files.internal("Sounds/click3.wav")));
+        sounds.put("click4", Gdx.audio.newSound(Gdx.files.internal("Sounds/click4.wav")));
+        sounds.put("click5", Gdx.audio.newSound(Gdx.files.internal("Sounds/click5.wav")));
+        sounds.put("click6", Gdx.audio.newSound(Gdx.files.internal("Sounds/click6.wav")));
+        sounds.put("click7", Gdx.audio.newSound(Gdx.files.internal("Sounds/click7.wav")));
+        sounds.put("click8", Gdx.audio.newSound(Gdx.files.internal("Sounds/click8.wav")));
+        sounds.put("click9", Gdx.audio.newSound(Gdx.files.internal("Sounds/click9.wav")));
+        sounds.put("click10", Gdx.audio.newSound(Gdx.files.internal("Sounds/click10.wav")));
+        sounds.put("coin1", Gdx.audio.newSound(Gdx.files.internal("Sounds/coin1.wav")));
+        sounds.put("coin2", Gdx.audio.newSound(Gdx.files.internal("Sounds/coin2.wav")));
+        sounds.put("coin3", Gdx.audio.newSound(Gdx.files.internal("Sounds/coin3.wav")));
+        sounds.put("confuse", Gdx.audio.newSound(Gdx.files.internal("Sounds/confuse.wav")));
+        sounds.put("daurhurt", Gdx.audio.newSound(Gdx.files.internal("Sounds/daurhurt.wav")));
+        sounds.put("death1", Gdx.audio.newSound(Gdx.files.internal("Sounds/death1.wav")));
+        sounds.put("death2", Gdx.audio.newSound(Gdx.files.internal("Sounds/death2.wav")));
+        sounds.put("defeat1", Gdx.audio.newSound(Gdx.files.internal("Sounds/defeat1.wav")));
+        sounds.put("defeat2", Gdx.audio.newSound(Gdx.files.internal("Sounds/defeat2.wav")));
+        sounds.put("defeat3", Gdx.audio.newSound(Gdx.files.internal("Sounds/defeat3.wav")));
+        sounds.put("dooropen", Gdx.audio.newSound(Gdx.files.internal("Sounds/dooropen.wav")));
+        sounds.put("doorslam1", Gdx.audio.newSound(Gdx.files.internal("Sounds/doorslam1.wav")));
+        sounds.put("doorslam2", Gdx.audio.newSound(Gdx.files.internal("Sounds/doorslam2.wav")));
+        sounds.put("drown", Gdx.audio.newSound(Gdx.files.internal("Sounds/drown.wav")));
+        sounds.put("dungeonopen", Gdx.audio.newSound(Gdx.files.internal("Sounds/dungeonopen.wav")));
+        sounds.put("effect1", Gdx.audio.newSound(Gdx.files.internal("Sounds/effect1.wav")));
+        sounds.put("effect2", Gdx.audio.newSound(Gdx.files.internal("Sounds/effect2.wav")));
+        sounds.put("effect3", Gdx.audio.newSound(Gdx.files.internal("Sounds/effect3.wav")));
+        sounds.put("effect4", Gdx.audio.newSound(Gdx.files.internal("Sounds/effect4.wav")));
+        sounds.put("effect5", Gdx.audio.newSound(Gdx.files.internal("Sounds/effect5.wav")));
+        sounds.put("effect6", Gdx.audio.newSound(Gdx.files.internal("Sounds/effect6.wav")));
+        sounds.put("effect7", Gdx.audio.newSound(Gdx.files.internal("Sounds/effect7.wav")));
+        sounds.put("effect8", Gdx.audio.newSound(Gdx.files.internal("Sounds/effect8.wav")));
+        sounds.put("electricity", Gdx.audio.newSound(Gdx.files.internal("Sounds/electricity.wav")));
+        sounds.put("enterstairs", Gdx.audio.newSound(Gdx.files.internal("Sounds/enterstairs.wav")));
+        sounds.put("error", Gdx.audio.newSound(Gdx.files.internal("Sounds/error.wav")));
+        sounds.put("explode1", Gdx.audio.newSound(Gdx.files.internal("Sounds/explode1.wav")));
+        sounds.put("explode2", Gdx.audio.newSound(Gdx.files.internal("Sounds/explode2.wav")));
+        sounds.put("explode3", Gdx.audio.newSound(Gdx.files.internal("Sounds/explode3.wav")));
+        sounds.put("explode4", Gdx.audio.newSound(Gdx.files.internal("Sounds/explode4.wav")));
+        sounds.put("explode5", Gdx.audio.newSound(Gdx.files.internal("Sounds/explode5.wav")));
+        sounds.put("fairyappear", Gdx.audio.newSound(Gdx.files.internal("Sounds/fairyappear.wav")));
+        sounds.put("fall1", Gdx.audio.newSound(Gdx.files.internal("Sounds/fall1.wav")));
+        sounds.put("fall2", Gdx.audio.newSound(Gdx.files.internal("Sounds/fall2.wav")));
+        sounds.put("fly1", Gdx.audio.newSound(Gdx.files.internal("Sounds/fly1.wav")));
+        sounds.put("fly2", Gdx.audio.newSound(Gdx.files.internal("Sounds/fly2.wav")));
+        sounds.put("grasswalk", Gdx.audio.newSound(Gdx.files.internal("Sounds/grasswalk.wav")));
+        sounds.put("heart", Gdx.audio.newSound(Gdx.files.internal("Sounds/heart.wav")));
+        sounds.put("hop", Gdx.audio.newSound(Gdx.files.internal("Sounds/hop.wav")));
+        sounds.put("hurt1", Gdx.audio.newSound(Gdx.files.internal("Sounds/hurt1.wav")));
+        sounds.put("hurt2", Gdx.audio.newSound(Gdx.files.internal("Sounds/hurt2.wav")));
+        sounds.put("jellyfishattack1", Gdx.audio.newSound(Gdx.files.internal("Sounds/jellyfishattack1.wav")));
+        sounds.put("jellyfishattack2", Gdx.audio.newSound(Gdx.files.internal("Sounds/jellyfishattack2.wav")));
+        sounds.put("jump", Gdx.audio.newSound(Gdx.files.internal("Sounds/jump.wav")));
+        sounds.put("landing", Gdx.audio.newSound(Gdx.files.internal("Sounds/landing.wav")));
+        sounds.put("launch1", Gdx.audio.newSound(Gdx.files.internal("Sounds/launch1.wav")));
+        sounds.put("launch2", Gdx.audio.newSound(Gdx.files.internal("Sounds/launch2.wav")));
+        sounds.put("launch3", Gdx.audio.newSound(Gdx.files.internal("Sounds/launch3.wav")));
+        sounds.put("launch4", Gdx.audio.newSound(Gdx.files.internal("Sounds/launch4.wav")));
+        sounds.put("launch5", Gdx.audio.newSound(Gdx.files.internal("Sounds/launch5.wav")));
+        sounds.put("launch6", Gdx.audio.newSound(Gdx.files.internal("Sounds/launch6.wav")));
+        sounds.put("lose1", Gdx.audio.newSound(Gdx.files.internal("Sounds/lose1.wav")));
+        sounds.put("lose2", Gdx.audio.newSound(Gdx.files.internal("Sounds/lose2.wav")));
+        sounds.put("lose3", Gdx.audio.newSound(Gdx.files.internal("Sounds/lose3.wav")));
+        sounds.put("lose4", Gdx.audio.newSound(Gdx.files.internal("Sounds/lose4.wav")));
+        sounds.put("mysterious", Gdx.audio.newSound(Gdx.files.internal("Sounds/mysterious.wav")));
+        sounds.put("powerup1", Gdx.audio.newSound(Gdx.files.internal("Sounds/powerup1.wav")));
+        sounds.put("powerup2", Gdx.audio.newSound(Gdx.files.internal("Sounds/powerup2.wav")));
+        sounds.put("powerup3", Gdx.audio.newSound(Gdx.files.internal("Sounds/powerup3.wav")));
+        sounds.put("powerup4", Gdx.audio.newSound(Gdx.files.internal("Sounds/powerup4.wav")));
+        sounds.put("powerup5", Gdx.audio.newSound(Gdx.files.internal("Sounds/powerup5.wav")));
+        sounds.put("powerup6", Gdx.audio.newSound(Gdx.files.internal("Sounds/powerup6.wav")));
+        sounds.put("pulse", Gdx.audio.newSound(Gdx.files.internal("Sounds/pulse.wav")));
+        sounds.put("push", Gdx.audio.newSound(Gdx.files.internal("Sounds/push.wav")));
+        sounds.put("refill", Gdx.audio.newSound(Gdx.files.internal("Sounds/refill.wav")));
+        sounds.put("shake", Gdx.audio.newSound(Gdx.files.internal("Sounds/shake.wav")));
+        sounds.put("sickle", Gdx.audio.newSound(Gdx.files.internal("Sounds/sickle.wav")));
+        sounds.put("success1", Gdx.audio.newSound(Gdx.files.internal("Sounds/success1.wav")));
+        sounds.put("success2", Gdx.audio.newSound(Gdx.files.internal("Sounds/success2.wav")));
+        sounds.put("swim", Gdx.audio.newSound(Gdx.files.internal("Sounds/swim.wav")));
+        sounds.put("swordslash1", Gdx.audio.newSound(Gdx.files.internal("Sounds/swordslash1.wav")));
+        sounds.put("swordslash2", Gdx.audio.newSound(Gdx.files.internal("Sounds/swordslash2.wav")));
+        sounds.put("swordslash3", Gdx.audio.newSound(Gdx.files.internal("Sounds/swordslash3.wav")));
+        sounds.put("swordslash4", Gdx.audio.newSound(Gdx.files.internal("Sounds/swordslash4.wav")));
+        sounds.put("teleport", Gdx.audio.newSound(Gdx.files.internal("Sounds/teleport.wav")));
+        sounds.put("textend", Gdx.audio.newSound(Gdx.files.internal("Sounds/textend.wav")));
+        sounds.put("textletter", Gdx.audio.newSound(Gdx.files.internal("Sounds/textletter.wav")));
+        sounds.put("throw", Gdx.audio.newSound(Gdx.files.internal("Sounds/throw.wav")));
+        sounds.put("tremor1", Gdx.audio.newSound(Gdx.files.internal("Sounds/tremor1.wav")));
+        sounds.put("tremor2", Gdx.audio.newSound(Gdx.files.internal("Sounds/tremor2.wav")));
+        sounds.put("tremor3", Gdx.audio.newSound(Gdx.files.internal("Sounds/tremor3.wav")));
+        sounds.put("unlock", Gdx.audio.newSound(Gdx.files.internal("Sounds/unlock.wav")));
+        sounds.put("wade1", Gdx.audio.newSound(Gdx.files.internal("Sounds/wade1.wav")));
+        sounds.put("wade2", Gdx.audio.newSound(Gdx.files.internal("Sounds/wade2.wav")));
+        sounds.put("watercharge", Gdx.audio.newSound(Gdx.files.internal("Sounds/watercharge.wav")));
+        sounds.put("zap1", Gdx.audio.newSound(Gdx.files.internal("Sounds/zap1.wav")));
+        sounds.put("zap2", Gdx.audio.newSound(Gdx.files.internal("Sounds/zap2.wav")));
+        sounds.put("zap3", Gdx.audio.newSound(Gdx.files.internal("Sounds/zap3.wav")));
+        sounds.put("zap4", Gdx.audio.newSound(Gdx.files.internal("Sounds/zap4.wav")));
+        // Adds all the music to the music hashmap.
+        music = new HashMap<String, Music>();
+        // Adds all the music fo easy hashmap reference.
+        music.put("bossmusic", Gdx.audio.newMusic(Gdx.files.internal("Music/Boss.mp3")));
+        music.put("bossvictorymusic", Gdx.audio.newMusic(Gdx.files.internal("Music/BossVictory.mp3")));
+        music.put("carthellvillagemusic", Gdx.audio.newMusic(Gdx.files.internal("Music/CarthellVillage.mp3")));
+        music.put("cavemusic", Gdx.audio.newMusic(Gdx.files.internal("Music/Cave.mp3")));
+        music.put("creepymusic", Gdx.audio.newMusic(Gdx.files.internal("Music/CreepyMusic.mp3")));
+        music.put("fairyfountainmusic", Gdx.audio.newMusic(Gdx.files.internal("Music/FairyFountain.mp3")));
+        music.put("forestmusic", Gdx.audio.newMusic(Gdx.files.internal("Music/ForestMusic.mp3")));
+        music.put("forestmusicloop", Gdx.audio.newMusic(Gdx.files.internal("Music/ForestMusicLoop.mp3")));
+        music.put("gameover", Gdx.audio.newMusic(Gdx.files.internal("Music/GameOver.mp3")));
+        music.put("greathollowmusic", Gdx.audio.newMusic(Gdx.files.internal("Music/GreatHollow.mp3")));
+        music.put("housemusic", Gdx.audio.newMusic(Gdx.files.internal("Music/HouseMusic.mp3")));
+        music.put("minibossmusic", Gdx.audio.newMusic(Gdx.files.internal("Music/Miniboss.mp3")));
+        music.put("mysteriousmusic", Gdx.audio.newMusic(Gdx.files.internal("Music/MysteriousMusic.mp3")));
+        music.put("mysteriousmusicloop", Gdx.audio.newMusic(Gdx.files.internal("Music/MysteriousMusicLoop.mp3")));
+        music.put("overworldtheme", Gdx.audio.newMusic(Gdx.files.internal("Music/OverworldTheme.mp3")));
+        music.put("sagemeetingmusic", Gdx.audio.newMusic(Gdx.files.internal("Music/SageMeeting.mp3")));
+        music.put("shopmusic", Gdx.audio.newMusic(Gdx.files.internal("Music/Shop.mp3")));
+        music.put("strangemusic", Gdx.audio.newMusic(Gdx.files.internal("Music/StrangeMusic.mp3")));
+        music.put("titlescreenmusic", Gdx.audio.newMusic(Gdx.files.internal("Music/TitleScreen.mp3")));
+        music.put("titlescreenmusicloop", Gdx.audio.newMusic(Gdx.files.internal("Music/TitleScreenLoop.mp3")));
+        music.put("trendymusic", Gdx.audio.newMusic(Gdx.files.internal("Music/TrendyMusic.mp3")));
+        music.put("victorymusic", Gdx.audio.newMusic(Gdx.files.internal("Music/Victory.mp3")));
     }
 
     // Reinitializes the preferences and all the variables. This is to create a new, fresh game without any previous
@@ -478,7 +627,7 @@ public class Storage {
 
     // Returns true if Daur has the map for the dungeon he is currently in.
     public boolean hasMap() {
-        return maps[dungeon];
+        return dungeon >= 0 && maps[dungeon];
     }
 
     // Removes the key based on the dungeon Daur is in currently.
@@ -503,6 +652,98 @@ public class Storage {
     // Informs the game which dungeon Daur is in currently.
     public void setDungeon(int dungeon) {
         this.dungeon = dungeon;
+    }
+
+    // Sets the volume of the current soundtrack playing.
+    public void setVolume(float volume) {
+        // First finds the music that is currently playing.
+        // If the Boss Music is currently playing.
+        if (music.get("bossmusic").isPlaying())
+            music.get("bossmusic").setVolume(volume);
+        // If the Boss Victory Music is currently playing.
+        if (music.get("bossvictorymusic").isPlaying())
+            music.get("bossvictorymusic").setVolume(volume);
+        // Etc.
+        if (music.get("carthellvillagemusic").isPlaying())
+            music.get("carthellvillagemusic").setVolume(volume);
+        if (music.get("cavemusic").isPlaying())
+            music.get("cavemusic").setVolume(volume);
+        if (music.get("bossvictorymusic").isPlaying())
+            music.get("bossvictorymusic").setVolume(volume);
+        if (music.get("fairyfountainmusic").isPlaying())
+            music.get("fairyfountainmusic").setVolume(volume);
+        if (music.get("forestmusic").isPlaying())
+            music.get("forestmusic").setVolume(volume);
+        if (music.get("forestmusicloop").isPlaying())
+            music.get("forestmusicloop").setVolume(volume);
+        if (music.get("greathollowmusic").isPlaying())
+            music.get("greathollowmusic").setVolume(volume);
+        if (music.get("housemusic").isPlaying())
+            music.get("housemusic").setVolume(volume);
+        if (music.get("minibossmusic").isPlaying())
+            music.get("minibossmusic").setVolume(volume);
+        if (music.get("mysteriousmusic").isPlaying())
+            music.get("mysteriousmusic").setVolume(volume);
+        if (music.get("mysteriousmusicloop").isPlaying())
+            music.get("mysteriousmusicloop").setVolume(volume);
+        if (music.get("overworldtheme").isPlaying())
+            music.get("overworldtheme").setVolume(volume);
+        if (music.get("shopmusic").isPlaying())
+            music.get("shopmusic").setVolume(volume);
+        if (music.get("strangemusic").isPlaying())
+            music.get("strangemusic").setVolume(volume);
+        if (music.get("titlescreenmusic").isPlaying())
+            music.get("titlescreenmusic").setVolume(volume);
+        if (music.get("titlescreenmusicloop").isPlaying())
+            music.get("titlescreenmusicloop").setVolume(volume);
+        if (music.get("trendymusic").isPlaying())
+            music.get("trendymusic").setVolume(volume);
+    }
+
+    // Same as the above method, but stops music instead of setting its volume.
+    public void stopMusic() {
+        // First finds the music that is currently playing.
+        // If the Boss Music is currently playing.
+        if (music.get("bossmusic").isPlaying())
+            music.get("bossmusic").stop();
+        // If the Boss Victory Music is currently playing.
+        if (music.get("bossvictorymusic").isPlaying())
+            music.get("bossvictorymusic").stop();
+        // Etc.
+        if (music.get("carthellvillagemusic").isPlaying())
+            music.get("carthellvillagemusic").stop();
+        if (music.get("cavemusic").isPlaying())
+            music.get("cavemusic").stop();
+        if (music.get("bossvictorymusic").isPlaying())
+            music.get("bossvictorymusic").stop();
+        if (music.get("fairyfountainmusic").isPlaying())
+            music.get("fairyfountainmusic").stop();
+        if (music.get("forestmusic").isPlaying())
+            music.get("forestmusic").stop();
+        if (music.get("forestmusicloop").isPlaying())
+            music.get("forestmusicloop").stop();
+        if (music.get("greathollowmusic").isPlaying())
+            music.get("greathollowmusic").stop();
+        if (music.get("housemusic").isPlaying())
+            music.get("housemusic").stop();
+        if (music.get("minibossmusic").isPlaying())
+            music.get("minibossmusic").stop();
+        if (music.get("mysteriousmusic").isPlaying())
+            music.get("mysteriousmusic").stop();
+        if (music.get("mysteriousmusicloop").isPlaying())
+            music.get("mysteriousmusicloop").stop();
+        if (music.get("overworldtheme").isPlaying())
+            music.get("overworldtheme").stop();
+        if (music.get("shopmusic").isPlaying())
+            music.get("shopmusic").stop();
+        if (music.get("strangemusic").isPlaying())
+            music.get("strangemusic").stop();
+        if (music.get("titlescreenmusic").isPlaying())
+            music.get("titlescreenmusic").stop();
+        if (music.get("titlescreenmusicloop").isPlaying())
+            music.get("titlescreenmusicloop").stop();
+        if (music.get("trendymusic").isPlaying())
+            music.get("trendymusic").stop();
     }
 
     // When a new heart piece is obtained increases health and sets heart pieces to zero.

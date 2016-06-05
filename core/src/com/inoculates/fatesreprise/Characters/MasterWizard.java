@@ -91,6 +91,9 @@ public class MasterWizard extends Enemy {
 
         // Phases in and then casts a random spell.
         phase(true);
+        // Plays the appearance sound.
+        storage.sounds.get("mysterious").play(1.0f);
+
         // After 1.5 seconds phases back out.
         screen.globalTimer.scheduleTask(new Timer.Task() {
             @Override
@@ -134,6 +137,9 @@ public class MasterWizard extends Enemy {
         // Launches a Magic Sphere using this angle, and adds it to the rendering list.
         MagicSphere sphere = new MagicSphere(screen, map, screen.daurAtlases.get(5), this, angle);
         screen.projectiles.add(sphere);
+        // Plays spell launching sound.
+        storage.sounds.get("electricity").play(1.0f);
+
     }
 
     // Fires a rotating spell at Daur. After a certain amount of time the spell will split into three fast-moving shards.
@@ -144,6 +150,8 @@ public class MasterWizard extends Enemy {
         // Launches a Magic Sphere using this angle, and adds it to the rendering list.
         WhirlingSpheres spheres = new WhirlingSpheres(screen, map, screen.daurAtlases.get(5), this, angle);
         screen.projectiles.add(spheres);
+        // Plays spell launching sound.
+        storage.sounds.get("electricity").play(1.0f);
     }
 
     // Fires an extremely fast spear at Daur. Difficult to evade.
@@ -154,6 +162,8 @@ public class MasterWizard extends Enemy {
         // Launches a Magic Sphere using this angle, and adds it to the rendering list.
         MagicBullet bullet = new MagicBullet(screen, map, screen.daurAtlases.get(5), this, angle);
         screen.projectiles.add(bullet);
+        // Plays spell launching sound.
+        storage.sounds.get("electricity").play(1.0f);
     }
 
     // Depending on the boolean in, phases the wizard in and out.
@@ -284,6 +294,9 @@ public class MasterWizard extends Enemy {
             }, 0.6f);
             if (health == 0)
                 death();
+            // If hurt and not dead, plays boss hurt sound.
+            else
+                storage.sounds.get("bosshurt").play(0.75f);
         }
     }
 
@@ -298,23 +311,27 @@ public class MasterWizard extends Enemy {
         setState(DEAD, true);
         // Makes the Master Wizard slightly transparent.
         setAlpha(0.5f);
-        // After one second performs the death animation.
+        // Plays death sound.
+        storage.sounds.get("bossdeath").play(1.0f);
+        // After two seconds performs the death animation.
         screen.globalTimer.scheduleTask(new Timer.Task() {
             @Override
             public void run() {
                 selfDestruct();
             }
-        }, 1);
-        // Clears self away after three seconds.
+        }, 2);
+        // Clears self away after four seconds.
         screen.globalTimer.scheduleTask(new Timer.Task() {
             @Override
             public void run() {
                 // Checks if this enemy a part of a triggering event.
                 screen.checkClear(enemy);
+                // Plays explosion sound.
+                storage.sounds.get("boom1").play(1.0f);
                 // Removes self from game.
                 removeSelf();
             }
-        }, 3);
+        }, 4);
     }
 
     // Same as the King Slime method.
@@ -324,6 +341,8 @@ public class MasterWizard extends Enemy {
                 @Override
                 public void run() {
                     destructing = true;
+                    // Mini explosion sound.
+                    storage.sounds.get("bossminiexplosion").play(1.0f);
                 }
             }, time);
         for (float time = 0.2f; time <= 2; time += 0.2f)

@@ -76,17 +76,33 @@ public class UnderWorld extends World {
             }
     }
 
+    // Same as for upperworld.
     protected void setShaderTransitions() {
         Vector2 vec;
+        // For Faron Out (i.e. removes the faron wood shader).
         vec = new Vector2(1, 15);
-        shaderCells.put("fwout1", vec);
+        shaderCells.get("fwout").add(vec);
     }
 
-    // Overrides the shader transitions so that a null pointer exception does not occur.
-    protected void checkShaderTransition() {
-        Vector2 cells = new Vector2(cellX, cellY);
-        if (shaderCells.get("fwout1").equals(cells))
-            screen.setCurrentMapShader(null);
+    // Plays music if Daur enters a specific cell (and no music is playing previously). This method simply adds the cells
+    // to the arraylist.
+    protected void setMusicCells() {
+        Vector2 vec;
+        // For the Great Hollow Dungeon. Uses multiple for loops to carve up the nearly-rectangular dungeon.
+        for (int i = 1; i <= 9; i++) {
+            vec = new Vector2(i, 15);
+            musicCells.get("greathollow").add(vec);
+        }
+        for (int y = 14; y >= 13; y--)
+            for (int x = 0; x <= 9; x++) {
+                vec = new Vector2(x, y);
+                musicCells.get("greathollow").add(vec);
+            }
+        // Adds the last five cells.
+        for (int i = 3; i <= 7; i ++) {
+            vec = new Vector2(i, 12);
+            musicCells.get("greathollow").add(vec);
+        }
     }
 
     public Rectangle getAccess(int p, boolean in) {

@@ -3,12 +3,10 @@ package com.inoculates.fatesreprise.InputProcessor;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Timer;
-import com.inoculates.fatesreprise.Characters.Daur;
 import com.inoculates.fatesreprise.Screens.GameScreen;
 import com.inoculates.fatesreprise.Storage.Storage;
 import com.inoculates.fatesreprise.Worlds.Houses;
 import com.inoculates.fatesreprise.Worlds.UnderWorld;
-import com.inoculates.fatesreprise.Worlds.UpperWorld;
 
 // This is the input processor that allows Daur to act when the user presses a keyboard button.
 public class DaurInput implements InputProcessor {
@@ -61,6 +59,10 @@ public class DaurInput implements InputProcessor {
                     screen.unFreeze();
                 }
             }, 0.5f);
+            // Plays the pause sound.
+            storage.sounds.get("click10").play(1.0f);
+            // Sets the volume of the music to be lower.
+            storage.setVolume(0.1f);
         }
 
         // Pauses the screen and goes the map screen, if Daur is not currently stunned. This will only work if Daur is
@@ -85,6 +87,10 @@ public class DaurInput implements InputProcessor {
                     screen.unFreeze();
                 }
             }, 0.5f);
+            // Plays the map sound.
+            storage.sounds.get("click8").play(1.0f);
+            // Sets the volume of the music to be lower.
+            storage.setVolume(0.1f);
         }
 
         // If any of the storage slots are pressed, checks how Daur should react.

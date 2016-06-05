@@ -15,8 +15,7 @@ public class Bat extends Enemy {
     TextureAtlas.AtlasRegion FD1 = atlas.findRegion("bat1"), FD2 = atlas.findRegion("bat2");
 
     float moveTime = 0, roostTime = 0;
-    boolean following;
-    boolean roosting;
+    boolean following, roosting, soundCooldown = false;
 
     private Point roost;
 
@@ -71,6 +70,17 @@ public class Bat extends Enemy {
         // Sets the velocity based on the cosine and sine of the angle.
         SVX((float) Math.cos(angle) / 2);
         SVY((float) Math.sin(angle) / 2);
+        // Plays a flapping sound every 0.5 seconds.
+        if (!soundCooldown) {
+            storage.sounds.get("effect7").play(0.1f);
+            soundCooldown = true;
+            screen.globalTimer.scheduleTask(new Timer.Task() {
+                @Override
+                public void run() {
+                    soundCooldown = false;
+                }
+            }, 0.5f);
+        }
     }
 
     // Goes to a space for "rest".
@@ -98,6 +108,18 @@ public class Bat extends Enemy {
         // Sets the velocity based on the cosine and sine of the angle.
         SVX((float) Math.cos(angle) / 2);
         SVY((float) Math.sin(angle) / 2);
+
+        // Plays a flapping sound every 0.5 seconds.
+        if (!soundCooldown) {
+            storage.sounds.get("effect7").play(0.05f);
+            soundCooldown = true;
+            screen.globalTimer.scheduleTask(new Timer.Task() {
+                @Override
+                public void run() {
+                    soundCooldown = false;
+                }
+            }, 0.5f);
+        }
     }
 
     protected void updateTime(float deltaTime) {
@@ -208,6 +230,9 @@ public class Bat extends Enemy {
 
     // Overrides the stun collision method for the same reason.
     public void stunCollision(Sprite sprite, float time) {
+        if (stuncooldown)
+            return;
+
         float angle = (float) Math.atan2(getY() - sprite.getY(), getX() - sprite.getX());
         if (!roosting) {
             vel.x = (float) (4 * Math.cos(angle));
@@ -227,6 +252,16 @@ public class Bat extends Enemy {
                 unStun();
             }
         }, time);
+        // Plays the stun collision sound.
+        screen.storage.sounds.get("bounce").play(1.0f);
+        // Sets stun cooldown to be true so that the enemy is not stunned overmuch.
+        stuncooldown = true;
+        screen.globalTimer.scheduleTask(new Timer.Task() {
+            @Override
+            public void run() {
+                stuncooldown = false;
+            }
+        }, 0.1f);
     }
 
 }

@@ -202,6 +202,8 @@ public class PlantStalker extends Enemy {
                 setAlpha(0f);
             }
         }, 0.5f);
+        // Plays the effect of fading out.
+        storage.sounds.get("pulse").play(1.0f);
 
         // The variables that are responsible for the setting up of the running point.
         float randX;
@@ -250,7 +252,8 @@ public class PlantStalker extends Enemy {
         screen.globalTimer.scheduleTask(new Timer.Task() {
             @Override
             public void run() {
-                fadeIn();
+                if (health != 0)
+                    fadeIn();
             }
         }, 2);
     }
@@ -317,7 +320,6 @@ public class PlantStalker extends Enemy {
                 setAlpha(1f);
             }
         }, 0.5f);
-
         running = false;
     }
 
@@ -397,8 +399,23 @@ public class PlantStalker extends Enemy {
                 }
             }, 0.6f);
 
-            if (health == 0)
+            if (health == 0) {
                 death();
+                // Plays death sound.
+                storage.sounds.get("death2").play(1.0f);
+            }
+            else {
+                // Plays hurt sound.
+                int random = (int) (Math.random() * 2);
+                switch (random) {
+                    case 0:
+                        storage.sounds.get("hurt1").play(1.0f);
+                        break;
+                    case 1:
+                        storage.sounds.get("hurt2").play(1.0f);
+                        break;
+                }
+            }
         }
     }
 
@@ -407,7 +424,7 @@ public class PlantStalker extends Enemy {
     }
 
     protected boolean priorities(int cState) {
-        return state == DEAD;
+        return (state == DEAD && cState != FALLING && cState != DROWNING) || state == FALLING || state == DROWNING;
     }
 
     protected void chooseSprite()

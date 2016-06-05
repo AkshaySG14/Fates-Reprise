@@ -44,13 +44,19 @@ public class BushAmbush extends Event {
                 screen.daur.freeze();
                 screen.daur.forceState(0);
                 screen.pauseScreen();
+                // Stops all music.
+                screen.storage.stopMusic();
                 break;
-        // Breaks dialogue and initiates the fight.
+            // Breaks dialogue and initiates the fight.
             case 1:
                 screen.setText(null, null);
                 screen.daur.unStun();
                 screen.unPauseScreen();
                 createEvent();
+                // Starts playing the miniboss music.
+                screen.storage.music.get("minibossmusic").play();
+                screen.storage.music.get("minibossmusic").setVolume(0.75f);
+                screen.storage.music.get("minibossmusic").setLooping(true);
                 break;
         }
     }

@@ -22,7 +22,6 @@ public class FirstDungeonStorage {
     private GameScreen screen;
     private Storage storage;
 
-    private BushBlock fairyBushBlock;
     // The bush blocks that cordon the area off.
     private ArrayList<BushBlock> ambushBushBlocks = new ArrayList<BushBlock>();
     // Enemies that Daur encounters in the ambush.
@@ -145,6 +144,13 @@ public class FirstDungeonStorage {
         storage.setMainQuestStage();
         // Clears array.
         ambushEnemies.clear();
+        // Plays the victory sound.
+        storage.sounds.get("success1").play(2.0f);
+        // Stops miniboss music and starts normal cave music.
+        storage.stopMusic();
+        screen.storage.music.get("cavemusic").play();
+        screen.storage.music.get("cavemusic").setVolume(0.75f);
+        screen.storage.music.get("cavemusic").setLooping(true);
     }
 
     // Similar to above.
@@ -160,6 +166,8 @@ public class FirstDungeonStorage {
         screen.storage.setHeartPiece(0);
         // Creates the chest.
         spawnChest("greenchestkillspawn");
+        // Plays the victory sound.
+        storage.sounds.get("success2").play(2.0f);
     }
 
     public void checkClearGreatHollowTrigger1(Sprite sprite) {
@@ -177,6 +185,8 @@ public class FirstDungeonStorage {
         }
         // Otherwise gives the key chest.
         spawnChest("greathollowtrigger1spawn");
+        // Plays the victory sound.
+        storage.sounds.get("success2").play(2.0f);
     }
 
     public void checkClearGreatHollowTrigger2(Sprite sprite) {
@@ -189,8 +199,11 @@ public class FirstDungeonStorage {
                 if (!((Enemy) component).isDead())
                     return;
             // If the for loop has gone on far enough to reach the closed door, opens it.
-            if (component instanceof WoodClosedDoorVertical)
+            if (component instanceof WoodClosedDoorVertical) {
                 ((WoodClosedDoorVertical) component).open(2);
+                // Plays the victory sound.
+                storage.sounds.get("success2").play(2.0f);
+            }
         }
     }
 
@@ -198,13 +211,16 @@ public class FirstDungeonStorage {
         // If the array DOES NOT contain the sprite.
         if (!greatHollowTrigger3Sprites.contains(sprite))
             return;
-        // If the block is not pushed, does not spawn the chest containing the 50 coins.
+        // If the block is not pushed, does not spawn the chest containing the compass.
         for (Sprite component : greatHollowTrigger3Sprites) {
             if (component instanceof WoodBlock)
                 if (!(((Block) component).isTriggered()))
                     return;
-                else
+                else {
                     spawnChest("greathollowtrigger3spawn");
+                    // Plays the victory sound.
+                    storage.sounds.get("success2").play(2.0f);
+                }
         }
     }
 
@@ -218,8 +234,11 @@ public class FirstDungeonStorage {
                 if (!(((Block) component).isTriggered()))
                     return;
             // If the for loop has gone on far enough to reach the closed door, opens it.
-            if (component instanceof WoodClosedDoorHorizontal)
+            if (component instanceof WoodClosedDoorHorizontal) {
                 ((WoodClosedDoorHorizontal) component).open(1);
+                // Plays the victory sound.
+                storage.sounds.get("success2").play(2.0f);
+            }
         }
     }
 
@@ -232,6 +251,8 @@ public class FirstDungeonStorage {
                 if (!(((Block) component).isTriggered()))
                     return;
         spawnChest("greathollowtrigger5spawn");
+        // Plays the victory sound.
+        storage.sounds.get("success2").play(2.0f);
     }
 
     public void checkClearGreatHollowTrigger6(Sprite sprite) {
@@ -243,6 +264,8 @@ public class FirstDungeonStorage {
                 if (!(((Block) component).isTriggered()))
                     return;
         spawnChest("greathollowtrigger6spawn");
+        // Plays the victory sound.
+        storage.sounds.get("success2").play(2.0f);
     }
 
     // If the sprite is the King Slime miniboss, spawns the chest containing Zephyr's Wisp and the teleporter for the
@@ -257,28 +280,44 @@ public class FirstDungeonStorage {
                     spawnChest("GHMS");
                     createTeleporters();
                     greatHollowMinibossTriggerDoor.open(-2);
+                    // Plays the victory sound.
+                    storage.sounds.get("success1").play(2.0f);
+                    // Stops miniboss music and starts normal Great Hollow music.
+                    storage.stopMusic();
+                    storage.music.get("greathollowmusic").play();
+                    storage.music.get("greathollowmusic").setVolume(0.75f);
+                    storage.music.get("greathollowmusic").setLooping(true);
                 }
             }, 0.5f);
         }
     }
 
-    // If the Master Wizard has died, opens the door to the first sage and the door to the boss.
+    // If the Master Wizard has died, opens the door to the first sage.
     private void checkClearBoss(Sprite sprite) {
         if (sprite instanceof MasterWizard) {
             // Increments the main quest to 4, for trigger-related purposes.
             storage.setMainQuestStage();
-            screen.globalTimer.scheduleTask(new Timer.Task() {
-                @Override
-                public void run() {
-                    greatHollowBossTriggerDoor.open(-2);
-                }
-            }, 0.5f);
+            // Opens the sage door after 2 seconds.
             screen.globalTimer.scheduleTask(new Timer.Task() {
                 @Override
                 public void run() {
                     greatHollowBossTriggerDoor2.open(2);
                 }
-            }, 0.5f);
+            }, 2);
+            // Stops boss music and starts victory music.
+            storage.stopMusic();
+            // Plays victory sound (the short burst of sound).
+            screen.storage.music.get("victorymusic").play();
+            screen.storage.music.get("victorymusic").setVolume(2.0f);
+            screen.globalTimer.scheduleTask(new Timer.Task() {
+                @Override
+                public void run() {
+                    // Plays victory music (the ambient soundtrack) after 2 seconds.
+                    screen.storage.music.get("bossvictorymusic").play();
+                    screen.storage.music.get("bossvictorymusic").setVolume(0.75f);
+                    screen.storage.music.get("bossvictorymusic").setLooping(true);
+                }
+            }, 2);
         }
     }
 
@@ -300,13 +339,31 @@ public class FirstDungeonStorage {
                             Integer.parseInt(rectObject.getProperties().get("chest").toString()));
                     chest.spawn();
                     screen.interactables.add(chest);
-                }
+                    // Plays the chest appear sound, if Daur is close enough after 1 second.
+                    if ((int) (x / layer.getTileWidth()) / 10 == storage.cellX &&
+                            (int) (y / layer.getTileHeight()) / 10 == storage.cellY)
+                        screen.globalTimer.scheduleTask(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                storage.sounds.get("chestappear").play(1.0f);
+                            }
+                        }, 1);
+                    }
                 if (object.getProperties().containsKey(trigger) && object.getProperties().containsKey("wood")) {
                     WoodChest chest = new WoodChest(screen, screen.map, screen.miscAtlases.get(0), storage,
                             rectObject.getProperties().get(trigger).toString(), x, y,
                             Integer.parseInt(rectObject.getProperties().get("chest").toString()));
                     chest.spawn();
                     screen.interactables.add(chest);
+                    // Plays the chest appear sound, if Daur is close enough after 1 second.
+                    if ((int) (x / layer.getTileWidth()) / 10 == storage.cellX &&
+                            (int) (y / layer.getTileHeight()) / 10 == storage.cellY)
+                        screen.globalTimer.scheduleTask(new Timer.Task() {
+                            @Override
+                            public void run() {
+                                storage.sounds.get("chestappear").play(1.0f);
+                            }
+                        }, 1);
                 }
             }
     }
@@ -318,6 +375,8 @@ public class FirstDungeonStorage {
         greatHollowDialogue = false;
         GHT1 = false;
         GHT2 = false;
+        GHMT = false;
+        GHBT = false;
     }
 
     public void clearEvents() {
@@ -376,6 +435,9 @@ public class FirstDungeonStorage {
                     sKing.setY(sKing.getY() + 100);
                     // Adds the King Slime to the rendering list.
                     screen.characters2.add(sKing);
+                    // Stops the dungeon music. NOTE: Only starts the miniboss music once the King Slime reaches the
+                    // floor.
+                    screen.storage.stopMusic();
                 }
             }
     }

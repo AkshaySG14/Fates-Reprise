@@ -27,6 +27,9 @@ public class Dialogue {
     // array used to display the text. This creates a stuttering effect.
     private String[] textList = new String[100];
     private String[] displayList = new String[100];
+    // Timer for sounds. This timer is to clear any extraneous sounds (i.e the user goes through the dialogue fast enough
+    // to trigger multiple sound instances.
+    Timer soundTimer = new Timer();
 
     public Dialogue(GameScreen screen, String text, Event owner) {
         this.screen = screen;
@@ -34,7 +37,7 @@ public class Dialogue {
         this.owner = owner;
 
         // Initializes both lists.
-        for (int i = 0; i < 99; i ++) {
+        for (int i = 0; i < 99; i++) {
             textList[i] = "";
             displayList[i] = "";
         }
@@ -76,10 +79,10 @@ public class Dialogue {
                     for (int x = 0; x <= i; x++)
                         textList[line] = textList[line] + textValue.charAt(x);
                     // Increments the line, as the next iteration of the method will need a new array position.
-                    line ++;
+                    line++;
                     // Sets the text value to the REST of the string by adding it to a placeholder string. The text
                     // value string is then set to the placeholder.
-                    for (int y = i + 1; y < textValue.length(); y ++)
+                    for (int y = i + 1; y < textValue.length(); y++)
                         placeHolder = placeHolder + textValue.charAt(y);
                     textValue = placeHolder;
                     break;
@@ -124,23 +127,30 @@ public class Dialogue {
 
     // Moves to the next line.
     public void incrementLine() {
+        // Automatically halts the sound from previous text lines.
+        screen.storage.sounds.get("textend").stop();
+        screen.storage.sounds.get("textletter").stop();
+        // Clears the sound timer.
+        soundTimer.clear();
         // If the user is at the end of the dialogue, exits the dialogue and event.
         if (line + 1 >= maxLines)
             owner.proceed();
-        // Otherwise increases the line by two. NOTE: this is because line + 1 denotes the line that is drawn to the
-        // bottom of the current line.
-        else line += 2;
-        // Draws the new line in a stutter-like fashion.
-        stutterText();
-        // Checks if the arrow should be changed to a square.
-        setBackgroundSprite();
+            // Otherwise increases the line by two. NOTE: this is because line + 1 denotes the line that is drawn to the
+            // bottom of the current line.
+        else {
+            line += 2;
+            // Draws the new line in a stutter-like fashion.
+            stutterText();
+            // Checks if the arrow should be changed to a square.
+            setBackgroundSprite();
+        }
     }
 
     // Slowly writes the text out to create a more aesthetically pleasing effect.
     private void stutterText() {
         float deltaTime = 0;
         // From line 1 to line 2.
-        for (int i = line; i <= line + 1; i ++)
+        for (int i = line; i <= line + 1; i++)
             // Each character individually.
             for (int o = 0; o < textList[i].length(); o++) {
                 // Gets the final version for concurrent threading.
@@ -151,6 +161,17 @@ public class Dialogue {
                     public void run() {
                         // Slowly adds the characters to the line of the displaylist.
                         displayList[arrayLine] = displayList[arrayLine] + textList[arrayLine].charAt(charNumber);
+                    }
+                }, deltaTime);
+                soundTimer.scheduleTask(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        // Plays text letter sound if not at the end, otherwise plays the text end sound. Note that
+                        // whether the text end sound is played is predicated upon whether it's the last line.
+                        if (arrayLine == maxLines && charNumber == textList[arrayLine].length() - 1)
+                            screen.storage.sounds.get("textend").play(0.2f);
+                        else
+                            screen.storage.sounds.get("textletter").play(0.2f);
                     }
                 }, deltaTime);
                 // Increases time.

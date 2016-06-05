@@ -139,7 +139,7 @@ public class Beetle extends Enemy {
 
     // If returned true, the current state has priority over the new one.
     protected boolean priorities(int cState) {
-        return state == DEAD;
+        return (state == DEAD && cState != FALLING && cState != DROWNING) || state == FALLING || state == DROWNING;
     }
 
     //This method periodically sets the frame of the beetle depending on both the state and the animationTime.

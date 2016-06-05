@@ -1,5 +1,9 @@
 package com.inoculates.fatesreprise.Events;
 
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
@@ -19,6 +23,20 @@ public class MessengerMeeting extends Event {
     public MessengerMeeting(TiledMap map, GameScreen screen) {
         super(screen, map);
         startEvent();
+        // Plays the messenger meeting music.
+        screen.storage.music.get("mysteriousmusic").play();
+        screen.storage.music.get("mysteriousmusic").setVolume(0.75f);
+        // Sets final version of screen.
+        final GameScreen lScreen = screen;
+        // Sets an oncompletionlistener, so that the mysterious music plays the looping version once played.
+        screen.storage.music.get("mysteriousmusic").setOnCompletionListener(new Music.OnCompletionListener() {
+            @Override
+            public void onCompletion(Music music) {
+                lScreen.storage.music.get("mysteriousmusicloop").play();
+                lScreen.storage.music.get("mysteriousmusicloop").setVolume(0.75f);
+                lScreen.storage.music.get("mysteriousmusicloop").setLooping(true);
+            }
+        });
     }
 
     protected void startEvent() {
@@ -52,30 +70,30 @@ public class MessengerMeeting extends Event {
         screen.mask.setPosition(screen.camera.position.x - screen.camera.viewportWidth / 2, screen.camera.position.y -
                 screen.camera.viewportHeight / 2);
         screen.mask.setColor(Color.BLACK);
-        screen.mask.fadeIn(1);
-
-        // Starts the dialogue after 0.01 seconds to avoid input spillage.
+        screen.mask.fadeIn(3);
+        // Stuns and freezes Daur and the screen.
+        screen.daur.stun();
+        screen.daur.setDirection(2);
+        screen.freeze();
+        screen.daur.forceState(0);
+        // Starts the dialogue after 3 seconds to avoid input spillage.
         timer.scheduleTask(new Timer.Task() {
             @Override
             public void run() {
                 message();
             }
-        }, 0.01f);
+        }, 3);
     }
 
     protected void message() {
         final Event event = this;
-
+        final Sound waveSound = Gdx.audio.newSound(Gdx.files.internal("Sounds/bigeffect.wav"));
+        long waveID;
         switch (stage) {
             case 0:
-                // Creates the dialogue text, stuns Daur to prevent movement, freezes the screen to prevent the user
-                // from bringing up options, sets the direction of Daur to look up, and makes Daur idle.
+                // Creates the dialogue text.
                 Dialogue dialogue = new Dialogue(screen, "Come wanderer...", this);
                 screen.setText(dialogue, dialogue.getBackground());
-                screen.daur.stun();
-                screen.daur.setDirection(2);
-                screen.freeze();
-                screen.daur.forceState(0);
                 break;
             case 1:
                 // Makes Daur move upwards by setting his velocity, clears the text, and makes Daur go into his running
@@ -125,7 +143,14 @@ public class MessengerMeeting extends Event {
                 // Fades out and proceeds to the game itself.
                 screen.setText(null, null);
                 // Washes the screen out.
-                screen.mask.fadeOut(1);
+                screen.mask.fadeOut(3);
+                // Plays the wash out music. Also captures the ID of the soundbyte in a long format.
+                waveID = waveSound.play(1.0f);
+                // The timer ID for the sound.
+                final long waveIDT = waveID;
+                // Stops the messenger meeting sound.
+                screen.storage.music.get("mysteriousmusic").stop();
+                screen.storage.music.get("mysteriousmusicloop").stop();
                 timer.scheduleTask(new Timer.Task() {
                     @Override
                     public void run() {
@@ -162,16 +187,30 @@ public class MessengerMeeting extends Event {
                             }
                         // Fades the mask in, causing the screen to wash in.
                         screen.mask.setColor(Color.WHITE);
-                        screen.mask.fadeIn(1);
+                        screen.mask.fadeIn(3);
+                        // Gradually lowers the sound of the wavesound.
+                        Timer timer2 = new Timer();
+                        for (float i = 0; i <= 3; i += 0.1) {
+                            // This is the volume that the waveSound plays at. Note that as time increases, the volume
+                            // will decrease accordingly.
+                            final float volume = 1 - i / 3;
+                            timer2.scheduleTask(new Timer.Task() {
+                                @Override
+                                public void run() {
+                                    waveSound.setVolume(waveIDT, volume);
+                                }
+                            }, i);
+                        }
                     }
-                }, 1);
+                }, 3);
                 // Creates and launches the next event that immediately proceeds the messenger meeting.
                 timer.scheduleTask(new Timer.Task() {
                     @Override
                     public void run() {
                         StartingEvent event = new StartingEvent(screen.world1.getMap(), screen);
+                        waveSound.stop();
                     }
-                }, 2);
+                }, 6);
         }
     }
 }

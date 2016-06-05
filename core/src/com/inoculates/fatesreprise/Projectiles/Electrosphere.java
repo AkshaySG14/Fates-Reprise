@@ -60,6 +60,8 @@ public class Electrosphere extends Projectile {
 
     // Same as the fireball.
     public void explode() {
+        if (exploding)
+            return;
         explodeTile();
         final Projectile projectile = this;
         vel.x = 0;
@@ -97,6 +99,8 @@ public class Electrosphere extends Projectile {
         }, 1);
         exploding = true;
         animationTime = 0;
+        // Plays the explode sound.
+        screen.storage.sounds.get("electricity").play(0.5f);
     }
 
     protected void effects() {

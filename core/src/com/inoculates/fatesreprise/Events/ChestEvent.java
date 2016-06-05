@@ -28,6 +28,8 @@ public class ChestEvent extends Event {
         chest.getContents() instanceof GreatHollowBossKey);
         // Sends the necessary dialogue and the item.
         setMessage();
+        // Plays the music for the chest event.
+        screen.storage.sounds.get("powerup1").play(1.0f);
     }
 
     // Informs the player that Daur has acquired the chest's item.

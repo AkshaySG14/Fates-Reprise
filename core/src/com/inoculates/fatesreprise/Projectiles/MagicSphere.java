@@ -72,9 +72,12 @@ public class MagicSphere extends Projectile {
 
     // When a Magic Sphere hits either a terrain object or Daur.
     public void explode() {
-        // If the Magic Sphere is destroyed by terrain, splinters into shards.
-        if (terrain)
-            spawnShards();
+        if (exploding)
+            return;
+        // Explode into shards.
+        spawnShards();
+        // Plays explode sound.
+        screen.storage.sounds.get("boom2").play(1.0f);
         // Rest of the explosion method.
         final Projectile projectile = this;
         vel.x = 0;

@@ -179,6 +179,8 @@ public class PausedScreenGame implements Screen {
             numY = 4;
         // Sets the new current item, as the position of the cursor has moved.
         setCurrentItem();
+        // Plays the sound that indicates the player moved the cursor.
+        storage.sounds.get("click1").play(1.0f);
     }
 
     // Creates the bitmapfont that displays the item name.
@@ -202,11 +204,11 @@ public class PausedScreenGame implements Screen {
         else if (currentItem instanceof ShieldItem)
             return "       Shield";
         else if (currentItem instanceof WindSickleItem)
-            return "    Wind Sickles";
+            return "   Wind Sickles";
         else if (currentItem instanceof ZephyrsWispItem)
             return "   Zephyr's Wisp";
         else if (currentItem instanceof MinorHealthPotionItem)
-            return "Minor Health Potion";
+            return "  Minor HP Pot";
 
         return "";
     }
