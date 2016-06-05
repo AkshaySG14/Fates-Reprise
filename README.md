@@ -12,6 +12,8 @@ looked through and understood with an intermediate understanding of Libgdx and J
 
 For anyone wishing to play the game itself, a jar is available for download, which allows any OS to easily launch and run the game. It is located in the Jar Folder in the main folder. Simply double click and play. If for whatever reason this doesn't work, the jar file can be launched via terminal/command line. However, the jar file name must be changed to something without a space and apostrophe before being launched via terminal/command line. 
 
+Some of the sounds of the game are taken directly from Link to the Past, Link's Awakening, and Link Oracle of Seasons/Ages. Some were created by myself using the various chiptunes soundmakers online. The music of the game is all directly ripped from Link's Awakening, as the game itself serves as an extremely heavy inspiration for Fate's Reprise. 
+
 NOTE: The game is as of yet unfinished. However, the game up until the first dungeon may be completed. 
 
 Made by Akshay Subramaniam.
