@@ -16,4 +16,11 @@ Some of the sounds of the game are taken directly from Link to the Past, Link's 
 
 NOTE: The game is as of yet unfinished. However, the game up until the first dungeon may be completed. 
 
+Credits: 
+•	Zelda Universe for ripping all the music used for the game.
+•	Bruce Juice for the Link spritesheet used as inspiration. 
+•	SFB games for the ChipTone generator used to create some sounds. 
+•	Craftron Gaming, Andrew Tyler, AEnigma, and Petyka for the various fonts used in the game.
+•	Drshnaps for the tile map used as an inspiration. 
+
 Made by Akshay Subramaniam.
