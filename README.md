@@ -28,4 +28,4 @@ Craftron Gaming, Andrew Tyler, AEnigma, and Petyka for the various fonts used in
 
 Drshnaps for the tile map used as an inspiration. 
 
-Made by Akshay Subramaniam.
+MADE BY AKSHAY SUBRAMANIAM
