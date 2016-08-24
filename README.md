@@ -18,6 +18,7 @@ NOTE: The game is as of yet unfinished. However, the game up until the first dun
 
 Credits: 
 •	Zelda Universe for ripping all the music used for the game.
+
 •	Bruce Juice for the Link spritesheet used as inspiration. 
 •	SFB games for the ChipTone generator used to create some sounds. 
 •	Craftron Gaming, Andrew Tyler, AEnigma, and Petyka for the various fonts used in the game.
