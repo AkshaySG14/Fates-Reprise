@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" width="160" height="160" tilewidth="16" tileheight="16">
- <tileset firstgid="1" name="Tiles" tilewidth="16" tileheight="16">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="160" height="160" tilewidth="16" tileheight="16" nextobjectid="187">
+ <tileset firstgid="1" name="Tiles" tilewidth="16" tileheight="16" tilecount="2500" columns="50">
   <image source="Tiles.png" width="800" height="800"/>
   <tile id="211">
    <properties>
@@ -264,658 +264,658 @@
    eJzt20EKgCAQBdC2nbIzdeMWEUSgmGk29N42GBc/GAecafq+Za77drd+i1r0d80plVurPNdMnfO32vOOGrlz+I5rTqnc3s7T/wMA8fWee3hXtMxK5x5ikBkAAAAAAAAA8FdLgzf+UOv8bscbHiAafZORnvRN9z9Gcv8DAABqle6V2z+nh9K9cvvnQHR6JSPplQA7cy0jmWsBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAOzb9uBcv
   </data>
  </layer>
- <objectgroup name="Spawns" width="160" height="160">
-  <object name="Main Spawn" x="84" y="106" width="22" height="16">
+ <objectgroup name="Spawns">
+  <object id="1" name="Main Spawn" x="84" y="106" width="22" height="16">
    <properties>
     <property name="startmainspawn" value=""/>
    </properties>
   </object>
-  <object name="Main Spawn" x="82" y="29" width="22" height="16">
+  <object id="2" name="Main Spawn" x="82" y="29" width="22" height="16">
    <properties>
     <property name="startmsgspawn" value=""/>
    </properties>
   </object>
-  <object name="Bat Spawn 1" x="422" y="28" width="13" height="13">
+  <object id="3" name="Bat Spawn 1" x="422" y="28" width="13" height="13">
    <properties>
     <property name="batspawn" value=""/>
    </properties>
   </object>
-  <object name="Bat Spawn 2" x="377" y="77" width="13" height="13">
+  <object id="4" name="Bat Spawn 2" x="377" y="77" width="13" height="13">
    <properties>
     <property name="batspawn" value=""/>
    </properties>
   </object>
-  <object name="Lurker Spawn 1" x="356" y="47" width="13" height="13">
+  <object id="5" name="Lurker Spawn 1" x="356" y="47" width="13" height="13">
    <properties>
     <property name="lurkerspawn" value=""/>
    </properties>
   </object>
-  <object name="Lurker Spawn 2" x="438" y="76" width="13" height="13">
+  <object id="6" name="Lurker Spawn 2" x="438" y="76" width="13" height="13">
    <properties>
     <property name="lurkerspawn" value=""/>
    </properties>
   </object>
-  <object name="Stalker Plant Spawn 1" x="452" y="253" width="13" height="13">
+  <object id="7" name="Stalker Plant Spawn 1" x="452" y="253" width="13" height="13">
    <properties>
     <property name="greathollowtrigger1" value=""/>
     <property name="plantstalkerspawn" value=""/>
    </properties>
   </object>
-  <object name="Wooden Statue Spawn 1" x="359" y="190" width="13" height="13">
+  <object id="8" name="Wooden Statue Spawn 1" x="359" y="190" width="13" height="13">
    <properties>
     <property name="greathollowtrigger1" value=""/>
     <property name="woodenstatuespawn" value=""/>
    </properties>
   </object>
-  <object name="Mud Doll Spawn 1" x="595" y="11" width="13" height="13">
+  <object id="9" name="Mud Doll Spawn 1" x="595" y="11" width="13" height="13">
    <properties>
     <property name="dollspawn" value=""/>
    </properties>
   </object>
-  <object name="Mud Doll Spawn 1" x="613" y="108" width="13" height="13">
+  <object id="10" name="Mud Doll Spawn 1" x="613" y="108" width="13" height="13">
    <properties>
     <property name="dollspawn" value=""/>
    </properties>
   </object>
-  <object name="Pantomime Spawn 1" x="519" y="105" width="13" height="17">
+  <object id="11" name="Pantomime Spawn 1" x="519" y="105" width="13" height="17">
    <properties>
     <property name="pantomimespawn" value=""/>
    </properties>
   </object>
-  <object name="Stalker Plant Spawn 2" x="536" y="28" width="13" height="13">
+  <object id="12" name="Stalker Plant Spawn 2" x="536" y="28" width="13" height="13">
    <properties>
     <property name="plantstalkerspawn" value=""/>
    </properties>
   </object>
-  <object name="Stalker Plant Spawn 3" x="600" y="254" width="13" height="13">
+  <object id="13" name="Stalker Plant Spawn 3" x="600" y="254" width="13" height="13">
    <properties>
     <property name="plantstalkerspawn" value=""/>
    </properties>
   </object>
-  <object name="Stalker Plant Spawn 4" x="532" y="188" width="13" height="13">
+  <object id="14" name="Stalker Plant Spawn 4" x="532" y="188" width="13" height="13">
    <properties>
     <property name="plantstalkerspawn" value=""/>
    </properties>
   </object>
-  <object name="Wooden Statue Spawn 2" x="550" y="348" width="13" height="13">
+  <object id="15" name="Wooden Statue Spawn 2" x="550" y="348" width="13" height="13">
    <properties>
     <property name="woodenstatuespawn" value=""/>
    </properties>
   </object>
-  <object name="Slime Spawn 1" x="713" y="268" width="13" height="13">
+  <object id="16" name="Slime Spawn 1" x="713" y="268" width="13" height="13">
    <properties>
     <property name="slimespawn" value=""/>
    </properties>
   </object>
-  <object name="Slime Spawn 2" x="777" y="269" width="13" height="13">
+  <object id="17" name="Slime Spawn 2" x="777" y="269" width="13" height="13">
    <properties>
     <property name="slimespawn" value=""/>
    </properties>
   </object>
-  <object name="Mud Doll Spawn 1" x="679" y="159" width="13" height="13">
+  <object id="18" name="Mud Doll Spawn 1" x="679" y="159" width="13" height="13">
    <properties>
     <property name="dollspawn" value=""/>
    </properties>
   </object>
-  <object name="Slime Spawn 3" x="714" y="106" width="13" height="13">
+  <object id="19" name="Slime Spawn 3" x="714" y="106" width="13" height="13">
    <properties>
     <property name="slimespawn" value=""/>
    </properties>
   </object>
-  <object name="Stalker Plant Spawn 3" x="680" y="27" width="13" height="13">
+  <object id="20" name="Stalker Plant Spawn 3" x="680" y="27" width="13" height="13">
    <properties>
     <property name="plantstalkerspawn" value=""/>
    </properties>
   </object>
-  <object name="Mud Doll Spawn 2" x="743" y="62" width="13" height="13">
+  <object id="21" name="Mud Doll Spawn 2" x="743" y="62" width="13" height="13">
    <properties>
     <property name="dollspawn" value=""/>
    </properties>
   </object>
-  <object name="Slime Spawn 3" x="759" y="334" width="13" height="13">
+  <object id="22" name="Slime Spawn 3" x="759" y="334" width="13" height="13">
    <properties>
     <property name="slimespawn" value=""/>
    </properties>
   </object>
-  <object name="Pantomime Spawn 2" x="838" y="380" width="13" height="17">
+  <object id="23" name="Pantomime Spawn 2" x="838" y="380" width="13" height="17">
    <properties>
     <property name="pantomimespawn" value=""/>
    </properties>
   </object>
-  <object name="Pantomime Spawn 3" x="887" y="344" width="13" height="17">
+  <object id="24" name="Pantomime Spawn 3" x="887" y="344" width="13" height="17">
    <properties>
     <property name="pantomimespawn" value=""/>
    </properties>
   </object>
-  <object name="Bat Spawn 3" x="869" y="332" width="13" height="13">
+  <object id="25" name="Bat Spawn 3" x="869" y="332" width="13" height="13">
    <properties>
     <property name="batspawn" value=""/>
    </properties>
   </object>
-  <object name="Bat Spawn 4" x="886" y="427" width="13" height="13">
+  <object id="26" name="Bat Spawn 4" x="886" y="427" width="13" height="13">
    <properties>
     <property name="batspawn" value=""/>
    </properties>
   </object>
-  <object name="Wooden Statue Spawn 3" x="824" y="186" width="13" height="13">
+  <object id="27" name="Wooden Statue Spawn 3" x="824" y="186" width="13" height="13">
    <properties>
     <property name="greathollowtrigger2" value=""/>
     <property name="woodenstatuespawn" value=""/>
    </properties>
   </object>
-  <object name="Wooden Statue Spawn 4" x="917" y="192" width="13" height="13">
+  <object id="28" name="Wooden Statue Spawn 4" x="917" y="192" width="13" height="13">
    <properties>
     <property name="greathollowtrigger2" value=""/>
     <property name="woodenstatuespawn" value=""/>
    </properties>
   </object>
-  <object name="Wooden Statue Spawn 5" x="853" y="255" width="13" height="13">
+  <object id="29" name="Wooden Statue Spawn 5" x="853" y="255" width="13" height="13">
    <properties>
     <property name="greathollowtrigger2" value=""/>
     <property name="woodenstatuespawn" value=""/>
    </properties>
   </object>
-  <object name="Wooden Statue Spawn 6" x="919" y="253" width="13" height="13">
+  <object id="30" name="Wooden Statue Spawn 6" x="919" y="253" width="13" height="13">
    <properties>
     <property name="greathollowtrigger2" value=""/>
     <property name="woodenstatuespawn" value=""/>
    </properties>
   </object>
-  <object name="Slimejumper Spawn 1" x="858" y="90" width="13" height="17">
+  <object id="31" name="Slimejumper Spawn 1" x="858" y="90" width="13" height="17">
    <properties>
     <property name="slimejumperspawn" value=""/>
    </properties>
   </object>
-  <object name="Bat Spawn 5" x="934" y="38" width="13" height="17">
+  <object id="32" name="Bat Spawn 5" x="934" y="38" width="13" height="17">
    <properties>
     <property name="batspawn" value=""/>
    </properties>
   </object>
-  <object name="Bat Spawn 6" x="838" y="537" width="13" height="17">
+  <object id="33" name="Bat Spawn 6" x="838" y="537" width="13" height="17">
    <properties>
     <property name="batspawn" value=""/>
    </properties>
   </object>
-  <object name="Bat Spawn 7" x="937" y="490" width="13" height="17">
+  <object id="34" name="Bat Spawn 7" x="937" y="490" width="13" height="17">
    <properties>
     <property name="batspawn" value=""/>
    </properties>
   </object>
-  <object name="Slimejumper Spawn 2" x="903" y="568" width="13" height="17">
+  <object id="35" name="Slimejumper Spawn 2" x="903" y="568" width="13" height="17">
    <properties>
     <property name="slimejumperspawn" value=""/>
    </properties>
   </object>
-  <object name="Ghost Spawn 1" x="1033" y="202" width="13" height="17">
+  <object id="36" name="Ghost Spawn 1" x="1033" y="202" width="13" height="17">
    <properties>
     <property name="ghostspawn" value="2"/>
    </properties>
   </object>
-  <object name="Slimejumper Spawn 2" x="1078" y="235" width="13" height="17">
+  <object id="37" name="Slimejumper Spawn 2" x="1078" y="235" width="13" height="17">
    <properties>
     <property name="slimejumperspawn" value=""/>
    </properties>
   </object>
-  <object name="Pantomime Spawn 4" x="1155" y="266" width="13" height="17">
+  <object id="38" name="Pantomime Spawn 4" x="1155" y="266" width="13" height="17">
    <properties>
     <property name="pantomimespawn" value=""/>
    </properties>
   </object>
-  <object name="Pantomime Spawn 5" x="1253" y="183" width="13" height="17">
+  <object id="39" name="Pantomime Spawn 5" x="1253" y="183" width="13" height="17">
    <properties>
     <property name="pantomimespawn" value=""/>
    </properties>
   </object>
-  <object name="Slime Spawn 4" x="1252" y="256" width="13" height="13">
+  <object id="40" name="Slime Spawn 4" x="1252" y="256" width="13" height="13">
    <properties>
     <property name="slimespawn" value=""/>
    </properties>
   </object>
-  <object name="Slime Spawn 5" x="1160" y="172" width="13" height="13">
+  <object id="41" name="Slime Spawn 5" x="1160" y="172" width="13" height="13">
    <properties>
     <property name="slimespawn" value=""/>
    </properties>
   </object>
-  <object name="Ghost Spawn 2" x="1175" y="330" width="13" height="17">
+  <object id="42" name="Ghost Spawn 2" x="1175" y="330" width="13" height="17">
    <properties>
     <property name="ghostspawn" value="-1"/>
    </properties>
   </object>
-  <object name="Ghost Spawn 3" x="1224" y="330" width="13" height="17">
+  <object id="43" name="Ghost Spawn 3" x="1224" y="330" width="13" height="17">
    <properties>
     <property name="ghostspawn" value="1"/>
    </properties>
   </object>
-  <object name="Mud Doll Spawn 2" x="1175" y="429" width="13" height="13">
+  <object id="44" name="Mud Doll Spawn 2" x="1175" y="429" width="13" height="13">
    <properties>
     <property name="dollspawn" value=""/>
    </properties>
   </object>
-  <object name="Mud Doll Spawn 3" x="1224" y="428" width="13" height="13">
+  <object id="45" name="Mud Doll Spawn 3" x="1224" y="428" width="13" height="13">
    <properties>
     <property name="dollspawn" value=""/>
    </properties>
   </object>
-  <object name="Slime Spawn 6" x="1174" y="111" width="13" height="13">
+  <object id="46" name="Slime Spawn 6" x="1174" y="111" width="13" height="13">
    <properties>
     <property name="slimespawn" value=""/>
    </properties>
   </object>
-  <object name="Slimejumper Spawn 3" x="1204" y="60" width="13" height="17">
+  <object id="47" name="Slimejumper Spawn 3" x="1204" y="60" width="13" height="17">
    <properties>
     <property name="slimejumperspawn" value=""/>
    </properties>
   </object>
-  <object name="Bat Spawn 6" x="1145" y="28" width="13" height="17">
+  <object id="48" name="Bat Spawn 6" x="1145" y="28" width="13" height="17">
    <properties>
     <property name="batspawn" value=""/>
    </properties>
   </object>
-  <object name="Bat Spawn 7" x="1256" y="22" width="13" height="17">
+  <object id="49" name="Bat Spawn 7" x="1256" y="22" width="13" height="17">
    <properties>
     <property name="batspawn" value=""/>
    </properties>
   </object>
-  <object name="Pantomime Spawn 4" x="1351" y="186" width="13" height="17">
+  <object id="50" name="Pantomime Spawn 4" x="1351" y="186" width="13" height="17">
    <properties>
     <property name="pantomimespawn" value=""/>
    </properties>
   </object>
-  <object name="Pantomime Spawn 5" x="1381" y="266" width="13" height="17">
+  <object id="51" name="Pantomime Spawn 5" x="1381" y="266" width="13" height="17">
    <properties>
     <property name="pantomimespawn" value=""/>
    </properties>
   </object>
-  <object name="Slime Spawn 7" x="1384" y="224" width="13" height="13">
+  <object id="52" name="Slime Spawn 7" x="1384" y="224" width="13" height="13">
    <properties>
     <property name="slimespawn" value=""/>
    </properties>
   </object>
-  <object name="Bat Spawn 8" x="1334" y="397" width="13" height="13">
+  <object id="53" name="Bat Spawn 8" x="1334" y="397" width="13" height="13">
    <properties>
     <property name="batspawn" value=""/>
    </properties>
   </object>
-  <object name="Bat Spawn 9" x="1369" y="398" width="13" height="13">
+  <object id="54" name="Bat Spawn 9" x="1369" y="398" width="13" height="13">
    <properties>
     <property name="batspawn" value=""/>
    </properties>
   </object>
-  <object name="Wizard Spawn 1" x="1378" y="358" width="13" height="13">
+  <object id="55" name="Wizard Spawn 1" x="1378" y="358" width="13" height="13">
    <properties>
     <property name="wizardspawn" value=""/>
    </properties>
   </object>
-  <object name="JellyFish Spawn 1" x="554" y="524" width="13" height="13">
+  <object id="56" name="JellyFish Spawn 1" x="554" y="524" width="13" height="13">
    <properties>
     <property name="jfishspawn" value=""/>
    </properties>
   </object>
-  <object name="Pantomime Spawn 6" x="281" y="378" width="13" height="17">
+  <object id="57" name="Pantomime Spawn 6" x="281" y="378" width="13" height="17">
    <properties>
     <property name="pantomimespawn" value=""/>
    </properties>
   </object>
-  <object name="Pantomime Spawn 7" x="215" y="378" width="13" height="17">
+  <object id="58" name="Pantomime Spawn 7" x="215" y="378" width="13" height="17">
    <properties>
     <property name="pantomimespawn" value=""/>
    </properties>
   </object>
-  <object name="Mud Doll Spawn 4" x="583" y="395" width="13" height="13">
+  <object id="59" name="Mud Doll Spawn 4" x="583" y="395" width="13" height="13">
    <properties>
     <property name="dollspawn" value=""/>
    </properties>
   </object>
-  <object name="JellyFish Spawn 2" x="72" y="415" width="13" height="13">
+  <object id="60" name="JellyFish Spawn 2" x="72" y="415" width="13" height="13">
    <properties>
     <property name="jfishspawn" value=""/>
    </properties>
   </object>
-  <object name="Lurker Spawn 4" x="100" y="348" width="13" height="13">
+  <object id="61" name="Lurker Spawn 4" x="100" y="348" width="13" height="13">
    <properties>
     <property name="lurkerspawn" value=""/>
    </properties>
   </object>
-  <object name="Lurker Spawn 5" x="21" y="364" width="13" height="13">
+  <object id="62" name="Lurker Spawn 5" x="21" y="364" width="13" height="13">
    <properties>
     <property name="lurkerspawn" value=""/>
    </properties>
   </object>
-  <object name="Slime King Spawn" x="68" y="229" width="26" height="24">
+  <object id="63" name="Slime King Spawn" x="68" y="229" width="26" height="24">
    <properties>
     <property name="slimekingspawn" value=""/>
    </properties>
   </object>
-  <object name="Bat Spawn 10" x="182" y="207" width="13" height="13">
+  <object id="64" name="Bat Spawn 10" x="182" y="207" width="13" height="13">
    <properties>
     <property name="batspawn" value=""/>
    </properties>
   </object>
-  <object name="Bat Spawn 11" x="292" y="272" width="13" height="13">
+  <object id="65" name="Bat Spawn 11" x="292" y="272" width="13" height="13">
    <properties>
     <property name="batspawn" value=""/>
    </properties>
   </object>
-  <object name="Lurker Spawn 8" x="194" y="287" width="13" height="13">
+  <object id="66" name="Lurker Spawn 8" x="194" y="287" width="13" height="13">
    <properties>
     <property name="lurkerspawn" value=""/>
    </properties>
   </object>
-  <object name="Slimejumper Spawn 4" x="1348" y="53" width="13" height="17">
+  <object id="67" name="Slimejumper Spawn 4" x="1348" y="53" width="13" height="17">
    <properties>
     <property name="slimejumperspawn" value=""/>
    </properties>
   </object>
-  <object name="Slimejumper Spawn 5" x="1381" y="86" width="13" height="17">
+  <object id="68" name="Slimejumper Spawn 5" x="1381" y="86" width="13" height="17">
    <properties>
     <property name="slimejumperspawn" value=""/>
    </properties>
   </object>
-  <object name="Bat Spawn 12" x="1462" y="88" width="13" height="13">
+  <object id="69" name="Bat Spawn 12" x="1462" y="88" width="13" height="13">
    <properties>
     <property name="batspawn" value=""/>
    </properties>
   </object>
-  <object name="Bat Spawn 13" x="1514" y="62" width="13" height="13">
+  <object id="70" name="Bat Spawn 13" x="1514" y="62" width="13" height="13">
    <properties>
     <property name="batspawn" value=""/>
    </properties>
   </object>
-  <object name="Bat Spawn 14" x="1539" y="126" width="13" height="13">
+  <object id="71" name="Bat Spawn 14" x="1539" y="126" width="13" height="13">
    <properties>
     <property name="batspawn" value=""/>
    </properties>
   </object>
-  <object name="Lurker Spawn 9" x="1526" y="286" width="13" height="13">
+  <object id="72" name="Lurker Spawn 9" x="1526" y="286" width="13" height="13">
    <properties>
     <property name="lurkerspawn" value=""/>
    </properties>
   </object>
-  <object name="Lurker Spawn 10" x="1461" y="387" width="13" height="13">
+  <object id="73" name="Lurker Spawn 10" x="1461" y="387" width="13" height="13">
    <properties>
     <property name="lurkerspawn" value=""/>
    </properties>
   </object>
-  <object name="Bat Spawn 15" x="1459" y="356" width="13" height="13">
+  <object id="74" name="Bat Spawn 15" x="1459" y="356" width="13" height="13">
    <properties>
     <property name="batspawn" value=""/>
    </properties>
   </object>
-  <object name="Bat Spawn 16" x="1590" y="406" width="13" height="13">
+  <object id="75" name="Bat Spawn 16" x="1590" y="406" width="13" height="13">
    <properties>
     <property name="batspawn" value=""/>
    </properties>
   </object>
-  <object name="Bat Spawn 17" x="1519" y="446" width="13" height="13">
+  <object id="76" name="Bat Spawn 17" x="1519" y="446" width="13" height="13">
    <properties>
     <property name="batspawn" value=""/>
    </properties>
   </object>
-  <object name="Wooden Statue Spawn 7" x="1735" y="382" width="13" height="13">
+  <object id="77" name="Wooden Statue Spawn 7" x="1735" y="382" width="13" height="13">
    <properties>
     <property name="woodenstatuespawn" value=""/>
    </properties>
   </object>
-  <object name="Wooden Statue Spawn 9" x="1639" y="444" width="13" height="13">
+  <object id="78" name="Wooden Statue Spawn 9" x="1639" y="444" width="13" height="13">
    <properties>
     <property name="woodenstatuespawn" value=""/>
    </properties>
   </object>
-  <object name="Wooden Statue Spawn 10" x="1673" y="411" width="13" height="13">
+  <object id="79" name="Wooden Statue Spawn 10" x="1673" y="411" width="13" height="13">
    <properties>
     <property name="woodenstatuespawn" value=""/>
    </properties>
   </object>
-  <object name="Master Wizard Spawn" x="1672" y="204" width="13" height="13">
+  <object id="80" name="Master Wizard Spawn" x="1672" y="204" width="13" height="13">
    <properties>
     <property name="MWspawn" value=""/>
    </properties>
   </object>
-  <object name="Druni Spawn" x="1688" y="29" width="13" height="13">
+  <object id="81" name="Druni Spawn" x="1688" y="29" width="13" height="13">
    <properties>
     <property name="drunispawn" value=""/>
    </properties>
   </object>
  </objectgroup>
- <objectgroup name="Access" width="160" height="160">
-  <object name="Access In 1" x="244" y="146" width="10" height="12">
+ <objectgroup name="Access">
+  <object id="82" name="Access In 1" x="244" y="146" width="10" height="12">
    <properties>
     <property name="entrance" value=""/>
    </properties>
   </object>
-  <object name="Access Out 1" x="245" y="132" width="10" height="12">
+  <object id="83" name="Access Out 1" x="245" y="132" width="10" height="12">
    <properties>
     <property name="exit" value=""/>
    </properties>
   </object>
  </objectgroup>
- <objectgroup name="Fogs" width="160" height="160"/>
- <objectgroup name="Interactables" width="160" height="160">
-  <object name="Block 1" x="404" y="224" width="13" height="11">
+ <objectgroup name="Fogs"/>
+ <objectgroup name="Interactables">
+  <object id="84" name="Block 1" x="404" y="224" width="13" height="11">
    <properties>
     <property name="greathollowtrigger1" value=""/>
     <property name="limited" value=""/>
     <property name="woodblock" value="0"/>
    </properties>
   </object>
-  <object name="Chest Spawn 1" x="342" y="177" width="8" height="10">
+  <object id="85" name="Chest Spawn 1" x="342" y="177" width="8" height="10">
    <properties>
     <property name="chest" value="4"/>
     <property name="greathollowtrigger1spawn" value="Great Hollow Dungeon Key"/>
     <property name="wood" value=""/>
    </properties>
   </object>
-  <object name="Chest Spawn 2" x="614" y="15" width="8" height="10">
+  <object id="86" name="Chest Spawn 2" x="614" y="15" width="8" height="10">
    <properties>
     <property name="chest" value="5"/>
     <property name="woodchest" value="Dungeon Map"/>
    </properties>
   </object>
-  <object name="Chest Spawn 3" x="183" y="175" width="8" height="10">
+  <object id="87" name="Chest Spawn 3" x="183" y="175" width="8" height="10">
    <properties>
     <property name="chest" value="6"/>
     <property name="woodchest" value="Great Hollow Dungeon Key"/>
    </properties>
   </object>
-  <object name="Locked Door 1" x="52" y="318" width="13" height="11">
+  <object id="88" name="Locked Door 1" x="52" y="318" width="13" height="11">
    <properties>
     <property name="ghlockedv" value=""/>
     <property name="locked" value="0"/>
    </properties>
   </object>
-  <object name="Closed Door 1" x="869" y="144" width="10" height="11">
+  <object id="89" name="Closed Door 1" x="869" y="144" width="10" height="11">
    <properties>
     <property name="closed" value="-2"/>
     <property name="ghclosedv" value=""/>
     <property name="greathollowtrigger2" value=""/>
    </properties>
   </object>
-  <object name="Chest Spawn 4" x="663" y="428" width="8" height="10">
+  <object id="90" name="Chest Spawn 4" x="663" y="428" width="8" height="10">
    <properties>
     <property name="chest" value="7"/>
     <property name="greathollowtrigger3spawn" value="Compass"/>
     <property name="wood" value=""/>
    </properties>
   </object>
-  <object name="Locked Door 2" x="791" y="351" width="13" height="11">
+  <object id="91" name="Locked Door 2" x="791" y="351" width="13" height="11">
    <properties>
     <property name="ghlockedh" value=""/>
     <property name="locked" value="1"/>
    </properties>
   </object>
-  <object name="Block 2" x="918" y="416" width="13" height="11">
+  <object id="92" name="Block 2" x="918" y="416" width="13" height="11">
    <properties>
     <property name="greathollowtrigger3" value=""/>
     <property name="limited" value=""/>
     <property name="woodblock" value="0"/>
    </properties>
   </object>
-  <object name="Closed Door 2" x="966" y="576" width="10" height="11">
+  <object id="93" name="Closed Door 2" x="966" y="576" width="10" height="11">
    <properties>
     <property name="closed" value="-1"/>
     <property name="ghclosedh" value=""/>
     <property name="greathollowtrigger4" value=""/>
    </properties>
   </object>
-  <object name="Block 3" x="822" y="588" width="13" height="11">
+  <object id="94" name="Block 3" x="822" y="588" width="13" height="11">
    <properties>
     <property name="greathollowtrigger4" value=""/>
     <property name="limited" value=""/>
     <property name="woodblock" value="3"/>
    </properties>
   </object>
-  <object name="Block 4" x="710" y="542" width="13" height="11">
+  <object id="95" name="Block 4" x="710" y="542" width="13" height="11">
    <properties>
     <property name="greathollowtrigger5" value=""/>
     <property name="limited" value="2"/>
     <property name="woodblock" value="0, 1, 2, 3"/>
    </properties>
   </object>
-  <object name="Block 5" x="727" y="562" width="13" height="11">
+  <object id="96" name="Block 5" x="727" y="562" width="13" height="11">
    <properties>
     <property name="greathollowtrigger5" value=""/>
     <property name="limited" value="2"/>
     <property name="woodblock" value="0, 1, 2, 3"/>
    </properties>
   </object>
-  <object name="Block 6" x="743" y="576" width="13" height="11">
+  <object id="97" name="Block 6" x="743" y="576" width="13" height="11">
    <properties>
     <property name="greathollowtrigger5" value=""/>
     <property name="limited" value="-1"/>
     <property name="woodblock" value="0, 1, 2, 3"/>
    </properties>
   </object>
-  <object name="Block 7" x="758" y="593" width="13" height="11">
+  <object id="98" name="Block 7" x="758" y="593" width="13" height="11">
    <properties>
     <property name="greathollowtrigger5" value=""/>
     <property name="limited" value="2"/>
     <property name="woodblock" value="0, 1, 2, 3"/>
    </properties>
   </object>
-  <object name="Block 8" x="694" y="528" width="13" height="11">
+  <object id="99" name="Block 8" x="694" y="528" width="13" height="11">
    <properties>
     <property name="greathollowtrigger5" value=""/>
     <property name="limited" value="-2"/>
     <property name="woodblock" value="0, 1, 2, 3"/>
    </properties>
   </object>
-  <object name="Block 9" x="1172" y="559" width="13" height="11">
+  <object id="100" name="Block 9" x="1172" y="559" width="13" height="11">
    <properties>
     <property name="greathollowtrigger6" value=""/>
     <property name="limited" value="2"/>
     <property name="woodblock" value="0, 1, 2, 3"/>
    </properties>
   </object>
-  <object name="Block 10" x="1157" y="526" width="13" height="11">
+  <object id="101" name="Block 10" x="1157" y="526" width="13" height="11">
    <properties>
     <property name="greathollowtrigger6" value=""/>
     <property name="limited" value="-2"/>
     <property name="woodblock" value="0, 1, 2, 3"/>
    </properties>
   </object>
-  <object name="Block 11" x="1189" y="526" width="13" height="11">
+  <object id="102" name="Block 11" x="1189" y="526" width="13" height="11">
    <properties>
     <property name="greathollowtrigger6" value=""/>
     <property name="limited" value="-2"/>
     <property name="woodblock" value="0, 1, 2, 3"/>
    </properties>
   </object>
-  <object name="Block 12" x="1223" y="558" width="13" height="11">
+  <object id="103" name="Block 12" x="1223" y="558" width="13" height="11">
    <properties>
     <property name="greathollowtrigger6" value=""/>
     <property name="limited" value="2"/>
     <property name="woodblock" value="0, 1, 2, 3"/>
    </properties>
   </object>
-  <object name="Block 13" x="1207" y="525" width="13" height="11">
+  <object id="104" name="Block 13" x="1207" y="525" width="13" height="11">
    <properties>
     <property name="greathollowtrigger6" value=""/>
     <property name="limited" value="-2"/>
     <property name="woodblock" value="0, 1, 2, 3"/>
    </properties>
   </object>
-  <object name="Block 14" x="1240" y="528" width="13" height="11">
+  <object id="105" name="Block 14" x="1240" y="528" width="13" height="11">
    <properties>
     <property name="greathollowtrigger6" value=""/>
     <property name="limited" value="-2"/>
     <property name="woodblock" value="0, 1, 2, 3"/>
    </properties>
   </object>
-  <object name="Chest Spawn 5" x="980" y="336" width="8" height="10">
+  <object id="106" name="Chest Spawn 5" x="980" y="336" width="8" height="10">
    <properties>
     <property name="chest" value="8"/>
     <property name="greathollowtrigger6spawn" value="Great Hollow Dungeon Key"/>
     <property name="wood" value=""/>
    </properties>
   </object>
-  <object name="Chest Spawn 6" x="678" y="608" width="8" height="10">
+  <object id="107" name="Chest Spawn 6" x="678" y="608" width="8" height="10">
    <properties>
     <property name="chest" value="9"/>
     <property name="greathollowtrigger5spawn" value="Great Hollow Boss Key"/>
     <property name="wood" value=""/>
    </properties>
   </object>
-  <object name="Chest Spawn 7" x="1143" y="15" width="8" height="10">
+  <object id="108" name="Chest Spawn 7" x="1143" y="15" width="8" height="10">
    <properties>
     <property name="chest" value="10"/>
     <property name="woodchest" value="50"/>
    </properties>
   </object>
-  <object name="Closed Door 3" x="53" y="334" width="10" height="11">
+  <object id="109" name="Closed Door 3" x="53" y="334" width="10" height="11">
    <properties>
     <property name="closed" value="2"/>
     <property name="ghclosedv" value=""/>
     <property name="greathollowminiboss" value=""/>
    </properties>
   </object>
-  <object name="Chest Spawn 8" x="23" y="194" width="8" height="10">
+  <object id="110" name="Chest Spawn 8" x="23" y="194" width="8" height="10">
    <properties>
     <property name="GHMS" value="Zephyr's Wisp"/>
     <property name="chest" value="11"/>
     <property name="wood" value=""/>
    </properties>
   </object>
-  <object name="Platform Spawn 1" x="1513" y="232" width="8" height="10">
+  <object id="111" name="Platform Spawn 1" x="1513" y="232" width="8" height="10">
    <properties>
     <property name="platformspawn" value=""/>
     <property name="velocityX" value="0"/>
     <property name="velocityY" value="-0.5"/>
    </properties>
   </object>
-  <object name="Platform Spawn 3" x="1506" y="435" width="8" height="10">
+  <object id="112" name="Platform Spawn 3" x="1506" y="435" width="8" height="10">
    <properties>
     <property name="platformspawn" value=""/>
     <property name="velocityX" value="0.5"/>
     <property name="velocityY" value="0"/>
    </properties>
   </object>
-  <object name="Platform Spawn 4" x="1560" y="406" width="8" height="10">
+  <object id="113" name="Platform Spawn 4" x="1560" y="406" width="8" height="10">
    <properties>
     <property name="platformspawn" value=""/>
     <property name="velocityX" value="0"/>
     <property name="velocityY" value="0.5"/>
    </properties>
   </object>
-  <object name="Locked Door 3" x="1591" y="352" width="13" height="11">
+  <object id="114" name="Locked Door 3" x="1591" y="352" width="13" height="11">
    <properties>
     <property name="ghlockedh" value=""/>
     <property name="locked" value="2"/>
    </properties>
   </object>
-  <object name="Boss Door" x="1685" y="320" width="13" height="11">
+  <object id="115" name="Boss Door" x="1685" y="320" width="13" height="11">
    <properties>
     <property name="bossdoor" value="0"/>
     <property name="bossv" value=""/>
    </properties>
   </object>
-  <object name="Closed Door 4" x="1687" y="335" width="10" height="11">
+  <object id="116" name="Closed Door 4" x="1687" y="335" width="10" height="11">
    <properties>
     <property name="closed" value="2"/>
     <property name="ghclosedv" value=""/>
     <property name="greathollowboss" value=""/>
    </properties>
   </object>
-  <object name="Closed Door 5" x="1623" y="145" width="10" height="11">
+  <object id="117" name="Closed Door 5" x="1623" y="145" width="10" height="11">
    <properties>
     <property name="closed" value="-2"/>
     <property name="ghclosedv" value=""/>
@@ -923,355 +923,355 @@
    </properties>
   </object>
  </objectgroup>
- <objectgroup name="Triggers" width="160" height="160" opacity="0.94">
-  <object name="Great Hollow Dialogue Trigger" x="223" y="128" width="48" height="20">
+ <objectgroup name="Triggers" opacity="0.94">
+  <object id="118" name="Great Hollow Dialogue Trigger" x="224" y="108" width="48" height="20">
    <properties>
     <property name="GHD" value=""/>
    </properties>
   </object>
-  <object name="Great Hollow Trigger 1" x="839" y="191" width="106" height="115">
+  <object id="119" name="Great Hollow Trigger 1" x="839" y="191" width="106" height="115">
    <properties>
     <property name="GHT1" value=""/>
    </properties>
   </object>
-  <object name="Great Hollow Trigger 2" x="864" y="495" width="75" height="84">
+  <object id="120" name="Great Hollow Trigger 2" x="864" y="495" width="75" height="84">
    <properties>
     <property name="GHT2" value=""/>
    </properties>
   </object>
-  <object name="Great Hollow Miniboss Trigger" x="36" y="272" width="36" height="33">
+  <object id="121" name="Great Hollow Miniboss Trigger" x="36" y="272" width="36" height="33">
    <properties>
     <property name="GHMT" value=""/>
    </properties>
   </object>
-  <object name="Great Hollow Boss Trigger" x="1634" y="246" width="102" height="55">
+  <object id="122" name="Great Hollow Boss Trigger" x="1634" y="246" width="102" height="55">
    <properties>
     <property name="GHBT" value=""/>
    </properties>
   </object>
  </objectgroup>
- <objectgroup name="Level" width="160" height="160">
-  <object name="Upstairs 1" x="883" y="23" width="11" height="8">
+ <objectgroup name="Level">
+  <object id="123" name="Upstairs 1" x="883" y="23" width="11" height="8">
    <properties>
     <property name="up" value=""/>
    </properties>
   </object>
-  <object name="Downstairs 1" x="980" y="19" width="9" height="10">
+  <object id="124" name="Downstairs 1" x="980" y="19" width="9" height="10">
    <properties>
     <property name="down" value=""/>
    </properties>
   </object>
-  <object name="Upstairs 2" x="1093" y="340" width="11" height="8">
+  <object id="125" name="Upstairs 2" x="1093" y="340" width="11" height="8">
    <properties>
     <property name="up" value=""/>
    </properties>
   </object>
-  <object name="Downstairs 2" x="1141" y="592" width="9" height="10">
+  <object id="126" name="Downstairs 2" x="1141" y="592" width="9" height="10">
    <properties>
     <property name="down" value=""/>
    </properties>
   </object>
-  <object name="Upstairs 3" x="501" y="594" width="11" height="8">
+  <object id="127" name="Upstairs 3" x="501" y="594" width="11" height="8">
    <properties>
     <property name="up" value=""/>
    </properties>
   </object>
-  <object name="Downstairs 3" x="1317" y="431" width="9" height="10">
+  <object id="128" name="Downstairs 3" x="1317" y="431" width="9" height="10">
    <properties>
     <property name="down" value=""/>
    </properties>
   </object>
-  <object name="Upstairs 4" x="1058" y="21" width="11" height="8">
+  <object id="129" name="Upstairs 4" x="1058" y="21" width="11" height="8">
    <properties>
     <property name="up" value=""/>
    </properties>
   </object>
-  <object name="Downstairs 4" x="1301" y="19" width="9" height="10">
+  <object id="130" name="Downstairs 4" x="1301" y="19" width="9" height="10">
    <properties>
     <property name="down" value=""/>
    </properties>
   </object>
  </objectgroup>
- <objectgroup name="Markers" width="160" height="160">
-  <object name="Ghost Marker 1" x="1028" y="179" width="10" height="9">
+ <objectgroup name="Markers">
+  <object id="131" name="Ghost Marker 1" x="1028" y="179" width="10" height="9">
    <properties>
     <property name="ghostmarker" value="1"/>
    </properties>
   </object>
-  <object name="Ghost Marker 3" x="1092" y="242" width="10" height="8">
+  <object id="132" name="Ghost Marker 3" x="1092" y="242" width="10" height="8">
    <properties>
     <property name="ghostmarker" value="-1"/>
    </properties>
   </object>
-  <object name="Ghost Marker 4" x="1060" y="244" width="12" height="9">
+  <object id="133" name="Ghost Marker 4" x="1060" y="244" width="12" height="9">
    <properties>
     <property name="ghostmarker" value="-2"/>
    </properties>
   </object>
-  <object name="Ghost Marker 5" x="1060" y="260" width="9" height="8">
+  <object id="134" name="Ghost Marker 5" x="1060" y="260" width="9" height="8">
    <properties>
     <property name="ghostmarker" value="-1"/>
    </properties>
   </object>
-  <object name="Ghost Marker 6" x="1044" y="260" width="9" height="7">
+  <object id="135" name="Ghost Marker 6" x="1044" y="260" width="9" height="7">
    <properties>
     <property name="ghostmarker" value="-2"/>
    </properties>
   </object>
-  <object name="Ghost Marker 7" x="1044" y="291" width="9" height="9">
+  <object id="136" name="Ghost Marker 7" x="1044" y="291" width="9" height="9">
    <properties>
     <property name="ghostmarker" value="-1"/>
    </properties>
   </object>
-  <object name="Ghost Marker 8" x="980" y="293" width="9" height="7">
+  <object id="137" name="Ghost Marker 8" x="980" y="293" width="9" height="7">
    <properties>
     <property name="ghostmarker" value="2"/>
    </properties>
   </object>
-  <object name="Ghost Marker 9" x="981" y="226" width="9" height="10">
+  <object id="138" name="Ghost Marker 9" x="981" y="226" width="9" height="10">
    <properties>
     <property name="ghostmarker" value="1"/>
    </properties>
   </object>
-  <object name="Ghost Marker 10" x="1013" y="226" width="9" height="12">
+  <object id="139" name="Ghost Marker 10" x="1013" y="226" width="9" height="12">
    <properties>
     <property name="ghostmarker" value="2"/>
    </properties>
   </object>
-  <object name="Ghost Marker 11" x="1014" y="210" width="9" height="12">
+  <object id="140" name="Ghost Marker 11" x="1014" y="210" width="9" height="12">
    <properties>
     <property name="ghostmarker" value="1"/>
    </properties>
   </object>
-  <object name="Ghost Marker 12" x="1027" y="210" width="9" height="12">
+  <object id="141" name="Ghost Marker 12" x="1027" y="210" width="9" height="12">
    <properties>
     <property name="ghostmarker" value="2"/>
    </properties>
   </object>
-  <object name="Ghost Marker 13" x="1092" y="178" width="10" height="9">
+  <object id="142" name="Ghost Marker 13" x="1092" y="178" width="10" height="9">
    <properties>
     <property name="ghostmarker" value="-2"/>
    </properties>
   </object>
-  <object name="Ghost Marker 14" x="1158" y="334" width="9" height="12">
+  <object id="143" name="Ghost Marker 14" x="1158" y="334" width="9" height="12">
    <properties>
     <property name="ghostmarker" value="-2"/>
    </properties>
   </object>
-  <object name="Ghost Marker 15" x="1155" y="352" width="9" height="12">
+  <object id="144" name="Ghost Marker 15" x="1155" y="352" width="9" height="12">
    <properties>
     <property name="ghostmarker" value="-1"/>
    </properties>
   </object>
-  <object name="Ghost Marker 16" x="1142" y="349" width="9" height="12">
+  <object id="145" name="Ghost Marker 16" x="1142" y="349" width="9" height="12">
    <properties>
     <property name="ghostmarker" value="-2"/>
    </properties>
   </object>
-  <object name="Ghost Marker 17" x="1142" y="379" width="9" height="12">
+  <object id="146" name="Ghost Marker 17" x="1142" y="379" width="9" height="12">
    <properties>
     <property name="ghostmarker" value="1"/>
    </properties>
   </object>
-  <object name="Ghost Marker 18" x="1155" y="383" width="9" height="12">
+  <object id="147" name="Ghost Marker 18" x="1155" y="383" width="9" height="12">
    <properties>
     <property name="ghostmarker" value="-2"/>
    </properties>
   </object>
-  <object name="Ghost Marker 19" x="1157" y="429" width="9" height="12">
+  <object id="148" name="Ghost Marker 19" x="1157" y="429" width="9" height="12">
    <properties>
     <property name="ghostmarker" value="1"/>
    </properties>
   </object>
-  <object name="Ghost Marker 20" x="1189" y="429" width="9" height="12">
+  <object id="149" name="Ghost Marker 20" x="1189" y="429" width="9" height="12">
    <properties>
     <property name="ghostmarker" value="2"/>
    </properties>
   </object>
-  <object name="Ghost Marker 21" x="1191" y="398" width="9" height="12">
+  <object id="150" name="Ghost Marker 21" x="1191" y="398" width="9" height="12">
    <properties>
     <property name="ghostmarker" value="-1"/>
    </properties>
   </object>
-  <object name="Ghost Marker 22" x="1175" y="397" width="9" height="12">
+  <object id="151" name="Ghost Marker 22" x="1175" y="397" width="9" height="12">
    <properties>
     <property name="ghostmarker" value="2"/>
    </properties>
   </object>
-  <object name="Ghost Marker 23" x="1177" y="366" width="9" height="12">
+  <object id="152" name="Ghost Marker 23" x="1177" y="366" width="9" height="12">
    <properties>
     <property name="ghostmarker" value="1"/>
    </properties>
   </object>
-  <object name="Ghost Marker 24" x="1191" y="363" width="9" height="12">
+  <object id="153" name="Ghost Marker 24" x="1191" y="363" width="9" height="12">
    <properties>
     <property name="ghostmarker" value="2"/>
    </properties>
   </object>
-  <object name="Ghost Marker 25" x="1191" y="334" width="9" height="12">
+  <object id="154" name="Ghost Marker 25" x="1191" y="334" width="9" height="12">
    <properties>
     <property name="ghostmarker" value="-1"/>
    </properties>
   </object>
-  <object name="Ghost Marker 26" x="1242" y="332" width="9" height="12">
+  <object id="155" name="Ghost Marker 26" x="1242" y="332" width="9" height="12">
    <properties>
     <property name="ghostmarker" value="-2"/>
    </properties>
   </object>
-  <object name="Ghost Marker 27" x="1237" y="352" width="9" height="12">
+  <object id="156" name="Ghost Marker 27" x="1237" y="352" width="9" height="12">
    <properties>
     <property name="ghostmarker" value="1"/>
    </properties>
   </object>
-  <object name="Ghost Marker 28" x="1253" y="350" width="9" height="12">
+  <object id="157" name="Ghost Marker 28" x="1253" y="350" width="9" height="12">
    <properties>
     <property name="ghostmarker" value="-2"/>
    </properties>
   </object>
-  <object name="Ghost Marker 29" x="1253" y="384" width="9" height="12">
+  <object id="158" name="Ghost Marker 29" x="1253" y="384" width="9" height="12">
    <properties>
     <property name="ghostmarker" value="-1"/>
    </properties>
   </object>
-  <object name="Ghost Marker 30" x="1240" y="380" width="9" height="12">
+  <object id="159" name="Ghost Marker 30" x="1240" y="380" width="9" height="12">
    <properties>
     <property name="ghostmarker" value="-2"/>
    </properties>
   </object>
-  <object name="Ghost Marker 31" x="1238" y="430" width="9" height="12">
+  <object id="160" name="Ghost Marker 31" x="1238" y="430" width="9" height="12">
    <properties>
     <property name="ghostmarker" value="-1"/>
    </properties>
   </object>
-  <object name="Ghost Marker 32" x="1207" y="430" width="9" height="12">
+  <object id="161" name="Ghost Marker 32" x="1207" y="430" width="9" height="12">
    <properties>
     <property name="ghostmarker" value="2"/>
    </properties>
   </object>
-  <object name="Ghost Marker 33" x="1207" y="398" width="9" height="12">
+  <object id="162" name="Ghost Marker 33" x="1207" y="398" width="9" height="12">
    <properties>
     <property name="ghostmarker" value="1"/>
    </properties>
   </object>
-  <object name="Ghost Marker 34" x="1223" y="397" width="9" height="12">
+  <object id="163" name="Ghost Marker 34" x="1223" y="397" width="9" height="12">
    <properties>
     <property name="ghostmarker" value="2"/>
    </properties>
   </object>
-  <object name="Ghost Marker 35" x="1223" y="366" width="9" height="12">
+  <object id="164" name="Ghost Marker 35" x="1223" y="366" width="9" height="12">
    <properties>
     <property name="ghostmarker" value="-1"/>
    </properties>
   </object>
-  <object name="Ghost Marker 36" x="1207" y="368" width="9" height="12">
+  <object id="165" name="Ghost Marker 36" x="1207" y="368" width="9" height="12">
    <properties>
     <property name="ghostmarker" value="2"/>
    </properties>
   </object>
-  <object name="Ghost Marker 37" x="1209" y="335" width="9" height="12">
+  <object id="166" name="Ghost Marker 37" x="1209" y="335" width="9" height="12">
    <properties>
     <property name="ghostmarker" value="1"/>
    </properties>
   </object>
-  <object name="Platform Marker 1" x="1507" y="285" width="9" height="12">
+  <object id="167" name="Platform Marker 1" x="1507" y="285" width="9" height="12">
    <properties>
     <property name="platformmarker" value=""/>
    </properties>
   </object>
-  <object name="Platform Marker 2" x="1511" y="170" width="9" height="12">
+  <object id="168" name="Platform Marker 2" x="1511" y="170" width="9" height="12">
    <properties>
     <property name="platformmarker" value=""/>
    </properties>
   </object>
-  <object name="Platform Marker 4" x="1497" y="333" width="9" height="12">
+  <object id="169" name="Platform Marker 4" x="1497" y="333" width="9" height="12">
    <properties>
     <property name="platformmarker" value=""/>
    </properties>
   </object>
-  <object name="Platform Marker 5" x="1445" y="434" width="9" height="12">
+  <object id="170" name="Platform Marker 5" x="1445" y="434" width="9" height="12">
    <properties>
     <property name="platformmarker" value=""/>
    </properties>
   </object>
-  <object name="Platform Marker 6" x="1543" y="425" width="9" height="12">
+  <object id="171" name="Platform Marker 6" x="1543" y="425" width="9" height="12">
    <properties>
     <property name="platformmarker" value=""/>
    </properties>
   </object>
-  <object name="Platform Marker 7" x="1563" y="351" width="9" height="12">
+  <object id="172" name="Platform Marker 7" x="1563" y="351" width="9" height="12">
    <properties>
     <property name="platformmarker" value=""/>
    </properties>
   </object>
-  <object name="Platform Marker 8" x="1556" y="463" width="9" height="12">
+  <object id="173" name="Platform Marker 8" x="1556" y="463" width="9" height="12">
    <properties>
     <property name="platformmarker" value=""/>
    </properties>
   </object>
-  <object name="Master Wizard Marker 1" x="1637" y="197" width="8" height="7">
+  <object id="174" name="Master Wizard Marker 1" x="1637" y="197" width="8" height="7">
    <properties>
     <property name="MWmarker" value=""/>
    </properties>
   </object>
-  <object name="Master Wizard Marker 2" x="1684" y="226" width="9" height="9">
+  <object id="175" name="Master Wizard Marker 2" x="1684" y="226" width="9" height="9">
    <properties>
     <property name="MWmarker" value=""/>
    </properties>
   </object>
-  <object name="Master Wizard Marker 3" x="1733" y="181" width="10" height="5">
+  <object id="176" name="Master Wizard Marker 3" x="1733" y="181" width="10" height="5">
    <properties>
     <property name="MWmarker" value=""/>
    </properties>
   </object>
-  <object name="Master Wizard Marker 4" x="1733" y="228" width="9" height="7">
+  <object id="177" name="Master Wizard Marker 4" x="1733" y="228" width="9" height="7">
    <properties>
     <property name="MWmarker" value=""/>
    </properties>
   </object>
-  <object name="Master Wizard Marker 5" x="1620" y="261" width="11" height="5">
+  <object id="178" name="Master Wizard Marker 5" x="1620" y="261" width="11" height="5">
    <properties>
     <property name="MWmarker" value=""/>
    </properties>
   </object>
-  <object name="Master Wizard Marker 6" x="1621" y="229" width="9" height="5">
+  <object id="179" name="Master Wizard Marker 6" x="1621" y="229" width="9" height="5">
    <properties>
     <property name="MWmarker" value=""/>
    </properties>
   </object>
-  <object name="Master Wizard Marker 7" x="1734" y="276" width="9" height="7">
+  <object id="180" name="Master Wizard Marker 7" x="1734" y="276" width="9" height="7">
    <properties>
     <property name="MWmarker" value=""/>
    </properties>
   </object>
-  <object name="Master Wizard Marker 8" x="1669" y="293" width="9" height="7">
+  <object id="181" name="Master Wizard Marker 8" x="1669" y="293" width="9" height="7">
    <properties>
     <property name="MWmarker" value=""/>
    </properties>
   </object>
-  <object name="Master Wizard Marker 9" x="1622" y="295" width="8" height="6">
+  <object id="182" name="Master Wizard Marker 9" x="1622" y="295" width="8" height="6">
    <properties>
     <property name="MWmarker" value=""/>
    </properties>
   </object>
-  <object name="Master Wizard Marker 10" x="1716" y="211" width="8" height="8">
+  <object id="183" name="Master Wizard Marker 10" x="1716" y="211" width="8" height="8">
    <properties>
     <property name="MWmarker" value=""/>
    </properties>
   </object>
-  <object name="Master Wizard Marker 11" x="1672" y="254" width="9" height="12">
+  <object id="184" name="Master Wizard Marker 11" x="1672" y="254" width="9" height="12">
    <properties>
     <property name="MWmarker" value=""/>
    </properties>
   </object>
  </objectgroup>
- <objectgroup name="Teleporters" width="160" height="160">
-  <object name="Teleporter 1 Spawn" x="102" y="175" width="8" height="10">
+ <objectgroup name="Teleporters">
+  <object id="185" name="Teleporter 1 Spawn" x="102" y="175" width="8" height="10">
    <properties>
     <property name="TP1" value=""/>
     <property name="TP1Spawn" value=""/>
    </properties>
   </object>
-  <object name="Teleporter 2 Spawn" x="244" y="17" width="8" height="10">
+  <object id="186" name="Teleporter 2 Spawn" x="244" y="17" width="8" height="10">
    <properties>
     <property name="TP2" value=""/>
     <property name="TP2Spawn" value=""/>
