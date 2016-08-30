@@ -16,7 +16,7 @@ Some of the sounds of the game are taken directly from Link to the Past, Link's 
 
 NOTE: The game is as of yet unfinished. However, the game up until the first dungeon may be completed. 
 
-Credits: 
+Credits: Thanks to -
 
 Zelda Universe for ripping all the music used for the game.
 
